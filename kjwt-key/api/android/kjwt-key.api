@@ -1,0 +1,63 @@
+public final class com/mooncloak/kodetools/kjwt/key/AndroidKeyKt {
+	public static final fun encoded (Lcom/mooncloak/kodetools/kjwt/key/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun invoke (Lcom/mooncloak/kodetools/kjwt/key/Key$Companion;Ljava/security/Key;)Lcom/mooncloak/kodetools/kjwt/key/Key;
+	public static final fun toKey (Ljava/security/Key;)Lcom/mooncloak/kodetools/kjwt/key/Key;
+	public static final fun toKey (Ljava/security/PrivateKey;)Lcom/mooncloak/kodetools/kjwt/key/PrivateKey;
+	public static final fun toKey (Ljava/security/PublicKey;)Lcom/mooncloak/kodetools/kjwt/key/PublicKey;
+}
+
+public abstract interface annotation class com/mooncloak/kodetools/kjwt/key/ExperimentalKeyApi : java/lang/annotation/Annotation {
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/GenericKey : com/mooncloak/kodetools/kjwt/key/Key {
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getNative ()Ljava/security/Key;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/mooncloak/kodetools/kjwt/key/Key : com/mooncloak/kodetools/kjwt/key/KeyMaterial {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/key/Key$Companion;
+	public abstract fun getNative ()Ljava/security/Key;
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/Key$Companion {
+}
+
+public abstract interface class com/mooncloak/kodetools/kjwt/key/KeyMaterial {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/key/KeyMaterial$Companion;
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/KeyMaterial$Companion {
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/KeyPair : com/mooncloak/kodetools/kjwt/key/KeyMaterial {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/key/KeyPair$Companion;
+	public fun <init> (Lcom/mooncloak/kodetools/kjwt/key/PublicKey;Lcom/mooncloak/kodetools/kjwt/key/PrivateKey;)V
+	public fun <init> (Ljava/security/KeyPair;)V
+	public final fun getNative ()Ljava/security/KeyPair;
+	public final fun getPrivateKey ()Lcom/mooncloak/kodetools/kjwt/key/PrivateKey;
+	public final fun getPublicKey ()Lcom/mooncloak/kodetools/kjwt/key/PublicKey;
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/KeyPair$Companion {
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/PrivateKey : com/mooncloak/kodetools/kjwt/key/Key {
+	public fun <init> (Ljava/security/PrivateKey;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getNative ()Ljava/security/Key;
+	public fun getNative ()Ljava/security/PrivateKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/kjwt/key/PublicKey : com/mooncloak/kodetools/kjwt/key/Key {
+	public fun <init> (Ljava/security/PublicKey;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun getNative ()Ljava/security/Key;
+	public fun getNative ()Ljava/security/PublicKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
