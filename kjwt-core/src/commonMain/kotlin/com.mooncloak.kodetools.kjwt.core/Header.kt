@@ -1,167 +1,180 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 /**
  * An interface that represents reserved JWT Header parameters.
  *
- * Note that this interface includes both the reserved JWT Header parameters and the JWS Header parameters. Since all
- * the parameters are optional, and this provides type safety and helps to prevent name clashes, it should be fine to
- * include both the JWT and JWS Header parameters in one interface.
+ * Note that this interface includes both the reserved JWT Header parameters and the JWS Header
+ * parameters. Since all the parameters are optional, and this provides type safety and helps to
+ * prevent name clashes, it should be fine to include both the JWT and JWS Header parameters in one
+ * interface.
  *
- * Note that it is important to make sure that the [SerialName] values for each property are used correctly by
- * implementing classes. Refer to the [PropertyKey] object for the correct [SerialName] usage for each property.
+ * Note that it is important to make sure that the [SerialName] values for each property are used
+ * correctly by implementing classes. Refer to the [PropertyKey] object for the correct
+ * [SerialName] usage for each property.
  *
  * @see [JWS Specification](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1)
  * @see [JWT Specification](https://datatracker.ietf.org/doc/html/rfc7519#section-5)
  */
 @ExperimentalJwtApi
-public interface Header : JwtObject {
+@Serializable(with = HeaderSerializer::class)
+public class Header public constructor(
+    override val json: Json,
+    override val properties: Map<String, JsonElement>
+) : JwtObject() {
 
     /**
-     * The "alg" (algorithm) Header Parameter identifies the cryptographic algorithm used to secure the JWS.
+     * The "alg" (algorithm) Header Parameter identifies the cryptographic algorithm used to secure
+     * the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1)
      */
-    public val algorithm: String?
+    public val algorithm: String? by property(PropertyKey.ALGORITHM)
 
     /**
-     * The "jku" (JWK Set URL) Header Parameter is a URI [RFC3986](https://datatracker.ietf.org/doc/html/rfc3986) that
-     * refers to a resource for a set of JSON-encoded public keys, one of which corresponds to the key used to
-     * digitally sign the JWS.
+     * The "jku" (JWK Set URL) Header Parameter is a URI
+     * [RFC3986](https://datatracker.ietf.org/doc/html/rfc3986) that refers to a resource for a set
+     * of JSON-encoded public keys, one of which corresponds to the key used to digitally sign the
+     * JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.2)
      */
-    public val jwkSetUrl: String?
+    public val jwkSetUrl: String? by property(PropertyKey.JWK_SET_URL)
 
     /**
-     * The "jwk" (JSON Web Key) Header Parameter is the public key that corresponds to the key used to digitally sign
-     * the JWS.
+     * The "jwk" (JSON Web Key) Header Parameter is the public key that corresponds to the key used
+     * to digitally sign the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.3)
      */
-    public val jwk: String?
+    public val jwk: String? by property(PropertyKey.JWK)
 
     /**
-     * The "kid" (key ID) Header Parameter is a hint indicating which keywas used to secure the JWS.
+     * The "kid" (key ID) Header Parameter is a hint indicating which key was used to secure the
+     * JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.4)
      */
-    public val keyId: String?
+    public val keyId: String? by property(PropertyKey.KEY_ID)
 
     /**
-     * The "x5u" (X.509 URL) Header Parameter is a URI [RFC3986](https://datatracker.ietf.org/doc/html/rfc3986) that
-     * refers to a resource for the X.509 public key certificate or certificate chain
-     * [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to digitally sign the
-     * JWS.
+     * The "x5u" (X.509 URL) Header Parameter is a URI
+     * [RFC3986](https://datatracker.ietf.org/doc/html/rfc3986) that refers to a resource for the
+     * X.509 public key certificate or certificate chain
+     * [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to
+     * digitally sign the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.5)
      */
-    public val x5u: String?
+    public val x5u: String? by property(PropertyKey.X5U)
 
     /**
-     * The "x5c" (X.509 certificate chain) Header Parameter contains the X.509 public key certificate or certificate
-     * chain [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to digitally sign
-     * the JWS.
+     * The "x5c" (X.509 certificate chain) Header Parameter contains the X.509 public key
+     * certificate or certificate chain [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280)
+     * corresponding to the key used to digitally sign the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.6)
      */
-    public val x5c: String?
+    public val x5c: String? by property(PropertyKey.X5C)
 
     /**
-     * The "x5t" (X.509 certificate SHA-1 thumbprint) Header Parameter is a base64url-encoded SHA-1 thumbprint
-     * (a.k.a. digest) of the DER encoding of the X.509 certificate
-     * [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to digitally sign the
-     * JWS.
+     * The "x5t" (X.509 certificate SHA-1 thumbprint) Header Parameter is a base64url-encoded SHA-1
+     * thumbprint (a.k.a. digest) of the DER encoding of the X.509 certificate
+     * [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to
+     * digitally sign the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.7)
      */
-    public val x5t: String?
+    public val x5t: String? by property(PropertyKey.X5T)
 
     /**
-     * The "x5t#S256" (X.509 certificate SHA-256 thumbprint) Header Parameter is a base64url-encoded SHA-256 thumbprint
-     * (a.k.a. digest) of the DER encoding of the X.509 certificate
-     * [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the key used to digitally sign the
-     * JWS.
+     * The "x5t#S256" (X.509 certificate SHA-256 thumbprint) Header Parameter is a
+     * base64url-encoded SHA-256 thumbprint (a.k.a. digest) of the DER encoding of the X.509
+     * certificate [RFC5280](https://datatracker.ietf.org/doc/html/rfc5280) corresponding to the
+     * key used to digitally sign the JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.8)
      */
-    public val x5tS256: String?
+    public val x5tS256: String? by property(PropertyKey.X5T_S256)
 
     /**
      * The "typ" (type) Header Parameter is used by JWS applications to declare the media type
-     * [IANA.MediaTypes](https://datatracker.ietf.org/doc/html/rfc7515#ref-IANA.MediaTypes) of this complete JWS.
+     * [IANA.MediaTypes](https://datatracker.ietf.org/doc/html/rfc7515#ref-IANA.MediaTypes) of this
+     * complete JWS.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.9)
      * @see [JWT Definition](https://datatracker.ietf.org/doc/html/rfc7519#section-5.1)
      */
-    public val type: String?
+    public val type: String? by property(PropertyKey.TYPE)
 
     /**
-     * The "cty" (content type) Header Parameter is used by JWS applications to declare the media type
-     * [IANA.MediaTypes](https://datatracker.ietf.org/doc/html/rfc7515#ref-IANA.MediaTypes) of the secured content
-     * (the payload).
+     * The "cty" (content type) Header Parameter is used by JWS applications to declare the media
+     * type [IANA.MediaTypes](https://datatracker.ietf.org/doc/html/rfc7515#ref-IANA.MediaTypes) of
+     * the secured content (the payload).
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.10)
      * @see [JWT Definition](https://datatracker.ietf.org/doc/html/rfc7519#section-5.2)
      */
-    public val contentType: String?
+    public val contentType: String? by property(PropertyKey.CONTENT_TYPE)
 
     /**
-     * The "crit" (critical) Header Parameter indicates that extensions to this specification and/or
-     * [JWA](https://datatracker.ietf.org/doc/html/rfc7515#ref-JWA) are being used that MUST be understood and
-     * processed.
+     * The "crit" (critical) Header Parameter indicates that extensions to this specification
+     * and/or [JWA](https://datatracker.ietf.org/doc/html/rfc7515#ref-JWA) are being used that MUST
+     * be understood and processed.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.11)
      */
-    public val critical: String?
+    public val critical: String? by property(PropertyKey.CRITICAL)
 
     /**
-     * The "zip" (compression algorithm) Header Parameter indicates the compression algorithm applied to the plaintext
-     * before encryption, if any.
+     * The "zip" (compression algorithm) Header Parameter indicates the compression algorithm
+     * applied to the plaintext before encryption, if any.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7516#section-4.1.3)
      */
-    public val compression: String?
+    public val compression: String? by property(PropertyKey.COMPRESSION)
 
     /**
-     * The "enc" (encryption algorithm) Header Parameter identifies the content encryption algorithm used to perform
-     * authenticated encryption on the plaintext to produce the ciphertext and the Authentication Tag.
+     * The "enc" (encryption algorithm) Header Parameter identifies the content encryption
+     * algorithm used to perform authenticated encryption on the plaintext to produce the
+     * ciphertext and the Authentication Tag.
      *
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7516#section-4.1.2)
      */
-    public val encryption: String?
+    public val encryption: String? by property(PropertyKey.ENCRYPTION)
 
     /**
-     * Header key values. This consists of the keys for the standard header values, but other keys can be added via
-     * extension properties and functions.
+     * Header key values. This consists of the keys for the standard header values, but other keys
+     * can be added via extension properties and functions.
      */
     public object PropertyKey {
 
@@ -232,8 +245,9 @@ public interface Header : JwtObject {
     }
 
     /**
-     * A builder component for creating a [Header] instance. This component should not be created directly, but instead
-     * can be used to create a [Header] instance via the [Header] constructor function.
+     * A builder component for creating a [Header] instance. This component should not be created
+     * directly, but instead can be used to create a [Header] instance via the [Header] constructor
+     * function.
      */
     public class Builder internal constructor(
         override val json: Json,
@@ -304,15 +318,62 @@ public interface Header : JwtObject {
          * Gets/sets the [Header.encryption] value.
          */
         public var encryption: String? by property(key = PropertyKey.ENCRYPTION)
+
+        /**
+         * Creates a [Header] instance from this [Header.Builder].
+         */
+        public fun build(): Header = Header(
+            json = json,
+            properties = properties
+        )
     }
 
     public companion object
 }
 
 /**
- * Retrieves the [SignatureAlgorithm] algorithm used to sign the [Jws] token associated with this [Header], or `null`
- * if a matching [SignatureAlgorithm] could not be found or the [Header.algorithm] value was `null`.
+ * Retrieves the [SignatureAlgorithm] algorithm used to sign the [Jws] token associated with this
+ * [Header], or `null` if a matching [SignatureAlgorithm] could not be found or the
+ * [Header.algorithm] value was `null`.
  */
 @ExperimentalJwtApi
 public val Header.signatureAlgorithm: SignatureAlgorithm?
     get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+
+/**
+ * Converts this [Header] instance into a [Header.Builder].
+ */
+@ExperimentalJwtApi
+public fun Header.toBuilder(): Header.Builder =
+    Header.Builder(
+        json = this.json,
+        initialValues = this.properties
+    )
+
+/**
+ * Creates a new [Header] instance starting with the same values from this [Header] instance which
+ * can be overridden from the provided builder [block].
+ */
+@ExperimentalJwtApi
+public fun Header.copy(block: Header.Builder.() -> Unit = {}): Header {
+    val builder = this.toBuilder().apply(block)
+
+    return builder.build()
+}
+
+/**
+ * Creates a [Header] from the provided builder [block] and [json] instance.
+ */
+@ExperimentalJwtApi
+public fun Header.Companion.build(json: Json, block: Header.Builder.() -> Unit): Header =
+    Header.Builder(json = json).apply(block).build()
+
+@ExperimentalJwtApi
+internal class HeaderSerializer internal constructor() : BaseJwtObjectSerializer<Header>() {
+
+    override fun toType(json: Json, jsonObject: JsonObject): Header =
+        Header(
+            json = json,
+            properties = jsonObject
+        )
+}

@@ -1,14 +1,19 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.JwtObject.Builder
 import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.Transient
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.serializer
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -21,120 +26,7 @@ import kotlin.reflect.KProperty
  * simple way to extracting extra data from the object.
  */
 @ExperimentalJwtApi
-public sealed interface JwtObject : Map<String, JsonElement> {
-
-    /**
-     * A component that can be used to create an instance of a [JwtObject].
-     */
-    public abstract class Builder internal constructor(
-        initialValues: Map<String, JsonElement> = emptyMap()
-    ) : BaseJwtObject(),
-        JwtObject,
-        MutableMap<String, JsonElement> {
-
-        override val properties: MutableMap<String, JsonElement>
-            get() = storage
-
-        override val keys: MutableSet<String>
-            get() = storage.keys
-
-        override val values: MutableCollection<JsonElement>
-            get() = storage.values
-
-        override val entries: MutableSet<MutableMap.MutableEntry<String, JsonElement>>
-            get() = storage.entries
-
-        private val storage: MutableMap<String, JsonElement> =
-            mutableMapOf<String, JsonElement>().apply {
-                putAll(initialValues)
-            }
-
-        override fun put(key: String, value: JsonElement): JsonElement? =
-            storage.put(key, value)
-
-        override fun putAll(from: Map<out String, JsonElement>) {
-            storage.putAll(from)
-        }
-
-        override fun remove(key: String): JsonElement? =
-            storage.remove(key)
-
-        override fun clear() {
-            storage.clear()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is Builder) return false
-
-            if (json != other.json) return false
-
-            return properties == other.properties
-        }
-
-        override fun hashCode(): Int {
-            var result = json.hashCode()
-            result = 31 * result + properties.hashCode()
-            return result
-        }
-
-        override fun toString(): String =
-            "Builder(json=$json, properties=$properties)"
-
-        public inline fun <reified T> setValue(
-            key: String,
-            value: T
-        ) {
-            val element = json.encodeToJsonElement(value)
-
-            set(key, element)
-        }
-
-        /**
-         * A property delegate to the stored underlying value.
-         */
-        protected inline fun <reified V> property(
-            key: String? = null,
-            initialValue: V,
-            serializer: SerializationStrategy<V> = json.serializersModule.serializer(),
-            deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
-        ): ReadWriteProperty<Builder, V> = RequiredJwtObjectBuilderPropertyDelegate(
-            key = key,
-            initialValue = initialValue,
-            json = json,
-            serializer = serializer,
-            deserializer = deserializer
-        )
-
-        /**
-         * A property delegate to the stored underlying value.
-         */
-        protected inline fun <reified V> property(
-            key: String? = null,
-            serializer: SerializationStrategy<V> = json.serializersModule.serializer(),
-            deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
-        ): ReadWriteProperty<Builder, V?> = NullableJwtObjectBuilderPropertyDelegate(
-            key = key,
-            json = json,
-            serializer = serializer,
-            deserializer = deserializer
-        )
-
-        public companion object
-    }
-
-    public companion object
-}
-
-/**
- * Converts this [JwtObject] into a [JsonObject] instance.
- */
-@ExperimentalJwtApi
-public fun JwtObject.toJsonObject(): JsonObject =
-    JsonObject(content = this)
-
-@ExperimentalJwtApi
-public abstract class BaseJwtObject : JwtObject {
+public abstract class JwtObject internal constructor() : Map<String, JsonElement> {
 
     @PublishedApi
     internal abstract val json: Json
@@ -166,16 +58,204 @@ public abstract class BaseJwtObject : JwtObject {
 
     final override fun isEmpty(): Boolean = properties.isEmpty()
 
-    public inline fun <reified T> getValue(key: String): T? {
+    public inline fun <reified T> getValue(
+        key: String,
+        deserializer: DeserializationStrategy<T> = json.serializersModule.serializer()
+    ): T? {
         val element = get(key = key)
 
-        return element?.let { json.decodeFromJsonElement(element) }
+        return element?.let {
+            json.decodeFromJsonElement(
+                deserializer = deserializer,
+                element = element
+            )
+        }
+    }
+
+    /**
+     * A component that can be used to create an instance of a [JwtObject].
+     */
+    public abstract class Builder internal constructor(
+        initialValues: Map<String, JsonElement> = emptyMap()
+    ) : JwtObject(),
+        MutableMap<String, JsonElement> {
+
+        override val properties: MutableMap<String, JsonElement> =
+            mutableMapOf<String, JsonElement>().apply {
+                putAll(initialValues)
+            }
+
+        override val keys: MutableSet<String>
+            get() = properties.keys
+
+        override val values: MutableCollection<JsonElement>
+            get() = properties.values
+
+        override val entries: MutableSet<MutableMap.MutableEntry<String, JsonElement>>
+            get() = properties.entries
+
+        override fun put(key: String, value: JsonElement): JsonElement? =
+            properties.put(key, value)
+
+        override fun putAll(from: Map<out String, JsonElement>) {
+            properties.putAll(from)
+        }
+
+        override fun remove(key: String): JsonElement? =
+            properties.remove(key)
+
+        override fun clear() {
+            properties.clear()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Builder) return false
+
+            if (json != other.json) return false
+
+            return properties == other.properties
+        }
+
+        override fun hashCode(): Int {
+            var result = json.hashCode()
+            result = 31 * result + properties.hashCode()
+            return result
+        }
+
+        override fun toString(): String =
+            "Builder(json=$json, properties=$properties)"
+
+        public inline fun <reified T> putValue(
+            key: String,
+            value: T,
+            serializer: KSerializer<T> = json.serializersModule.serializer()
+        ) {
+            val element = json.encodeToJsonElement(
+                serializer = serializer,
+                value = value
+            )
+
+            set(key, element)
+        }
+
+        /**
+         * A property delegate to the stored underlying value.
+         */
+        @ExperimentalJwtApi
+        public inline fun <reified V> JwtObject.property(
+            key: String? = null,
+            initialValue: V,
+            serializer: SerializationStrategy<V> = json.serializersModule.serializer(),
+            deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
+        ): ReadWriteProperty<Builder, V> = RequiredJwtObjectBuilderPropertyDelegate(
+            key = key,
+            initialValue = initialValue,
+            json = json,
+            serializer = serializer,
+            deserializer = deserializer
+        )
+
+        /**
+         * A property delegate to the stored underlying value.
+         */
+        @ExperimentalJwtApi
+        public inline fun <reified V> JwtObject.property(
+            key: String? = null,
+            serializer: SerializationStrategy<V> = json.serializersModule.serializer(),
+            deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
+        ): ReadWriteProperty<Builder, V?> = NullableJwtObjectBuilderPropertyDelegate(
+            key = key,
+            json = json,
+            serializer = serializer,
+            deserializer = deserializer
+        )
+
+        public companion object
+    }
+
+    public companion object
+}
+
+/**
+ * A property delegate to the stored underlying value.
+ */
+@ExperimentalJwtApi
+public inline fun <reified V> JwtObject.property(
+    key: String? = null,
+    initialValue: V,
+    deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
+): ReadOnlyProperty<JwtObject, V> = ReadOnlyRequiredJwtObjectPropertyDelegate(
+    key = key,
+    initialValue = initialValue,
+    json = json,
+    deserializer = deserializer
+)
+
+/**
+ * A property delegate to the stored underlying value.
+ */
+@ExperimentalJwtApi
+public inline fun <reified V> JwtObject.property(
+    key: String? = null,
+    deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
+): ReadOnlyProperty<JwtObject, V?> = ReadOnlyNullableJwtObjectPropertyDelegate(
+    key = key,
+    json = json,
+    deserializer = deserializer
+)
+
+/**
+ * Converts this [JwtObject] into a [JsonObject] instance.
+ */
+@ExperimentalJwtApi
+public fun JwtObject.toJsonObject(): JsonObject =
+    JsonObject(content = this)
+
+@ExperimentalJwtApi
+@PublishedApi
+internal class ReadOnlyRequiredJwtObjectPropertyDelegate<T : JwtObject, V> @PublishedApi internal constructor(
+    private val key: String? = null,
+    private val initialValue: V,
+    private val json: Json,
+    private val deserializer: DeserializationStrategy<V>
+) : ReadOnlyProperty<T, V> {
+
+    override fun getValue(thisRef: T, property: KProperty<*>): V {
+        val key = key ?: property.name
+
+        return thisRef[key]?.let { element ->
+            json.decodeFromJsonElement(
+                deserializer = deserializer,
+                element = element
+            )
+        } ?: initialValue
     }
 }
 
 @ExperimentalJwtApi
 @PublishedApi
-internal class RequiredJwtObjectBuilderPropertyDelegate<T : JwtObject.Builder, V> @PublishedApi internal constructor(
+internal class ReadOnlyNullableJwtObjectPropertyDelegate<T : JwtObject, V> @PublishedApi internal constructor(
+    private val key: String? = null,
+    private val json: Json,
+    private val deserializer: DeserializationStrategy<V>
+) : ReadOnlyProperty<T, V?> {
+
+    override fun getValue(thisRef: T, property: KProperty<*>): V? {
+        val key = key ?: property.name
+
+        return thisRef[key]?.let { element ->
+            json.decodeFromJsonElement(
+                deserializer = deserializer,
+                element = element
+            )
+        }
+    }
+}
+
+@ExperimentalJwtApi
+@PublishedApi
+internal class RequiredJwtObjectBuilderPropertyDelegate<T : Builder, V> @PublishedApi internal constructor(
     private val key: String? = null,
     private val initialValue: V,
     private val json: Json,
@@ -212,7 +292,7 @@ internal class RequiredJwtObjectBuilderPropertyDelegate<T : JwtObject.Builder, V
 
 @ExperimentalJwtApi
 @PublishedApi
-internal class NullableJwtObjectBuilderPropertyDelegate<T : JwtObject.Builder, V> @PublishedApi internal constructor(
+internal class NullableJwtObjectBuilderPropertyDelegate<T : Builder, V> @PublishedApi internal constructor(
     private val key: String? = null,
     private val json: Json,
     private val serializer: SerializationStrategy<V>,
@@ -243,5 +323,38 @@ internal class NullableJwtObjectBuilderPropertyDelegate<T : JwtObject.Builder, V
 
             thisRef[key] = jsonElement
         }
+    }
+}
+
+@ExperimentalJwtApi
+internal abstract class BaseJwtObjectSerializer<T : JwtObject> internal constructor() :
+    KSerializer<T> {
+
+    override val descriptor: SerialDescriptor
+        get() = JsonObject.serializer().descriptor
+
+    abstract fun toType(json: Json, jsonObject: JsonObject): T
+
+    final override fun serialize(encoder: Encoder, value: T) {
+        val jsonObject = value.toJsonObject()
+
+        encoder.encodeSerializableValue(
+            serializer = JsonObject.serializer(),
+            value = jsonObject
+        )
+    }
+
+    final override fun deserialize(decoder: Decoder): T {
+        val jsonDecoder = (decoder as? JsonDecoder)
+            ?: error("JwtObject can only be decoded using a JsonDecoder.")
+
+        val jsonObject = decoder.decodeSerializableValue(
+            deserializer = JsonObject.serializer()
+        )
+
+        return toType(
+            json = jsonDecoder.json,
+            jsonObject = jsonObject
+        )
     }
 }

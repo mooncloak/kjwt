@@ -1,46 +1,38 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import kotlinx.coroutines.CancellationException
+import com.mooncloak.kodetools.kjwt.core.Jwt.Builder
+import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
+import com.mooncloak.kodetools.kjwt.key.Key
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
- * Represents a decoded JSON Web Token (JWT) without the Signature defined in a [Jws]. A JWT takes
- * the following encoded form:
- *
- * ```
- * Base64URL-Encoded-Header.Base64URL-Encoded-Payload
- * ```
+ * Represents a decoded JSON Web Token (JWT) without the Signature defined in a [Jws]. According to
+ * the [JWT Specification](https://datatracker.ietf.org/doc/html/rfc7519#section-3), a JWT is
+ * either a [Jws] or a JWE.
  *
  * The [header] is a JSON object, which when encoded it is turned into a JSON [String] and Base64
  * URL encoded.
  *
- * The [payload] is also a JSON object, which when encoded, is turned into a JSON [String] and Base64
- * URL encoded.
+ * The [payload] is also a JSON object, which when encoded, is turned into a JSON [String] and
+ * Base64 URL encoded.
  *
- * The Signature is a result of taking the encoded Header and Payload, adding a period character
- * between them, and signing that, along with a secret key, using the signing algorithm specified
- * in the Header. For example:
- *
- * ```
- * val signature = HMACSHA256(
- *     base64UrlEncode(header) + "." +
- *     base64UrlEncode(payload),
- *     secret)
- * ```
- *
- * This interface represents just the decoded [header] and [payload] of a JWT, and not the Signature
- * which is obtained after the other values are already encoded. For an extension of this
- * interface, which includes the Signature, refer to the [Jws] interface.
+ * This interface represents just the decoded [header] and [payload] of a JWT, and not the
+ * Signature of a [Jws], which is obtained after the other values are
+ * already encoded, or the extra parts of a JWE. For an extension of this interface, which includes
+ * the Signature, refer to the [Jws] interface.
  *
  * To obtain an instance of this interface, use the [Jwt] constructor function.
  *
  * @see [JWT Specification](https://datatracker.ietf.org/doc/html/rfc7519)
+ * @see [JWS Specification](https://datatracker.ietf.org/doc/html/rfc7515)
  * @see [jwt.io](https://jwt.io/introduction/)
  * @see [Jws]
  */
 @ExperimentalJwtApi
-public interface Jwt : Compactable,
-    Signable {
+public interface Jwt {
 
     /**
      * The [Header] of this [Jwt] token.
@@ -55,73 +47,129 @@ public interface Jwt : Compactable,
     /**
      * A builder component for creating a [Jwt] instance.
      */
-    public abstract class Builder {
+    @ExperimentalJwtApi
+    public class Builder internal constructor(
+        private val json: Json,
+        private var headerValue: Header? = null,
+        private var claimsValue: Claims? = null
+    ) {
 
-        public abstract fun header(builder: Header.Builder.() -> Unit)
+        public fun header(builder: Header.Builder.() -> Unit) {
+            headerValue = Header.Builder(json = json).apply(builder).build()
+        }
 
-        public abstract fun payload(builder: JsonClaims.Builder.() -> Unit)
+        public fun payload(builder: JsonClaims.Builder.() -> Unit) {
+            claimsValue = JsonClaims.Builder(json = json).apply(builder).build()
+        }
 
-        public abstract fun payload(claims: TextClaims)
+        public fun payload(claims: TextClaims) {
+            claimsValue = claims
+        }
+
+        internal fun build(): UnsignedJwt {
+            requireNotNull(this.headerValue) { "Cannot create a JWT. Header value is not initialized." }
+            requireNotNull(this.claimsValue) { "Cannot create a JWT. Claims value is not initialized." }
+
+            return UnsignedJwt(
+                header = headerValue!!,
+                payload = claimsValue!!,
+                json = json
+            )
+        }
     }
 
-    public fun interface Generator {
-
-        public suspend fun generate(
-            json: Json,
-            builder: Builder.() -> Unit
-        ): Jwt
-    }
-
-    public fun interface Validator {
-
-        @Throws(JwtValidationException::class, CancellationException::class)
-        public suspend fun validate(
-            compacted: CompactedJwt,
-            json: Json,
-            validation: suspend Jwt.() -> Boolean
-        ): Jwt
-    }
-
-    public fun interface Parser {
-
-        @Throws(JwtParseException::class, CancellationException::class)
-        public suspend fun parse(
-            compacted: CompactedJwt,
-            json: Json
-        ): Jwt
-    }
-
-    public companion object : Generator by DefaultJwtGenerator,
-        Validator by DefaultJwtValidator,
-        Parser by DefaultJwtParser
+    public companion object
 }
 
 @ExperimentalJwtApi
-internal expect val DefaultJwtGenerator: Jwt.Generator
+public class UnsignedJwt internal constructor(
+    override val header: Header,
+    override val payload: Claims,
+    private val json: Json
+) : Jwt,
+    Signable {
 
-@ExperimentalJwtApi
-internal expect val DefaultJwtParser: Jwt.Parser
-
-@ExperimentalJwtApi
-internal val DefaultJwtValidator: Jwt.Validator =
-    Jwt.Validator { compacted, json, validation ->
-        val jws = try {
-            Jwt.parse(
-                compacted = compacted,
-                json = json
-            )
-        } catch (e: JwtParseException) {
-            throw JwtValidationException(
-                message = "Error parsing JWT for validation.",
-                cause = e
-            )
+    @OptIn(ExperimentalEncodingApi::class)
+    @ExperimentalKeyApi
+    override suspend fun sign(key: Key?, algorithm: SignatureAlgorithm): Jws {
+        if (key == null && algorithm != SignatureAlgorithm.NONE) {
+            throw UnsupportedJwtSignatureAlgorithm("Signature algorithm '${algorithm.serialName}' requires a key but `null` was provided.")
         }
 
-        val result = validation.invoke(jws)
-
-        if (!result) {
-            throw JwtValidationException(message = "Validation failed for JWT $jws.")
+        if (key == null) {
+            return unsecured()
         }
 
-        jws
+        // The creation of compacted JWT are defined by the JWT specification:
+        // https://datatracker.ietf.org/doc/html/rfc7519#section-7.1
+        val claimString = when (payload) {
+            is TextClaims -> error("Illegal claims used for a JWS. A JWS must use JsonClaims.")
+            is JsonClaims -> json.encodeToString(
+                serializer = JsonObject.serializer(),
+                value = payload.toJsonObject()
+            )
+        }
+        val encodedPayload = Base64.UrlSafe.encode(claimString.encodeToByteArray())
+        val headerString = json.encodeToString(
+            serializer = JsonObject.serializer(),
+            value = header.toJsonObject()
+        )
+        val encodedHeader = Base64.UrlSafe.encode(headerString.encodeToByteArray())
+
+        val signatureInput = "$encodedHeader.$encodedPayload"
+        val signature = sign(
+            input = signatureInput,
+            key = key,
+            algorithm = algorithm
+        )
+
+        return DefaultJws(
+            header = header,
+            payload = payload,
+            signature = signature,
+            json = json
+        )
     }
+
+    /**
+     * Creates an "unsecured" [Jws] instance. Note that this requires the
+     * [Header.signatureAlgorithm] value to be equal to [SignatureAlgorithm.NONE], otherwise an
+     * [IllegalStateException] will be thrown.
+     *
+     * @throws [IllegalStateException] if this [UnsignedJwt.header]'s [Header.signatureAlgorithm]
+     * is NOT [SignatureAlgorithm.NONE].
+     *
+     * @see [Jws.isUnsecured]
+     *
+     * @return An "unsecured" [Jws], meaning that the signature value is empty.
+     */
+    @Throws(IllegalStateException::class)
+    public fun unsecured(): Jws =
+        DefaultJws(
+            header = header,
+            payload = payload,
+            signature = Signature(value = ""),
+            json = json
+        )
+}
+
+@ExperimentalJwtApi
+public operator fun Jwt.Companion.invoke(
+    json: Json,
+    builder: Builder.() -> Unit
+): UnsignedJwt =
+    Builder(json = json)
+        .apply(builder)
+        .build()
+
+@ExperimentalJwtApi
+public fun Jwt.Companion.from(
+    header: Header,
+    payload: Claims,
+    json: Json
+): UnsignedJwt =
+    UnsignedJwt(
+        header = header,
+        payload = payload,
+        json = json
+    )

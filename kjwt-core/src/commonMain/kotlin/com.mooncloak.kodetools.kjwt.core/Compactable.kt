@@ -1,7 +1,5 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import kotlinx.serialization.json.Json
-
 /**
  * A component that can be compacted into a [CompactedJwt] value.
  */
@@ -22,11 +20,11 @@ public fun interface Compactable {
      * include the trailing signature [String] value. If this is a [Jws] instance then it will
      * include the trailing signature [String] value.
      *
-     * @param [json] The [Json] object used to serialize the properties into JSON [String] values.
-     *
      * @return [CompactedJwt]
      *
      * @see [JWT Specification](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-25#section-7)
      */
-    public suspend fun compact(json: Json): CompactedJwt
+    public suspend fun compact(): CompactedJwt
+
+    public companion object
 }

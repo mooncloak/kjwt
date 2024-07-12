@@ -10,6 +10,14 @@ import kotlinx.serialization.SerialName
  * Note that this class was adapted from the open source
  * [JJWT library](https://github.com/jwtk/jjwt/blob/master/api/src/main/java/io/jsonwebtoken/SignatureAlgorithm.java).
  *
+ * > [!Note]
+ * > The [Jwt Specification](https://datatracker.ietf.org/doc/html/rfc7519#section-8) only
+ * > requires the [SignatureAlgorithm.HS256] and [SignatureAlgorithm.NONE] to be supported, and
+ * > recommends the [SignatureAlgorithm.RS256] and [SignatureAlgorithm.ES256] be supported.
+ * > Therefore, the required signing algorithms are the only algorithms that are guaranteed to
+ * > be supported across all platforms. Each platform may support any other
+ * > [SignatureAlgorithm]s.
+ *
  * @param [serialName] The JWA algorithm name constant. Should correspond to the defined values in
  * the specification: https://datatracker.ietf.org/doc/html/rfc7518#section-3.1
  *

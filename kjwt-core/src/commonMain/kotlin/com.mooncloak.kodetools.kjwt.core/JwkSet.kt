@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 @ExperimentalJwtApi
 public class JwkSet public constructor(
     @SerialName(value = PropertyKey.KEYS) public val keys: List<Jwk> = emptyList()
-) /* TODO: Make JwkSet a JwtObject? : JwtObject */ {
+) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
