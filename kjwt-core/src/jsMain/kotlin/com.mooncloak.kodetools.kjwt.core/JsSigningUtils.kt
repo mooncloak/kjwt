@@ -1,12 +1,11 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
-import com.mooncloak.kodetools.kjwt.key.Key
-
-@ExperimentalKeyApi
 @ExperimentalJwtApi
 internal actual suspend fun sign(
     input: String,
-    key: Key,
+    key: Jwk,
     algorithm: SignatureAlgorithm
 ): Signature = TODO()
+
+@ExperimentalJwtApi
+public actual suspend fun SignatureAlgorithm.generateSigningKey(): Jwk? = TODO()

@@ -1,11 +1,9 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
-import com.mooncloak.kodetools.kjwt.key.Key
 
 /**
- * A component that resolves the [Key] used when signing a [Jws]. This could be used to dynamically
- * resolve the signing key for verification or signing purposes.
+ * A component that resolves the [Jwk] key used when signing a [Jws]. This could be used to
+ * dynamically resolve the signing key for verification or signing purposes.
  */
 @ExperimentalJwtApi
 public fun interface KeyResolver {
@@ -19,10 +17,9 @@ public fun interface KeyResolver {
      * @return the key that should be used to validate a digital signature for the Claims JWS with
      * the specified header and claims.
      */
-    @ExperimentalKeyApi
     public suspend fun resolve(
         header: Header
-    ): Key
+    ): Jwk
 
     public companion object
 }
@@ -31,13 +28,12 @@ public fun interface KeyResolver {
  * Retrieves a [KeyResolver] instance that always resolves the provided [key] value. This is a
  * convenience function.
  *
- * @param [key] The [Key] that the returned [KeyResolver] will always return.
+ * @param [key] The [Jwk] key that the returned [KeyResolver] will always return.
  *
  * @return A [KeyResolver] whose [KeyResolver.resolve] function always returns the provided [key].
  */
-@ExperimentalKeyApi
 @ExperimentalJwtApi
-public fun KeyResolver.Companion.of(key: Key): KeyResolver =
+public fun KeyResolver.Companion.of(key: Jwk): KeyResolver =
     StaticKeyResolver(key = key)
 
 /**
@@ -49,12 +45,11 @@ public val KeyResolver.Companion.Unsupported: KeyResolver
     get() = UnsupportedKeyResolver
 
 /**
- * A [KeyResolver] implementation that always returns a single [Key] instance.
+ * A [KeyResolver] implementation that always returns a single [Jwk] key instance.
  */
 @ExperimentalJwtApi
-@ExperimentalKeyApi
 internal class StaticKeyResolver internal constructor(
-    private val key: Key
+    private val key: Jwk
 ) : KeyResolver {
 
     override suspend fun resolve(header: Header) = key
@@ -74,8 +69,7 @@ internal class StaticKeyResolver internal constructor(
 @ExperimentalJwtApi
 internal data object UnsupportedKeyResolver : KeyResolver {
 
-    @ExperimentalKeyApi
-    override suspend fun resolve(header: Header): Key {
+    override suspend fun resolve(header: Header): Jwk {
         throw UnsupportedJwtSignatureAlgorithm("No signature algorithms are supported.")
     }
 }
