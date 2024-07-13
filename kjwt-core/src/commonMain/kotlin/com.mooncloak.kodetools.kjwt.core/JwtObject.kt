@@ -72,6 +72,21 @@ public abstract class JwtObject internal constructor() : Map<String, JsonElement
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is JwtObject) return false
+
+        if (json != other.json) return false
+
+        return properties == other.properties
+    }
+
+    override fun hashCode(): Int {
+        var result = json.hashCode()
+        result = 31 * result + properties.hashCode()
+        return result
+    }
+
     /**
      * A component that can be used to create an instance of a [JwtObject].
      */

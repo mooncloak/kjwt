@@ -30,14 +30,17 @@ public class JwkSet public constructor(
         defaultValue = keys
     )
 
+    override fun toString(): String =
+        "JwkSet(json=$json, properties=$properties)"
+
     public object PropertyKey {
 
         public const val KEYS: String = "keys"
     }
 
     /**
-     * A builder component for creating a [Jwk] instance. This component should not be created
-     * directly, but instead can be used to create a [Jwk] instance via the [Jwk] constructor
+     * A builder component for creating a [JwkSet] instance. This component should not be created
+     * directly, but instead can be used to create a [JwkSet] instance via the [JwkSet] constructor
      * function.
      */
     public class Builder internal constructor(
@@ -66,7 +69,6 @@ public class JwkSet public constructor(
     public companion object
 }
 
-
 /**
  * Converts this [JwkSet] instance into a [JwkSet.Builder].
  */
@@ -88,6 +90,19 @@ public fun JwkSet.copy(block: JwkSet.Builder.() -> Unit = {}): JwkSet {
 
     return builder.build()
 }
+
+/**
+ * Creates a [JwkSet] from the provided builder [block] and [json] instance.
+ */
+@ExperimentalJwtApi
+public fun JwkSet.Companion.build(
+    keys: List<Jwk> = emptyList(),
+    json: Json,
+    block: JwkSet.Builder.() -> Unit
+): JwkSet = JwkSet.Builder(
+    json = json,
+    initialKeys = keys
+).apply(block).build()
 
 /**
  * The [KSerializer] implementation for the [Jwk] class.

@@ -109,6 +109,9 @@ public class JsonClaims public constructor(
      */
     public val id: String? by property(PropertyKey.ID)
 
+    override fun toString(): String =
+        "JsonClaims(json=$json, properties=$properties)"
+
     /**
      * Claim key values. This consists of the keys for the standard claim values, but other keys
      * can be added via extension properties and functions.

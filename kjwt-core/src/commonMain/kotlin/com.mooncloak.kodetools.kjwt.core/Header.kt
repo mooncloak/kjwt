@@ -172,6 +172,9 @@ public class Header public constructor(
      */
     public val encryption: String? by property(PropertyKey.ENCRYPTION)
 
+    override fun toString(): String =
+        "Header(json=$json, properties=$properties)"
+
     /**
      * Header key values. This consists of the keys for the standard header values, but other keys
      * can be added via extension properties and functions.

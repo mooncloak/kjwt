@@ -111,6 +111,9 @@ public class Jwk public constructor(
      */
     public val x5tS256: String? by property(key = PropertyKey.X5T_S256)
 
+    override fun toString(): String =
+        "Jwk(json=$json, properties=$properties)"
+
     /**
      * Jwk key values. This consists of the keys for the standard JWK properties, but other keys
      * can be added via extension properties and functions.
@@ -258,6 +261,20 @@ public fun Jwk.copy(block: Jwk.Builder.() -> Unit = {}): Jwk {
 
     return builder.build()
 }
+
+/**
+ * Creates a [Jwk] from the provided builder [block] and [json] instance.
+ */
+@ExperimentalJwtApi
+public fun Jwk.Companion.build(
+    keyType: KeyType,
+    json: Json,
+    block: Jwk.Builder.() -> Unit
+): Jwk = Jwk.Builder(
+    json = json,
+    initialKeyType = keyType
+).apply(block)
+    .build()
 
 /**
  * The [KSerializer] implementation for the [Jwk] class.
