@@ -491,14 +491,50 @@ public class Jwk public constructor(
         public var k: String? by property(key = PropertyKey.K)
 
         /**
+         * Whether the [Jwk.keyId] value should be set to the computed [Jwk.thumbprint] value. If
+         * `true`, when the [Jwk.Builder.build] function is invoked, the [Jwk.thumbprint] function
+         * will be computed and its result will be set as the [Jwk.keyId] value on the resulting
+         * [Jwk]. If `false`, no extra calculation will happen. Defaults to `false`.
+         *
+         * Note that if this value is set to `true`, the [Jwk.thumbprint] will override any
+         * previously set [Jwk.Builder.keyId] value.
+         *
+         * It is a common practice to set the [Jwk.keyId] as the thumbprint value, but is not
+         * mandatory.
+         *
+         * @see [JWK Thumbprint Specification](https://www.rfc-editor.org/rfc/rfc7638)
+         */
+        @Suppress("MemberVisibilityCanBePrivate")
+        public var computeIdFromThumbprint: Boolean = false
+
+        /**
+         * Determines the [HashFunction] that is used to compute the [Jwk.thumbprint] value when
+         * the [computeIdFromThumbprint] is set to `true`. Defaults to
+         * [HashFunction.Companion.Sha256].
+         */
+        @Suppress("MemberVisibilityCanBePrivate")
+        public var thumbprintHashFunction: HashFunction = HashFunction.Sha256
+
+        /**
          * Converts this [Jwk.Builder] instance into a [Jwk] instance.
          */
-        public fun build(): Jwk =
-            Jwk(
+        public fun build(): Jwk {
+            val jwk = Jwk(
                 json = json,
                 properties = properties,
                 keyType = keyType
             )
+
+            if (computeIdFromThumbprint) {
+                val thumbprint = jwk.thumbprint(hashFunction = thumbprintHashFunction)
+
+                return jwk.copy {
+                    keyId = thumbprint
+                }
+            }
+
+            return jwk
+        }
     }
 
     public companion object
