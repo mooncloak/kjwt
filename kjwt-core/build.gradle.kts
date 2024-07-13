@@ -35,18 +35,9 @@ kotlin {
                 // https://github.com/Kotlin/kotlinx-datetime
                 implementation(KotlinX.datetime)
 
-                // Base32 Encoding - encoding
-                // https://github.com/05nelsonm/encoding
-                implementation("io.matthewnelson.encoding:base32:_")
-
-                // HMAC algorithms - MACs
-                // https://github.com/KotlinCrypto/MACs
-                implementation("org.kotlincrypto.macs:hmac-sha1:_")
-                implementation("org.kotlincrypto.macs:hmac-sha2:_")
-
-                // Endian - endians
-                // https://github.com/KotlinCrypto/endians
-                implementation("org.kotlincrypto.endians:endians:_")
+                // SHA-256 Hash Function
+                // https://github.com/KotlinCrypto/hash
+                implementation("org.kotlincrypto.hash:sha2:_")
             }
         }
 
