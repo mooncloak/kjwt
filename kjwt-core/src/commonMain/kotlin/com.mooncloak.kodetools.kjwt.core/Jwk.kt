@@ -529,7 +529,7 @@ public class Jwk public constructor(
                 val thumbprint = jwk.thumbprint(hashFunction = thumbprintHashFunction)
 
                 return jwk.copy {
-                    keyId = thumbprint
+                    keyId = thumbprint.value
                 }
             }
 
@@ -589,7 +589,7 @@ public fun Jwk.Companion.build(
 @ExperimentalJwtApi
 public fun Jwk.thumbprint(
     hashFunction: HashFunction = HashFunction.Sha256
-): String {
+): Thumbprint {
     // Create a JSON Object containing only the required properties for a particular algorithm
     // (note that order matters):
     // https://www.rfc-editor.org/rfc/rfc7638#section-3.2
@@ -636,7 +636,7 @@ public fun Jwk.thumbprint(
     val utfEncodedBytes = jsonString.encodeToByteArray()
     val hashedBytes = hashFunction.hash(utfEncodedBytes)
 
-    return Base64.UrlSafe.encode(hashedBytes)
+    return Thumbprint(value = Base64.UrlSafe.encode(hashedBytes))
 }
 
 /**
