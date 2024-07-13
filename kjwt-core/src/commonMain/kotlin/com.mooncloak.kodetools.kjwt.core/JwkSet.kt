@@ -1,7 +1,14 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Represents a JWK (JSON Web Key) Set.
@@ -10,29 +17,108 @@ import kotlinx.serialization.Serializable
  *
  * @see [JWK Specification](https://datatracker.ietf.org/doc/html/rfc7517)
  */
-@Serializable
+@Serializable(with = JwkSetSerializer::class)
 @ExperimentalJwtApi
 public class JwkSet public constructor(
-    @SerialName(value = PropertyKey.KEYS) public val keys: List<Jwk> = emptyList()
-) {
+    override val json: Json,
+    override val properties: Map<String, JsonElement>,
+    keys: List<Jwk>
+) : JwtObject() {
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is JwkSet) return false
-
-        return keys == other.keys
-    }
-
-    override fun hashCode(): Int =
-        keys.hashCode()
-
-    override fun toString(): String =
-        "JwkSet(keys=$keys)"
+    public val jwkKeys: List<Jwk> by property(
+        key = PropertyKey.KEYS,
+        defaultValue = keys
+    )
 
     public object PropertyKey {
 
         public const val KEYS: String = "keys"
     }
 
+    /**
+     * A builder component for creating a [Jwk] instance. This component should not be created
+     * directly, but instead can be used to create a [Jwk] instance via the [Jwk] constructor
+     * function.
+     */
+    public class Builder internal constructor(
+        initialKeys: List<Jwk>,
+        override val json: Json,
+        initialValues: Map<String, JsonElement> = emptyMap()
+    ) : JwtObject.Builder(initialValues) {
+
+        @Suppress("MemberVisibilityCanBePrivate")
+        public var jwkKeys: List<Jwk> by property(
+            key = PropertyKey.KEYS,
+            initialValue = initialKeys
+        )
+
+        /**
+         * Converts this [JwkSet.Builder] instance into a [JwkSet] instance.
+         */
+        public fun build(): JwkSet =
+            JwkSet(
+                json = json,
+                properties = properties,
+                keys = jwkKeys
+            )
+    }
+
     public companion object
+}
+
+
+/**
+ * Converts this [JwkSet] instance into a [JwkSet.Builder].
+ */
+@ExperimentalJwtApi
+public fun JwkSet.toBuilder(): JwkSet.Builder =
+    JwkSet.Builder(
+        json = this.json,
+        initialValues = this.properties,
+        initialKeys = jwkKeys
+    )
+
+/**
+ * Creates a new [JwkSet] instance starting with the same values from this [JwkSet] instance which
+ * can be overridden from the provided builder [block].
+ */
+@ExperimentalJwtApi
+public fun JwkSet.copy(block: JwkSet.Builder.() -> Unit = {}): JwkSet {
+    val builder = this.toBuilder().apply(block)
+
+    return builder.build()
+}
+
+/**
+ * The [KSerializer] implementation for the [Jwk] class.
+ */
+@ExperimentalJwtApi
+internal object JwkSetSerializer : BaseJwtObjectSerializer<JwkSet>() {
+
+    override fun toType(json: Json, jsonObject: JsonObject): JwkSet {
+        val keys = jsonObject[JwkSet.PropertyKey.KEYS]
+            ?.jsonArray
+            ?.mapNotNull { it.jsonObject }
+            ?.map { jwk ->
+                val keyType = jsonObject[Jwk.PropertyKey.KEY_TYPE]
+                    ?.jsonPrimitive
+                    ?.contentOrNull
+                    ?.let {
+                        KeyType(value = it)
+                    }
+                    ?: error("Jwk must have a Key Type property.")
+
+                Jwk(
+                    json = json,
+                    properties = jwk,
+                    keyType = keyType
+                )
+            } ?: emptyList()
+
+        return JwkSet(
+            json = json,
+            properties = jsonObject,
+            keys = keys
+        )
+    }
 }

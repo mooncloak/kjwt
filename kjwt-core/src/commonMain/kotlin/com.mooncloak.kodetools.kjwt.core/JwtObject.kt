@@ -183,11 +183,11 @@ public abstract class JwtObject internal constructor() : Map<String, JsonElement
 @ExperimentalJwtApi
 public inline fun <reified V> JwtObject.property(
     key: String? = null,
-    initialValue: V,
+    defaultValue: V,
     deserializer: DeserializationStrategy<V> = json.serializersModule.serializer()
 ): ReadOnlyProperty<JwtObject, V> = ReadOnlyRequiredJwtObjectPropertyDelegate(
     key = key,
-    initialValue = initialValue,
+    initialValue = defaultValue,
     json = json,
     deserializer = deserializer
 )

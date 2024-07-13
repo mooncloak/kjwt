@@ -16,6 +16,9 @@ import kotlinx.serialization.json.*
 public class Jwk public constructor(
     override val json: Json,
     override val properties: Map<String, JsonElement>,
+    keyType: KeyType
+) : JwtObject() {
+
     /**
      * The "kty" (key type) parameter identifies the cryptographic algorithm family used with the
      * key, such as "RSA" or "EC". "kty" values should either be registered in the IANA "JSON Web
@@ -26,8 +29,7 @@ public class Jwk public constructor(
      *
      * @see [JWK Specification](https://datatracker.ietf.org/doc/html/rfc7517#section-4.1)
      */
-    public val keyType: KeyType
-) : JwtObject() {
+    public val keyType: KeyType by property(key = PropertyKey.KEY_TYPE, defaultValue = keyType)
 
     /**
      * The "use" (public key use) parameter identifies the intended use of the public key. The
@@ -175,6 +177,7 @@ public class Jwk public constructor(
         /**
          * Gets/sets the [Jwk.keyType] value.
          */
+        @Suppress("MemberVisibilityCanBePrivate")
         public var keyType: KeyType by property(
             key = PropertyKey.KEY_TYPE,
             initialValue = initialKeyType
