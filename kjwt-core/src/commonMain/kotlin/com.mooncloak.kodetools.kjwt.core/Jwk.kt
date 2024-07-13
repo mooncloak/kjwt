@@ -111,6 +111,138 @@ public class Jwk public constructor(
      */
     public val x5tS256: String? by property(key = PropertyKey.X5T_S256)
 
+    /**
+     * The "crv" (curve) parameter identifies the cryptographic curve used with the key.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.2.1.1)
+     */
+    public val curve: String? by property(key = PropertyKey.CURVE)
+
+    /**
+     * The "x" (x coordinate) parameter contains the x coordinate for the Elliptic Curve point. It
+     * is represented as the base64url encoding of the octet string representation of the
+     * coordinate, as defined in Section 2.3.5 of SEC1 [SEC1]. The length of this octet string MUST
+     * be the full size of a coordinate for the curve specified in the "crv" parameter. For
+     * example, if the value of "crv" is "P-521", the octet string must be 66 octets long.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.2.1.2)
+     */
+    public val x: String? by property(key = PropertyKey.X)
+
+    /**
+     * The "y" (y coordinate) parameter contains the y coordinate for the Elliptic Curve point. It
+     * is represented as the base64url encoding of the octet string representation of the
+     * coordinate, as defined in Section 2.3.5 of SEC1 [SEC1]. The length of this octet string MUST
+     * be the full size of a coordinate for the curve specified in the "crv" parameter. For
+     * example, if the value of "crv" is "P-521", the octet string must be 66 octets long.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.2.1.3)
+     */
+    public val y: String? by property(key = PropertyKey.Y)
+
+    /**
+     * For elliptic curve private keys, the "d" (ECC private key) parameter contains the Elliptic
+     * Curve private key value. It is represented as the base64url encoding of the octet string
+     * representation of the private key value, as defined in Section 2.3.7 of SEC1 [SEC1]. The
+     * length of this octet string MUST be ceiling(log-base-2(n)/8) octets (where n is the order of
+     * the curve).
+     *
+     * For rsa private keys, the "d" (private exponent) parameter contains the private exponent
+     * value for the RSA private key. It is represented as a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.2.2.1)
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.1)
+     */
+    public val d: String? by property(key = PropertyKey.D)
+
+    /**
+     * The "n" (modulus) parameter contains the modulus value for the RSA public key. It is
+     * represented as a Base64urlUInt-encoded value.
+     *
+     * Note that implementers have found that some cryptographic libraries prefix an extra
+     * zero-valued octet to the modulus representations they return, for instance, returning 257
+     * octets for a 2048-bit key, rather than 256. Implementations using such libraries will need
+     * to take care to omit the extra octet from the base64url-encoded representation.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.1.1)
+     */
+    public val n: String? by property(key = PropertyKey.N)
+
+    /**
+     * The "e" (exponent) parameter contains the exponent value for the RSA public key. It is
+     * represented as a Base64urlUInt-encoded value.
+     *
+     * For instance, when representing the value 65537, the octet sequence to be base64url-encoded
+     * MUST consist of the three octets [1, 0, 1]; the resulting representation for this value is
+     * "AQAB".
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.1.2)
+     */
+    public val e: String? by property(key = PropertyKey.E)
+
+    /**
+     * The "p" (first prime factor) parameter contains the first prime factor. It is represented as
+     * a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.2)
+     */
+    public val p: String? by property(key = PropertyKey.P)
+
+    /**
+     * The "q" (second prime factor) parameter contains the second prime factor. It is represented
+     * as a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.3)
+     */
+    public val q: String? by property(key = PropertyKey.Q)
+
+    /**
+     * The "dp" (first factor CRT exponent) parameter contains the Chinese Remainder Theorem (CRT)
+     * exponent of the first factor. It is represented as a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.4)
+     */
+    public val dp: String? by property(key = PropertyKey.DP)
+
+    /**
+     * The "dq" (second factor CRT exponent) parameter contains the CRT exponent of the second
+     * factor. It is represented as a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.5)
+     */
+    public val dq: String? by property(key = PropertyKey.DQ)
+
+    /**
+     * The "qi" (first CRT coefficient) parameter contains the CRT coefficient of the second
+     * factor. It is represented as a Base64urlUInt-encoded value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.6)
+     */
+    public val qi: String? by property(key = PropertyKey.QI)
+
+    /**
+     * The "oth" (other primes info) parameter contains an array of information about any third and
+     * subsequent primes, should they exist. When only two primes have been used (the normal case),
+     * this parameter MUST be omitted. When three or more primes have been used, the number of
+     * array elements MUST be the number of primes used minus two. For more information on this
+     * case, see the description of the OtherPrimeInfo parameters in Appendix A.1.2 of RFC 3447
+     * [RFC3447], upon which the following parameters are modeled. If the consumer of a JWK does
+     * not support private keys with more than two primes and it encounters a private key that
+     * includes the "oth" parameter, then it MUST NOT use the key.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.7)
+     */
+    public val oth: List<PrimeInfo>? by property(key = PropertyKey.OTH)
+
+    /**
+     * The "k" (key value) parameter contains the value of the symmetric (or other single-valued)
+     * key. It is represented as the base64url encoding of the octet sequence containing the key
+     * value.
+     *
+     * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.4.1)
+     */
+    public val k: String? by property(key = PropertyKey.K)
+
     override fun toString(): String =
         "Jwk(json=$json, properties=$properties)"
 
@@ -164,6 +296,81 @@ public class Jwk public constructor(
          * The key for the [Jwk.x5tS256] property. This constant value is equal to "x5t#S256".
          */
         public const val X5T_S256: String = "x5t#S256"
+
+        /**
+         * The key for the [Jwk.x] property.
+         */
+        public const val X: String = "x"
+
+        /**
+         * The key for the [Jwk.y] property.
+         */
+        public const val Y: String = "y"
+
+        /**
+         * The key for the [Jwk.curve] property.
+         */
+        public const val CURVE: String = "crv"
+
+        /**
+         * The key for the [Jwk.d] property.
+         */
+        public const val D: String = "d"
+
+        /**
+         * The key for the [Jwk.n] property.
+         */
+        public const val N: String = "n"
+
+        /**
+         * The key for the [Jwk.e] property.
+         */
+        public const val E: String = "e"
+
+        /**
+         * The key for the [Jwk.p] property.
+         */
+        public const val P: String = "p"
+
+        /**
+         * The key for the [Jwk.q] property.
+         */
+        public const val Q: String = "q"
+
+        /**
+         * The key for the [Jwk.dp] property.
+         */
+        public const val DP: String = "dp"
+
+        /**
+         * The key for the [Jwk.dq] property.
+         */
+        public const val DQ: String = "dq"
+
+        /**
+         * The key for the [Jwk.qi] property.
+         */
+        public const val QI: String = "qi"
+
+        /**
+         * The key for the [Jwk.oth] property.
+         */
+        public const val OTH: String = "oth"
+
+        /**
+         * The key for the [Jwk.r] property.
+         */
+        public const val R: String = "r"
+
+        /**
+         * The key for the [Jwk.t] property.
+         */
+        public const val T: String = "t"
+
+        /**
+         * The key for the [Jwk.k] property.
+         */
+        public const val K: String = "k"
     }
 
     /**
@@ -225,6 +432,71 @@ public class Jwk public constructor(
          * Gets/sets the [Jwk.x5tS256] value.
          */
         public var x5tS256: String? by property(key = PropertyKey.X5T_S256)
+
+        /**
+         * Gets/sets the [Jwk.curve] value.
+         */
+        public var curve: String? by property(key = PropertyKey.CURVE)
+
+        /**
+         * Gets/sets the [Jwk.x] value.
+         */
+        public var x: String? by property(key = PropertyKey.X)
+
+        /**
+         * Gets/sets the [Jwk.y] value.
+         */
+        public var y: String? by property(key = PropertyKey.Y)
+
+        /**
+         * Gets/sets the [Jwk.d] value.
+         */
+        public var d: String? by property(key = PropertyKey.D)
+
+        /**
+         * Gets/sets the [Jwk.n] value.
+         */
+        public var n: String? by property(key = PropertyKey.N)
+
+        /**
+         * Gets/sets the [Jwk.e] value.
+         */
+        public var e: String? by property(key = PropertyKey.E)
+
+        /**
+         * Gets/sets the [Jwk.p] value.
+         */
+        public var p: String? by property(key = PropertyKey.P)
+
+        /**
+         * Gets/sets the [Jwk.q] value.
+         */
+        public var q: String? by property(key = PropertyKey.Q)
+
+        /**
+         * Gets/sets the [Jwk.dp] value.
+         */
+        public var dp: String? by property(key = PropertyKey.DP)
+
+        /**
+         * Gets/sets the [Jwk.dq] value.
+         */
+        public var dq: String? by property(key = PropertyKey.DQ)
+
+        /**
+         * Gets/sets the [Jwk.qi] value.
+         */
+        public var qi: String? by property(key = PropertyKey.QI)
+
+        /**
+         * Gets/sets the [Jwk.oth] value.
+         */
+        public var oth: List<PrimeInfo>? by property(key = PropertyKey.OTH)
+
+        /**
+         * Gets/sets the [Jwk.k] value.
+         */
+        public var k: String? by property(key = PropertyKey.K)
 
         /**
          * Converts this [Jwk.Builder] instance into a [Jwk] instance.
