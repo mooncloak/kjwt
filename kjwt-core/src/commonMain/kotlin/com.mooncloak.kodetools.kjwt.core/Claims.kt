@@ -23,7 +23,7 @@ public value class TextClaims public constructor(
 @ExperimentalJwtApi
 @Serializable(with = JsonClaimsSerializer::class)
 public class JsonClaims public constructor(
-    override val json: Json,
+    override val json: Json = Json.Default,
     override val properties: Map<String, JsonElement>
 ) : Claims,
     JwtObject() {
@@ -249,7 +249,7 @@ public fun JsonClaims.copy(block: JsonClaims.Builder.() -> Unit = {}): JsonClaim
  */
 @ExperimentalJwtApi
 public fun JsonClaims.Companion.build(
-    json: Json,
+    json: Json = Json.Default,
     block: JsonClaims.Builder.() -> Unit
 ): JsonClaims =
     JsonClaims.Builder(json = json).apply(block).build()

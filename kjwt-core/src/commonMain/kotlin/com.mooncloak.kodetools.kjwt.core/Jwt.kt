@@ -154,7 +154,7 @@ public class UnsignedJwt internal constructor(
 
 @ExperimentalJwtApi
 public operator fun Jwt.Companion.invoke(
-    json: Json,
+    json: Json = Json.Default,
     builder: Builder.() -> Unit
 ): UnsignedJwt =
     Builder(json = json)
@@ -165,7 +165,7 @@ public operator fun Jwt.Companion.invoke(
 public fun Jwt.Companion.from(
     header: Header,
     payload: Claims,
-    json: Json
+    json: Json = Json.Default
 ): UnsignedJwt =
     UnsignedJwt(
         header = header,

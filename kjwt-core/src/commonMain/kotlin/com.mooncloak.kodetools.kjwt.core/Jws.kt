@@ -54,10 +54,33 @@ public interface Jws : Jwt,
      */
     public val signature: Signature
 
-    public fun interface Validator {
+    /**
+     * A component that parses and validates a [CompactedJwt] and converts it into a [Jws] and
+     * verifies its signature.
+     */
+    public fun interface Parser {
 
-        @Throws(JwtValidationException::class, CancellationException::class)
-        public suspend fun validate(
+        /**
+         * Parses the provided [compacted] JWT instance into a [Jws].
+         *
+         * @param [compacted] The [CompactedJwt] instance to parse into a [Jws].
+         *
+         * @param [json] The [Json] instance to use for deserializing and serializing JSON models.
+         *
+         * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
+         * signature of the [Jws] represented by the provided [compacted] JWT.
+         *
+         * @param [validation] A function that performs additional validation on the parsed [Jws]
+         * instance. If this function returns `false`, then validation failed and an exception is
+         * thrown. Otherwise, if this function returns `true`, the [Jws] is returned from this
+         * [parse] function.
+         *
+         * @throws [JwtParseException] if an exception occurred during parsing.
+         *
+         * @return The parsed [Jws].
+         */
+        @Throws(JwtParseException::class, CancellationException::class)
+        public suspend fun parse(
             compacted: CompactedJwt,
             json: Json,
             resolver: KeyResolver,
@@ -65,18 +88,100 @@ public interface Jws : Jwt,
         ): Jws
     }
 
-    public fun interface Parser {
+    public companion object : Parser by DefaultJwsParser
+}
 
-        @Throws(JwtParseException::class, CancellationException::class)
-        public suspend fun parse(
-            compacted: CompactedJwt,
-            json: Json,
-            resolver: KeyResolver
-        ): Jws
-    }
+/**
+ * Parses the provided [compacted] JWT instance into a [Jws]. This is a convenience function that
+ * delegates to the [Jws.Parser.parse] function using the [Json.Default] instance.
+ *
+ * @param [compacted] The [CompactedJwt] instance to parse into a [Jws].
+ *
+ * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
+ * signature of the [Jws] represented by the provided [compacted] JWT.
+ *
+ * @param [validation] A function that performs additional validation on the parsed [Jws] instance.
+ * If this function returns `false`, then validation failed and an exception is thrown. Otherwise,
+ * if this function returns `true`, the [Jws] is returned from this [parse] function.
+ *
+ * @throws [JwtParseException] if an exception occurred during parsing.
+ *
+ * @return The parsed [Jws].
+ */
+@ExperimentalJwtApi
+@Throws(JwtParseException::class, CancellationException::class)
+public suspend fun Jws.Parser.parse(
+    compacted: CompactedJwt,
+    resolver: KeyResolver,
+    validation: suspend Jws.() -> Boolean = { true }
+): Jws = parse(
+    compacted = compacted,
+    resolver = resolver,
+    json = Json.Default,
+    validation = validation
+)
 
-    public companion object : Validator by DefaultJwsValidator,
-        Parser by DefaultJwsParser
+/**
+ * Parses the provided [compacted] JWT instance into a [Jws]. This is a convenience function that
+ * delegates to the [Jws.Parser.parse] function using a validation parameter that always returns
+ * `true`.
+ *
+ * @param [compacted] The [CompactedJwt] instance to parse into a [Jws].
+ *
+ * @param [json] The [Json] instance to use for deserializing and serializing JSON models.
+ *
+ * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
+ * signature of the [Jws] represented by the provided [compacted] JWT.
+ *
+ * @throws [JwtParseException] if an exception occurred during parsing.
+ *
+ * @return The parsed [Jws].
+ */
+@ExperimentalJwtApi
+@Throws(JwtParseException::class, CancellationException::class)
+public suspend fun Jws.Parser.parse(
+    compacted: CompactedJwt,
+    json: Json = Json.Default,
+    resolver: KeyResolver
+): Jws = parse(
+    compacted = compacted,
+    resolver = resolver,
+    json = json,
+    validation = { true }
+)
+
+/**
+ * Parses the provided [compacted] JWT instance into a [Jws] and returns the value, or `null` if
+ * the parsing failed.
+ *
+ * @param [compacted] The [CompactedJwt] instance to parse into a [Jws].
+ *
+ * @param [json] The [Json] instance to use for deserializing and serializing JSON models.
+ *
+ * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
+ * signature of the [Jws] represented by the provided [compacted] JWT.
+ *
+ * @param [validation] A function that performs additional validation on the parsed [Jws] instance.
+ * If this function returns `false`, then validation failed and an exception is thrown. Otherwise,
+ * if this function returns `true`, the [Jws] is returned from this [parse] function.
+ *
+ * @return The parsed [Jws], or `null` if the parsing failed.
+ */
+@ExperimentalJwtApi
+public suspend fun Jws.Parser.parseOrNull(
+    compacted: CompactedJwt,
+    json: Json = Json.Default,
+    resolver: KeyResolver,
+    validation: suspend Jws.() -> Boolean = { true }
+): Jws? = try {
+    parse(
+        compacted = compacted,
+        json = json,
+        resolver = resolver,
+        validation = validation
+    )
+} catch (e: JwtParseException) {
+    null
 }
 
 /**
@@ -108,42 +213,15 @@ public val Jws.isSecured: Boolean
     get() = !isUnsecured
 
 @ExperimentalJwtApi
-internal data object DefaultJwsValidator : Jws.Validator {
+internal data object DefaultJwsParser : Jws.Parser {
 
-    override suspend fun validate(
+    @ExperimentalKeyApi
+    override suspend fun parse(
         compacted: CompactedJwt,
         json: Json,
         resolver: KeyResolver,
         validation: suspend Jws.() -> Boolean
     ): Jws {
-        val jws = try {
-            Jws.parse(
-                compacted = compacted,
-                json = json,
-                resolver = resolver
-            )
-        } catch (e: JwtParseException) {
-            throw JwtValidationException(
-                message = "Error parsing JWS for validation.",
-                cause = e
-            )
-        }
-
-        val result = validation.invoke(jws)
-
-        if (!result) {
-            throw JwtValidationException(message = "Validation failed for JWS $jws.")
-        }
-
-        return jws
-    }
-}
-
-@ExperimentalJwtApi
-internal data object DefaultJwsParser : Jws.Parser {
-
-    @ExperimentalKeyApi
-    override suspend fun parse(compacted: CompactedJwt, json: Json, resolver: KeyResolver): Jws {
         // The parsing and validation of a JWS is defined by the following specifications:
         // https://datatracker.ietf.org/doc/html/rfc7519#section-7.2
         // https://datatracker.ietf.org/doc/html/rfc7515#section-5.2
@@ -171,7 +249,8 @@ internal data object DefaultJwsParser : Jws.Parser {
             2, 3 -> parseJws(
                 json = json,
                 resolver = resolver,
-                sections = sections
+                sections = sections,
+                validation = validation
             )
 
             5 -> throw JwtParseException("JWEs are not currently supported.")
@@ -185,7 +264,8 @@ internal data object DefaultJwsParser : Jws.Parser {
     private suspend fun parseJws(
         json: Json,
         resolver: KeyResolver,
-        sections: List<String>
+        sections: List<String>,
+        validation: suspend Jws.() -> Boolean
     ): Jws {
         val headerSection = sections.firstOrNull()
             ?: throw JwtParseException("Compacted JWS must contain a header section.")
@@ -242,12 +322,24 @@ internal data object DefaultJwsParser : Jws.Parser {
             throw JwtParseException("Signature of JWS was invalid.")
         }
 
-        return DefaultJws(
+        val jws = DefaultJws(
             header = header,
             payload = payload,
             signature = signature,
             json = json
         )
+
+        try {
+            val isValid = validation.invoke(jws)
+
+            if (!isValid) {
+                throw JwtParseException(message = "Error validating JWS.")
+            }
+        } catch (e: JwtValidationException) {
+            throw JwtParseException(message = "Error validating JWS.", cause = e)
+        }
+
+        return jws
     }
 }
 

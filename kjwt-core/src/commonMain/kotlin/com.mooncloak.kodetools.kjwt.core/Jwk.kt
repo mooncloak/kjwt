@@ -16,7 +16,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 @ExperimentalJwtApi
 @Serializable(with = JwkSerializer::class)
 public class Jwk public constructor(
-    override val json: Json,
+    override val json: Json = Json.Default,
     override val properties: Map<String, JsonElement>,
     keyType: KeyType
 ) : JwtObject() {
@@ -568,7 +568,7 @@ public fun Jwk.copy(block: Jwk.Builder.() -> Unit = {}): Jwk {
 @ExperimentalJwtApi
 public fun Jwk.Companion.build(
     keyType: KeyType,
-    json: Json,
+    json: Json = Json.Default,
     block: Jwk.Builder.() -> Unit
 ): Jwk = Jwk.Builder(
     json = json,

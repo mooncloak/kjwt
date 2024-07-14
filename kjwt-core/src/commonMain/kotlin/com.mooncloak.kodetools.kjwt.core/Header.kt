@@ -22,7 +22,7 @@ import kotlinx.serialization.json.*
 @ExperimentalJwtApi
 @Serializable(with = HeaderSerializer::class)
 public class Header public constructor(
-    override val json: Json,
+    override val json: Json = Json.Default,
     override val properties: Map<String, JsonElement>
 ) : JwtObject() {
 
@@ -368,7 +368,10 @@ public fun Header.copy(block: Header.Builder.() -> Unit = {}): Header {
  * Creates a [Header] from the provided builder [block] and [json] instance.
  */
 @ExperimentalJwtApi
-public fun Header.Companion.build(json: Json, block: Header.Builder.() -> Unit): Header =
+public fun Header.Companion.build(
+    json: Json = Json.Default,
+    block: Header.Builder.() -> Unit
+): Header =
     Header.Builder(json = json).apply(block).build()
 
 @ExperimentalJwtApi

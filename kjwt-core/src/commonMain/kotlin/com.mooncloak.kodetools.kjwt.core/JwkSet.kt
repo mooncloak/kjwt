@@ -20,7 +20,7 @@ import kotlinx.serialization.json.jsonPrimitive
 @Serializable(with = JwkSetSerializer::class)
 @ExperimentalJwtApi
 public class JwkSet public constructor(
-    override val json: Json,
+    override val json: Json = Json.Default,
     override val properties: Map<String, JsonElement>,
     keys: List<Jwk>
 ) : JwtObject() {
@@ -97,7 +97,7 @@ public fun JwkSet.copy(block: JwkSet.Builder.() -> Unit = {}): JwkSet {
 @ExperimentalJwtApi
 public fun JwkSet.Companion.build(
     keys: List<Jwk> = emptyList(),
-    json: Json,
+    json: Json = Json.Default,
     block: JwkSet.Builder.() -> Unit
 ): JwkSet = JwkSet.Builder(
     json = json,
