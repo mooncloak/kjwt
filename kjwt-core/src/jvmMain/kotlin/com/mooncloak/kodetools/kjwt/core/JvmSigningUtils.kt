@@ -3,6 +3,8 @@ package com.mooncloak.kodetools.kjwt.core
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.DynamicJwkBuilder
 import io.jsonwebtoken.security.Jwks
+import io.jsonwebtoken.security.PrivateJwk
+import io.jsonwebtoken.security.PrivateJwkBuilder
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.ECPrivateKey
@@ -39,8 +41,7 @@ public actual suspend fun SignatureAlgorithm.generateSigningKey(): Jwk? {
         SignatureAlgorithm.PS512 -> Jwts.SIG.PS512.keyPair().build()
     }
 
-
-    val jwks = when (key) {
+    val jwk = when (key) {
         is java.security.Key -> Jwks.builder().key(key)
         is java.security.KeyPair -> Jwks.builder().pair(key)
         else -> error("Unexpected type generated for signing key $key.")

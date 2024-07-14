@@ -1,6 +1,5 @@
 package com.mooncloak.kodetools.kjwt.core
 
-
 /**
  * A component that resolves the [Jwk] key used when signing a [Jws]. This could be used to
  * dynamically resolve the signing key for verification or signing purposes.
