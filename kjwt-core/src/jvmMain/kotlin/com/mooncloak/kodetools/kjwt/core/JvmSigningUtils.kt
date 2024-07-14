@@ -3,8 +3,7 @@ package com.mooncloak.kodetools.kjwt.core
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.DynamicJwkBuilder
 import io.jsonwebtoken.security.Jwks
-import io.jsonwebtoken.security.PrivateJwk
-import io.jsonwebtoken.security.PrivateJwkBuilder
+import kotlinx.serialization.json.Json
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.ECPrivateKey
@@ -24,7 +23,7 @@ internal actual suspend fun sign(
 
 @ExperimentalJwtApi
 @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
-public actual suspend fun SignatureAlgorithm.generateSigningKey(): Jwk? {
+public actual suspend fun SignatureAlgorithm.generateSigningKey(json: Json): Jwk? {
     val key = when (this) {
         SignatureAlgorithm.NONE -> return null
         SignatureAlgorithm.HS256 -> Jwts.SIG.HS256.key().build()
@@ -47,7 +46,22 @@ public actual suspend fun SignatureAlgorithm.generateSigningKey(): Jwk? {
         else -> error("Unexpected type generated for signing key $key.")
     }
 
-    TODO()
+    return jwk.toJwk(json = json)
+}
+
+@ExperimentalJwtApi
+internal fun io.jsonwebtoken.security.Jwk<*>.toJwk(json: Json): Jwk {
+    // The library only gives us access to a Map<String, Any>, so we have to convert that to a
+    // Map<String, JsonElement> so that we can convert it to a Kotlin multiplatform JWK instance.
+    val properties = this.entries.associate { entry ->
+        entry.key to entry.value.toJsonElement()
+    }
+
+    return Jwk(
+        json = json,
+        properties = properties,
+        keyType = KeyType(value = this.type)
+    )
 }
 
 internal fun DynamicJwkBuilder<*, *>.key(key: java.security.Key): io.jsonwebtoken.security.Jwk<*> =
