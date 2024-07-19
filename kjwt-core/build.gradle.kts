@@ -33,9 +33,17 @@ kotlin {
                 // https://github.com/Kotlin/kotlinx-datetime
                 implementation(KotlinX.datetime)
 
-                // SHA-256 Hash Function
+                // SHA Hash Functions
                 // https://github.com/KotlinCrypto/hash
                 implementation("org.kotlincrypto.hash:sha2:_")
+
+                // HMAC Functions
+                // https://github.com/KotlinCrypto/MACs
+                implementation("org.kotlincrypto.macs:hmac-sha2:_")
+
+                // Secure Random (CSPRNG)
+                // https://github.com/KotlinCrypto/secure-random
+                implementation("org.kotlincrypto:secure-random:_")
             }
         }
 
