@@ -1,51 +1,20 @@
-public abstract class com/mooncloak/kodetools/kjwt/core/BaseJwtObject : com/mooncloak/kodetools/kjwt/core/JwtObject {
-	public fun <init> ()V
-	public fun clear ()V
-	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
-	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
-	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
-	public fun computeIfAbsent (Ljava/lang/String;Ljava/util/function/Function;)Lkotlinx/serialization/json/JsonElement;
-	public synthetic fun computeIfPresent (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
-	public fun computeIfPresent (Ljava/lang/String;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
-	public final fun containsKey (Ljava/lang/Object;)Z
-	public final fun containsKey (Ljava/lang/String;)Z
-	public final fun containsValue (Ljava/lang/Object;)Z
-	public final fun containsValue (Lkotlinx/serialization/json/JsonElement;)Z
-	public final fun entrySet ()Ljava/util/Set;
-	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
-	public final fun get (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonElement;
-	public final fun get (Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
-	public fun getEntries ()Ljava/util/Set;
-	public abstract fun getJson ()Lkotlinx/serialization/json/Json;
-	public fun getKeys ()Ljava/util/Set;
-	public final fun getSize ()I
-	public fun getValues ()Ljava/util/Collection;
-	public final fun isEmpty ()Z
-	public final fun keySet ()Ljava/util/Set;
-	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
-	public fun merge (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
-	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun put (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
-	public fun putAll (Ljava/util/Map;)V
-	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun putIfAbsent (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
-	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun remove (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonElement;
-	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
-	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
-	public fun replace (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
-	public fun replace (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/json/JsonElement;)Z
-	public fun replaceAll (Ljava/util/function/BiFunction;)V
-	public final fun size ()I
-	public final fun values ()Ljava/util/Collection;
-}
-
 public abstract interface class com/mooncloak/kodetools/kjwt/core/Claims {
 }
 
+public final class com/mooncloak/kodetools/kjwt/core/ClaimsKt {
+	public static final fun build (Lcom/mooncloak/kodetools/kjwt/core/JsonClaims$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;
+	public static synthetic fun build$default (Lcom/mooncloak/kodetools/kjwt/core/JsonClaims$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;
+	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;
+	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;)Lcom/mooncloak/kodetools/kjwt/core/JsonClaims$Builder;
+}
+
 public abstract interface class com/mooncloak/kodetools/kjwt/core/Compactable {
-	public abstract fun compact-ZahW-5w (Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Compactable$Companion;
+	public abstract fun compact-THRuOwY (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Compactable$Companion {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/CompactedJwt {
@@ -81,24 +50,41 @@ public final class com/mooncloak/kodetools/kjwt/core/CompactedJwt$Companion {
 public abstract interface annotation class com/mooncloak/kodetools/kjwt/core/ExperimentalJwtApi : java/lang/annotation/Annotation {
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Header : com/mooncloak/kodetools/kjwt/core/JwtObject {
+public abstract interface class com/mooncloak/kodetools/kjwt/core/HashFunction {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/HashFunction$Companion;
+	public abstract fun hash ([B)[B
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/HashFunction$Companion {
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/HashFunctionKt {
+	public static final fun getSha256 (Lcom/mooncloak/kodetools/kjwt/core/HashFunction$Companion;)Lcom/mooncloak/kodetools/kjwt/core/HashFunction;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Header : com/mooncloak/kodetools/kjwt/core/JwtObject {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Header$Companion;
-	public abstract fun getAlgorithm ()Ljava/lang/String;
-	public abstract fun getCompression ()Ljava/lang/String;
-	public abstract fun getContentType ()Ljava/lang/String;
-	public abstract fun getCritical ()Ljava/lang/String;
-	public abstract fun getEncryption ()Ljava/lang/String;
-	public abstract fun getJwk ()Ljava/lang/String;
-	public abstract fun getJwkSetUrl ()Ljava/lang/String;
-	public abstract fun getKeyId ()Ljava/lang/String;
-	public abstract fun getType ()Ljava/lang/String;
-	public abstract fun getX5c ()Ljava/lang/String;
-	public abstract fun getX5t ()Ljava/lang/String;
-	public abstract fun getX5tS256 ()Ljava/lang/String;
-	public abstract fun getX5u ()Ljava/lang/String;
+	public fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAlgorithm ()Ljava/lang/String;
+	public final fun getCompression ()Ljava/lang/String;
+	public final fun getContentType ()Ljava/lang/String;
+	public final fun getCritical ()Ljava/lang/String;
+	public final fun getEncryption ()Ljava/lang/String;
+	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getJwk ()Ljava/lang/String;
+	public final fun getJwkSetUrl ()Ljava/lang/String;
+	public final fun getKeyId ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getX5c ()Ljava/lang/String;
+	public final fun getX5t ()Ljava/lang/String;
+	public final fun getX5tS256 ()Ljava/lang/String;
+	public final fun getX5u ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/Header$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject$Builder {
+	public final fun build ()Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public final fun getAlgorithm ()Ljava/lang/String;
 	public final fun getCompression ()Ljava/lang/String;
 	public final fun getContentType ()Ljava/lang/String;
@@ -129,6 +115,7 @@ public final class com/mooncloak/kodetools/kjwt/core/Header$Builder : com/mooncl
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/Header$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/Header$PropertyKey {
@@ -149,21 +136,37 @@ public final class com/mooncloak/kodetools/kjwt/core/Header$PropertyKey {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/HeaderKt {
+	public static final fun build (Lcom/mooncloak/kodetools/kjwt/core/Header$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static synthetic fun build$default (Lcom/mooncloak/kodetools/kjwt/core/Header$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/Header;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/Header;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public static final fun getSignatureAlgorithm (Lcom/mooncloak/kodetools/kjwt/core/Header;)Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;
+	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/Header;)Lcom/mooncloak/kodetools/kjwt/core/Header$Builder;
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/JsonClaims : com/mooncloak/kodetools/kjwt/core/Claims, com/mooncloak/kodetools/kjwt/core/JwtObject {
+public class com/mooncloak/kodetools/kjwt/core/InvalidSignatureKeyAlgorithm : com/mooncloak/kodetools/kjwt/core/JwtSignatureException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/JsonClaims : com/mooncloak/kodetools/kjwt/core/JwtObject, com/mooncloak/kodetools/kjwt/core/Claims {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/JsonClaims$Companion;
-	public abstract fun getAudience ()Ljava/util/Set;
-	public abstract fun getExpiration ()Lkotlinx/datetime/Instant;
-	public abstract fun getId ()Ljava/lang/String;
-	public abstract fun getIssuedAt ()Lkotlinx/datetime/Instant;
-	public abstract fun getIssuer ()Ljava/lang/String;
-	public abstract fun getNotBefore ()Lkotlinx/datetime/Instant;
-	public abstract fun getSubject ()Ljava/lang/String;
+	public fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getAudience ()Ljava/util/Set;
+	public final fun getExpiration ()Lkotlinx/datetime/Instant;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getIssuedAt ()Lkotlinx/datetime/Instant;
+	public final fun getIssuer ()Ljava/lang/String;
+	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getNotBefore ()Lkotlinx/datetime/Instant;
+	public final fun getSubject ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JsonClaims$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject$Builder {
+	public final fun build ()Lcom/mooncloak/kodetools/kjwt/core/JsonClaims;
 	public final fun getAudience ()Ljava/util/Set;
 	public final fun getExpiration ()Lkotlinx/datetime/Instant;
 	public final fun getId ()Ljava/lang/String;
@@ -182,6 +185,7 @@ public final class com/mooncloak/kodetools/kjwt/core/JsonClaims$Builder : com/mo
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JsonClaims$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JsonClaims$PropertyKey {
@@ -195,47 +199,93 @@ public final class com/mooncloak/kodetools/kjwt/core/JsonClaims$PropertyKey {
 	public static final field SUBJECT Ljava/lang/String;
 }
 
-public final class com/mooncloak/kodetools/kjwt/core/JvmKeyUtilsKt {
-	public static final fun generateSigningKey (Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;)Lcom/mooncloak/kodetools/kjwt/key/KeyMaterial;
-	public static final fun keyFrom (Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;[B)Lcom/mooncloak/kodetools/kjwt/key/Key;
-	public static final fun toJwk (Lcom/mooncloak/kodetools/kjwt/key/KeyMaterial;Lkotlinx/serialization/json/Json;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
-	public static final fun toKeyMaterial (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lkotlinx/serialization/json/Json;)Lcom/mooncloak/kodetools/kjwt/key/KeyMaterial;
+public final class com/mooncloak/kodetools/kjwt/core/JvmSigningUtilsKt {
+	public static final fun generateSigningKey (Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun generateSigningKey$default (Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwk : com/mooncloak/kodetools/kjwt/core/JwtObject {
+public final class com/mooncloak/kodetools/kjwt/core/Jwk : com/mooncloak/kodetools/kjwt/core/JwtObject {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;
-	public abstract fun getAlgorithm ()Ljava/lang/String;
-	public abstract fun getKeyId ()Ljava/lang/String;
-	public abstract fun getKeyOperations ()Ljava/util/List;
-	public abstract fun getKeyType-pwm6Xcg ()Ljava/lang/String;
-	public abstract fun getUse-DSC2hQA ()Ljava/lang/String;
-	public abstract fun getX5c ()Ljava/lang/String;
-	public abstract fun getX5t ()Ljava/lang/String;
-	public abstract fun getX5tS256 ()Ljava/lang/String;
-	public abstract fun getX5u ()Ljava/lang/String;
-}
-
-public final class com/mooncloak/kodetools/kjwt/core/Jwk$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject$Builder {
-	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/Json;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAlgorithm ()Ljava/lang/String;
+	public final fun getCurve ()Ljava/lang/String;
+	public final fun getD ()Ljava/lang/String;
+	public final fun getDp ()Ljava/lang/String;
+	public final fun getDq ()Ljava/lang/String;
+	public final fun getE ()Ljava/lang/String;
 	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getK ()Ljava/lang/String;
 	public final fun getKeyId ()Ljava/lang/String;
 	public final fun getKeyOperations ()Ljava/util/List;
 	public final fun getKeyType-pwm6Xcg ()Ljava/lang/String;
+	public final fun getN ()Ljava/lang/String;
+	public final fun getOth ()Ljava/util/List;
+	public final fun getP ()Ljava/lang/String;
+	public final fun getQ ()Ljava/lang/String;
+	public final fun getQi ()Ljava/lang/String;
 	public final fun getUse-DSC2hQA ()Ljava/lang/String;
+	public final fun getX ()Ljava/lang/String;
 	public final fun getX5c ()Ljava/lang/String;
 	public final fun getX5t ()Ljava/lang/String;
 	public final fun getX5tS256 ()Ljava/lang/String;
 	public final fun getX5u ()Ljava/lang/String;
+	public final fun getY ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Jwk$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject$Builder {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/Json;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun build ()Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public final fun getAlgorithm ()Ljava/lang/String;
+	public final fun getComputeIdFromThumbprint ()Z
+	public final fun getCurve ()Ljava/lang/String;
+	public final fun getD ()Ljava/lang/String;
+	public final fun getDp ()Ljava/lang/String;
+	public final fun getDq ()Ljava/lang/String;
+	public final fun getE ()Ljava/lang/String;
+	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getK ()Ljava/lang/String;
+	public final fun getKeyId ()Ljava/lang/String;
+	public final fun getKeyOperations ()Ljava/util/List;
+	public final fun getKeyType-pwm6Xcg ()Ljava/lang/String;
+	public final fun getN ()Ljava/lang/String;
+	public final fun getOth ()Ljava/util/List;
+	public final fun getP ()Ljava/lang/String;
+	public final fun getQ ()Ljava/lang/String;
+	public final fun getQi ()Ljava/lang/String;
+	public final fun getThumbprintHashFunction ()Lcom/mooncloak/kodetools/kjwt/core/HashFunction;
+	public final fun getUse-DSC2hQA ()Ljava/lang/String;
+	public final fun getX ()Ljava/lang/String;
+	public final fun getX5c ()Ljava/lang/String;
+	public final fun getX5t ()Ljava/lang/String;
+	public final fun getX5tS256 ()Ljava/lang/String;
+	public final fun getX5u ()Ljava/lang/String;
+	public final fun getY ()Ljava/lang/String;
 	public final fun setAlgorithm (Ljava/lang/String;)V
+	public final fun setComputeIdFromThumbprint (Z)V
+	public final fun setCurve (Ljava/lang/String;)V
+	public final fun setD (Ljava/lang/String;)V
+	public final fun setDp (Ljava/lang/String;)V
+	public final fun setDq (Ljava/lang/String;)V
+	public final fun setE (Ljava/lang/String;)V
+	public final fun setK (Ljava/lang/String;)V
 	public final fun setKeyId (Ljava/lang/String;)V
 	public final fun setKeyOperations (Ljava/util/List;)V
 	public final fun setKeyType-FxVBMhw (Ljava/lang/String;)V
+	public final fun setN (Ljava/lang/String;)V
+	public final fun setOth (Ljava/util/List;)V
+	public final fun setP (Ljava/lang/String;)V
+	public final fun setQ (Ljava/lang/String;)V
+	public final fun setQi (Ljava/lang/String;)V
+	public final fun setThumbprintHashFunction (Lcom/mooncloak/kodetools/kjwt/core/HashFunction;)V
 	public final fun setUse-BJdfpy8 (Ljava/lang/String;)V
+	public final fun setX (Ljava/lang/String;)V
 	public final fun setX5c (Ljava/lang/String;)V
 	public final fun setX5t (Ljava/lang/String;)V
 	public final fun setX5tS256 (Ljava/lang/String;)V
 	public final fun setX5u (Ljava/lang/String;)V
+	public final fun setY (Ljava/lang/String;)V
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/Jwk$Companion {
@@ -244,43 +294,54 @@ public final class com/mooncloak/kodetools/kjwt/core/Jwk$Companion {
 
 public final class com/mooncloak/kodetools/kjwt/core/Jwk$PropertyKey {
 	public static final field ALGORITHM Ljava/lang/String;
+	public static final field CURVE Ljava/lang/String;
+	public static final field D Ljava/lang/String;
+	public static final field DP Ljava/lang/String;
+	public static final field DQ Ljava/lang/String;
+	public static final field E Ljava/lang/String;
 	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/Jwk$PropertyKey;
+	public static final field K Ljava/lang/String;
 	public static final field KEY_ID Ljava/lang/String;
 	public static final field KEY_OPERATIONS Ljava/lang/String;
 	public static final field KEY_TYPE Ljava/lang/String;
+	public static final field N Ljava/lang/String;
+	public static final field OTH Ljava/lang/String;
+	public static final field P Ljava/lang/String;
+	public static final field Q Ljava/lang/String;
+	public static final field QI Ljava/lang/String;
 	public static final field USE Ljava/lang/String;
+	public static final field X Ljava/lang/String;
 	public static final field X5C Ljava/lang/String;
 	public static final field X5T Ljava/lang/String;
 	public static final field X5T_S256 Ljava/lang/String;
 	public static final field X5U Ljava/lang/String;
+	public static final field Y Ljava/lang/String;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JwkKt {
-	public static final fun invoke-A8VPBvw (Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;Lkotlinx/serialization/json/Json;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
-	public static synthetic fun invoke-A8VPBvw$default (Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;Lkotlinx/serialization/json/Json;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
-	public static final fun invoke-VUNSF4M (Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;Lkotlinx/serialization/json/Json;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public static final fun build-C6DdH-E (Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public static synthetic fun build-C6DdH-E$default (Lcom/mooncloak/kodetools/kjwt/core/Jwk$Companion;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Jwk;
+	public static final fun thumbprint (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lcom/mooncloak/kodetools/kjwt/core/HashFunction;)Ljava/lang/String;
+	public static synthetic fun thumbprint$default (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lcom/mooncloak/kodetools/kjwt/core/HashFunction;ILjava/lang/Object;)Ljava/lang/String;
+	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/Jwk;)Lcom/mooncloak/kodetools/kjwt/core/Jwk$Builder;
 }
 
-public final class com/mooncloak/kodetools/kjwt/core/JwkSet {
+public final class com/mooncloak/kodetools/kjwt/core/JwkSet : com/mooncloak/kodetools/kjwt/core/JwtObject {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/JwkSet$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/util/List;)V
-	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getKeys ()Ljava/util/List;
-	public fun hashCode ()I
+	public fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;Ljava/util/List;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;Ljava/util/Map;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getJwkKeys ()Ljava/util/List;
 	public fun toString ()Ljava/lang/String;
 }
 
-public synthetic class com/mooncloak/kodetools/kjwt/core/JwkSet$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/JwkSet$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/kjwt/core/JwkSet;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+public final class com/mooncloak/kodetools/kjwt/core/JwkSet$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject$Builder {
+	public final fun build ()Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
+	public synthetic fun getJson ()Lkotlinx/serialization/json/Json;
+	public final fun getJwkKeys ()Ljava/util/List;
+	public final fun setJwkKeys (Ljava/util/List;)V
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JwkSet$Companion {
@@ -292,53 +353,51 @@ public final class com/mooncloak/kodetools/kjwt/core/JwkSet$PropertyKey {
 	public static final field KEYS Ljava/lang/String;
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jws : com/mooncloak/kodetools/kjwt/core/Jwt {
+public final class com/mooncloak/kodetools/kjwt/core/JwkSetKt {
+	public static final fun build (Lcom/mooncloak/kodetools/kjwt/core/JwkSet$Companion;Ljava/util/List;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
+	public static synthetic fun build$default (Lcom/mooncloak/kodetools/kjwt/core/JwkSet$Companion;Ljava/util/List;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
+	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/JwkSet;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/JwkSet;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet;
+	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/JwkSet;)Lcom/mooncloak/kodetools/kjwt/core/JwkSet$Builder;
+}
+
+public abstract interface class com/mooncloak/kodetools/kjwt/core/Jws : com/mooncloak/kodetools/kjwt/core/Compactable, com/mooncloak/kodetools/kjwt/core/Jwt {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Jws$Companion;
 	public abstract fun getSignature-FtMuiQw ()Ljava/lang/String;
 }
 
-public final class com/mooncloak/kodetools/kjwt/core/Jws$Companion : com/mooncloak/kodetools/kjwt/core/Jws$Parser, com/mooncloak/kodetools/kjwt/core/Jws$Validator {
-	public fun parse-8J0hliM (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun validate-HinsYik (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+public final class com/mooncloak/kodetools/kjwt/core/Jws$Companion : com/mooncloak/kodetools/kjwt/core/Jws$Parser {
+	public fun parse-HinsYik (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/mooncloak/kodetools/kjwt/core/Jws$Parser {
-	public abstract fun parse-8J0hliM (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun parse-HinsYik (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jws$Validator {
-	public abstract fun validate-HinsYik (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+public final class com/mooncloak/kodetools/kjwt/core/JwsKt {
+	public static final fun isSecured (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Z
+	public static final fun isUnsecured (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Z
+	public static final fun parse-bcDQO7Y (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun parse-bcDQO7Y (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun parse-bcDQO7Y$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun parse-bcDQO7Y$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun parseOrNull-dqr0rFM (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun parseOrNull-dqr0rFM$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwt : com/mooncloak/kodetools/kjwt/core/Compactable, com/mooncloak/kodetools/kjwt/core/Signable {
+public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwt {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;
 	public abstract fun getHeader ()Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public abstract fun getPayload ()Lcom/mooncloak/kodetools/kjwt/core/Claims;
 }
 
-public abstract class com/mooncloak/kodetools/kjwt/core/Jwt$Builder {
-	public fun <init> ()V
-	public abstract fun header (Lkotlin/jvm/functions/Function1;)V
-	public abstract fun payload (Lkotlin/jvm/functions/Function1;)V
-	public abstract fun payload-pWNhhxY (Ljava/lang/String;)V
+public final class com/mooncloak/kodetools/kjwt/core/Jwt$Builder {
+	public final fun header (Lkotlin/jvm/functions/Function1;)V
+	public final fun payload (Lkotlin/jvm/functions/Function1;)V
+	public final fun payload-pWNhhxY (Ljava/lang/String;)V
 }
 
-public final class com/mooncloak/kodetools/kjwt/core/Jwt$Companion : com/mooncloak/kodetools/kjwt/core/Jwt$Generator, com/mooncloak/kodetools/kjwt/core/Jwt$Parser, com/mooncloak/kodetools/kjwt/core/Jwt$Validator {
-	public fun generate (Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun parse-tfRL3p4 (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun validate-8J0hliM (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwt$Generator {
-	public abstract fun generate (Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwt$Parser {
-	public abstract fun parse-tfRL3p4 (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class com/mooncloak/kodetools/kjwt/core/Jwt$Validator {
-	public abstract fun validate-8J0hliM (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+public final class com/mooncloak/kodetools/kjwt/core/Jwt$Companion {
 }
 
 public class com/mooncloak/kodetools/kjwt/core/JwtException : java/lang/RuntimeException {
@@ -347,11 +406,59 @@ public class com/mooncloak/kodetools/kjwt/core/JwtException : java/lang/RuntimeE
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public abstract interface class com/mooncloak/kodetools/kjwt/core/JwtObject : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
-	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/JwtObject$Companion;
+public final class com/mooncloak/kodetools/kjwt/core/JwtKt {
+	public static final fun from (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lcom/mooncloak/kodetools/kjwt/core/Header;Lcom/mooncloak/kodetools/kjwt/core/Claims;Lkotlinx/serialization/json/Json;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
+	public static synthetic fun from$default (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lcom/mooncloak/kodetools/kjwt/core/Header;Lcom/mooncloak/kodetools/kjwt/core/Claims;Lkotlinx/serialization/json/Json;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
+	public static final fun invoke (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
+	public static synthetic fun invoke$default (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
 }
 
-public abstract class com/mooncloak/kodetools/kjwt/core/JwtObject$Builder : com/mooncloak/kodetools/kjwt/core/BaseJwtObject, com/mooncloak/kodetools/kjwt/core/JwtObject, java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
+public abstract class com/mooncloak/kodetools/kjwt/core/JwtObject : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/JwtObject$Companion;
+	public fun clear ()V
+	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
+	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
+	public fun computeIfAbsent (Ljava/lang/String;Ljava/util/function/Function;)Lkotlinx/serialization/json/JsonElement;
+	public synthetic fun computeIfPresent (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun computeIfPresent (Ljava/lang/String;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public final fun containsKey (Ljava/lang/String;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public final fun containsValue (Lkotlinx/serialization/json/JsonElement;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public fun equals (Ljava/lang/Object;)Z
+	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun get (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonElement;
+	public final fun get (Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
+	public fun getEntries ()Ljava/util/Set;
+	public abstract fun getJson ()Lkotlinx/serialization/json/Json;
+	public fun getKeys ()Ljava/util/Set;
+	public final fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun hashCode ()I
+	public final fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun merge (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Ljava/util/function/BiFunction;)Lkotlinx/serialization/json/JsonElement;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
+	public fun putAll (Ljava/util/Map;)V
+	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun putIfAbsent (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonElement;
+	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
+	public fun replace (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkotlinx/serialization/json/JsonElement;
+	public fun replace (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/json/JsonElement;)Z
+	public fun replaceAll (Ljava/util/function/BiFunction;)V
+	public final fun size ()I
+	public final fun values ()Ljava/util/Collection;
+}
+
+public abstract class com/mooncloak/kodetools/kjwt/core/JwtObject$Builder : com/mooncloak/kodetools/kjwt/core/JwtObject, java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/JwtObject$Builder$Companion;
 	public fun <init> ()V
 	public fun clear ()V
@@ -380,6 +487,12 @@ public final class com/mooncloak/kodetools/kjwt/core/JwtObjectKt {
 }
 
 public class com/mooncloak/kodetools/kjwt/core/JwtParseException : com/mooncloak/kodetools/kjwt/core/JwtException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public class com/mooncloak/kodetools/kjwt/core/JwtSignatureException : com/mooncloak/kodetools/kjwt/core/JwtException {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -435,6 +548,11 @@ public abstract interface class com/mooncloak/kodetools/kjwt/core/KeyResolver {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/KeyResolver$Companion {
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/KeyResolverKt {
+	public static final fun getUnsupported (Lcom/mooncloak/kodetools/kjwt/core/KeyResolver$Companion;)Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;
+	public static final fun of (Lcom/mooncloak/kodetools/kjwt/core/KeyResolver$Companion;Lcom/mooncloak/kodetools/kjwt/core/Jwk;)Lcom/mooncloak/kodetools/kjwt/core/KeyResolver;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/KeyType {
@@ -511,6 +629,50 @@ public final class com/mooncloak/kodetools/kjwt/core/NullableJwtObjectBuilderPro
 	public synthetic fun setValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;Ljava/lang/Object;)V
 }
 
+public final class com/mooncloak/kodetools/kjwt/core/PrimeInfo {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/PrimeInfo$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getD ()Ljava/lang/String;
+	public final fun getR ()Ljava/lang/String;
+	public final fun getT ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/kjwt/core/PrimeInfo$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/PrimeInfo$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/kjwt/core/PrimeInfo;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/kjwt/core/PrimeInfo;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/PrimeInfo$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/PrimeInfo$PropertyKey {
+	public static final field D Ljava/lang/String;
+	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/PrimeInfo$PropertyKey;
+	public static final field R Ljava/lang/String;
+	public static final field T Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/ReadOnlyNullableJwtObjectPropertyDelegate : kotlin/properties/ReadOnlyProperty {
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/DeserializationStrategy;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/DeserializationStrategy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue (Lcom/mooncloak/kodetools/kjwt/core/JwtObject;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/ReadOnlyRequiredJwtObjectPropertyDelegate : kotlin/properties/ReadOnlyProperty {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Object;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/DeserializationStrategy;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Object;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/DeserializationStrategy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getValue (Lcom/mooncloak/kodetools/kjwt/core/JwtObject;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+}
+
 public final class com/mooncloak/kodetools/kjwt/core/RequiredJwtObjectBuilderPropertyDelegate : kotlin/properties/ReadWriteProperty {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Object;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/SerializationStrategy;Lkotlinx/serialization/DeserializationStrategy;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Object;Lkotlinx/serialization/json/Json;Lkotlinx/serialization/SerializationStrategy;Lkotlinx/serialization/DeserializationStrategy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -521,7 +683,11 @@ public final class com/mooncloak/kodetools/kjwt/core/RequiredJwtObjectBuilderPro
 }
 
 public abstract interface class com/mooncloak/kodetools/kjwt/core/Signable {
-	public abstract fun sign (Lcom/mooncloak/kodetools/kjwt/key/Key;Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlinx/serialization/json/Json;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Signable$Companion;
+	public abstract fun sign (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Signable$Companion {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/Signature {
@@ -612,7 +778,20 @@ public final class com/mooncloak/kodetools/kjwt/core/SignatureAlgorithmKt {
 	public static final fun isRsa (Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;)Z
 }
 
+public abstract interface class com/mooncloak/kodetools/kjwt/core/Signer {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Signer$Companion;
+	public abstract fun sign-JN-WOHY (Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Signer$Companion {
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/SignerKt {
+	public static final fun getDefault (Lcom/mooncloak/kodetools/kjwt/core/Signer$Companion;)Lcom/mooncloak/kodetools/kjwt/core/Signer;
+}
+
 public final class com/mooncloak/kodetools/kjwt/core/TextClaims : com/mooncloak/kodetools/kjwt/core/Claims {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/TextClaims$Companion;
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/mooncloak/kodetools/kjwt/core/TextClaims;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
@@ -626,7 +805,59 @@ public final class com/mooncloak/kodetools/kjwt/core/TextClaims : com/mooncloak/
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
-public class com/mooncloak/kodetools/kjwt/core/UnsupportedJwtSignatureAlgorithm : com/mooncloak/kodetools/kjwt/core/JwtException {
+public synthetic class com/mooncloak/kodetools/kjwt/core/TextClaims$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/TextClaims$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-gY97BjQ (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-HylZ3l8 (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/TextClaims$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Thumbprint {
+	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/Thumbprint$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/mooncloak/kodetools/kjwt/core/Thumbprint;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/kjwt/core/Thumbprint$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/kjwt/core/Thumbprint$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize-C1589os (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize-tYhfLiw (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/Thumbprint$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/kjwt/core/UnsignedJwt : com/mooncloak/kodetools/kjwt/core/Jwt, com/mooncloak/kodetools/kjwt/core/Signable {
+	public fun getHeader ()Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public fun getPayload ()Lcom/mooncloak/kodetools/kjwt/core/Claims;
+	public fun sign (Lcom/mooncloak/kodetools/kjwt/core/Jwk;Lcom/mooncloak/kodetools/kjwt/core/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun unsecured ()Lcom/mooncloak/kodetools/kjwt/core/Jws;
+}
+
+public class com/mooncloak/kodetools/kjwt/core/UnsupportedJwtSignatureAlgorithm : com/mooncloak/kodetools/kjwt/core/JwtSignatureException {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

@@ -1,7 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.Jwt.Builder
-import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlin.io.encoding.Base64
@@ -90,7 +89,6 @@ public class UnsignedJwt internal constructor(
     Signable {
 
     @OptIn(ExperimentalEncodingApi::class)
-    @ExperimentalKeyApi
     override suspend fun sign(key: Jwk?, algorithm: SignatureAlgorithm): Jws {
         if (key == null && algorithm != SignatureAlgorithm.NONE) {
             throw UnsupportedJwtSignatureAlgorithm("Signature algorithm '${algorithm.serialName}' requires a key but `null` was provided.")

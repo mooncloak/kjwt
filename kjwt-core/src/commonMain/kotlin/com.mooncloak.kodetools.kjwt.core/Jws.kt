@@ -1,6 +1,5 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -215,7 +214,6 @@ public val Jws.isSecured: Boolean
 @ExperimentalJwtApi
 internal data object DefaultJwsParser : Jws.Parser {
 
-    @ExperimentalKeyApi
     override suspend fun parse(
         compacted: CompactedJwt,
         json: Json,
@@ -259,7 +257,6 @@ internal data object DefaultJwsParser : Jws.Parser {
         }
     }
 
-    @ExperimentalKeyApi
     @OptIn(ExperimentalEncodingApi::class)
     private suspend fun parseJws(
         json: Json,

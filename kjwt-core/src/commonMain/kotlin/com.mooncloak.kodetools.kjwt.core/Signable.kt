@@ -1,6 +1,5 @@
 package com.mooncloak.kodetools.kjwt.core
 
-import com.mooncloak.kodetools.kjwt.key.ExperimentalKeyApi
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -25,7 +24,6 @@ public fun interface Signable {
      *
      * @see [SignatureAlgorithm] for more information on the supported [SignatureAlgorithm]s.
      */
-    @ExperimentalKeyApi
     @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
     public suspend fun sign(
         key: Jwk?,
