@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.DynamicJwkBuilder
 import io.jsonwebtoken.security.Jwks
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.interfaces.ECPrivateKey
@@ -12,14 +13,6 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import javax.crypto.SecretKey
 import kotlin.coroutines.cancellation.CancellationException
-
-@ExperimentalJwtApi
-@Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
-internal actual suspend fun sign(
-    input: String,
-    key: Jwk,
-    algorithm: SignatureAlgorithm
-): Signature = TODO()
 
 @ExperimentalJwtApi
 @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
@@ -62,6 +55,18 @@ internal fun io.jsonwebtoken.security.Jwk<*>.toJwk(json: Json): Jwk {
         properties = properties,
         keyType = KeyType(value = this.type)
     )
+}
+
+@ExperimentalJwtApi
+internal fun Jwk.toJvmJwk(): io.jsonwebtoken.security.Jwk<*> {
+    val jwkJsonString = this.json.encodeToString(
+        serializer = JsonObject.serializer(),
+        value = this.toJsonObject()
+    )
+
+    return Jwks.parser()
+        .build()
+        .parse(jwkJsonString)
 }
 
 internal fun DynamicJwkBuilder<*, *>.key(key: java.security.Key): io.jsonwebtoken.security.Jwk<*> =

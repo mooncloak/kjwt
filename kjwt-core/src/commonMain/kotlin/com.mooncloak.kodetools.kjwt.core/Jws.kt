@@ -311,7 +311,7 @@ internal data object DefaultJwsParser : Jws.Parser {
         val key = resolver.resolve(header)
 
         val signatureInput = "$headerSection.$payloadSection"
-        val signature = sign(
+        val signature = Signer.Default.sign(
             input = signatureInput,
             key = key,
             algorithm = header.signatureAlgorithm

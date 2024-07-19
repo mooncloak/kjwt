@@ -84,7 +84,8 @@ public interface Jwt {
 public class UnsignedJwt internal constructor(
     override val header: Header,
     override val payload: Claims,
-    private val json: Json
+    private val json: Json,
+    private val signer: Signer = Signer.Default
 ) : Jwt,
     Signable {
 
@@ -116,7 +117,7 @@ public class UnsignedJwt internal constructor(
         val encodedHeader = Base64.UrlSafe.encode(headerString.encodeToByteArray())
 
         val signatureInput = "$encodedHeader.$encodedPayload"
-        val signature = sign(
+        val signature = signer.sign(
             input = signatureInput,
             key = key,
             algorithm = algorithm
