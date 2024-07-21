@@ -1,5 +1,8 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.signature
 
+import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.Jwk
+import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
