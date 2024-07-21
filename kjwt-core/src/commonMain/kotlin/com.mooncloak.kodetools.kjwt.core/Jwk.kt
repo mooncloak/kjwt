@@ -1,5 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.crypto.HashFunction
+import com.mooncloak.kodetools.kjwt.core.crypto.Sha256
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*

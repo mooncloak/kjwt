@@ -1,4 +1,4 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.crypto
 
 import org.kotlincrypto.hash.sha2.SHA256
 
