@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core.crypto
 
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.jvm.JvmInline
 
 /**
  * A component that performs the EMSA-PKCS1-v1_5-ENCODE encoding function defined by
@@ -37,7 +38,7 @@ internal data object EmsaPkcs1V15Encoding {
      *
      * @param [hLen] The length in octets of the hash function output.
      *
-     * @param [hashAlgorithmId] The unique hash algorithm identifier defined by the specification,
+     * @param [hashAlgorithm] The unique hash algorithm identifier defined by the specification,
      * see [Appendix A.2.4](https://www.rfc-editor.org/rfc/rfc8017#appendix-A.2.4).
      *
      * @throws [MessageTooLongException] if the provided message [M] was too long to be encoded.
@@ -59,7 +60,7 @@ internal data object EmsaPkcs1V15Encoding {
         emLen: Int,
         hash: HashFunction,
         hLen: Int,
-        hashAlgorithmId: String
+        hashAlgorithm: DigestAlgorithm
     ) {
         @Suppress("LocalVariableName")
         val H = hash.hash(M)
@@ -109,3 +110,32 @@ internal class EncodedMessageLengthTooShortException internal constructor(
 ) : EmsaPkcs1V15EncodingException(
     message = "intended encoded message length too short"
 )
+
+/**
+ * Represents a hash algorithm used for [EmsaPkcs1V15Encoding].
+ *
+ * @see [RFC-8017 Appendix A.2.4](https://www.rfc-editor.org/rfc/rfc8017#appendix-A.2.4)
+ * @see [RFC-8017 Appendix B](https://www.rfc-editor.org/rfc/rfc8017#appendix-B)
+ */
+internal enum class DigestAlgorithm(
+    internal val oid: ObjectIdentifier
+) {
+
+    MD2(oid = ObjectIdentifier.of(1, 2, 840, 113549, 2, 2)),
+
+    MD5(oid = ObjectIdentifier.of(1, 2, 840, 113549, 2, 5)),
+
+    SHA1(oid = ObjectIdentifier.of(1, 3, 14, 3, 2, 26)),
+
+    SHA224(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 4)),
+
+    SHA256(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 1)),
+
+    SHA384(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 2)),
+
+    SHA512(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 3)),
+
+    SHA512_224(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 5)),
+
+    SHA512_256(oid = ObjectIdentifier.of(2, 16, 840, 1, 101, 3, 4, 2, 6))
+}
