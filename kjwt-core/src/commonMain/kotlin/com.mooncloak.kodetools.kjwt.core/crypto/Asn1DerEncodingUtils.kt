@@ -18,7 +18,7 @@ internal fun Int.toDerEncodedSize(): List<Byte> {
         var remaining = this
         while (remaining > 0) {
             // Add just the least significant 8 bits
-            sizeBytes.add((remaining and 0xFF).toByte())
+            sizeBytes.add(0, (remaining and 0xFF).toByte())
 
             // Bit shift right 8 bits to get the next bytes to add
             remaining = remaining shr 8
@@ -26,11 +26,11 @@ internal fun Int.toDerEncodedSize(): List<Byte> {
 
         // The lower 7 bits of the first number indicate the number of subsequent bytes that
         // contain the actual length value
-        encoded.add((0x80 or sizeBytes.size).toByte())
+        encoded.add(sizeBytes.size.toByte())
 
         // TODO: Probably can update the loop above to shift left and place the bytes in the
         //  correct order the first time around, instead of having to reverse it here.
-        encoded.addAll(sizeBytes.reversed())
+        encoded.addAll(sizeBytes)
     }
 
     return encoded

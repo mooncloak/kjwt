@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core.crypto
 
 import kotlin.jvm.JvmInline
+import kotlin.jvm.JvmName
 
 /**
  * Represents an ASN.1 Object Identifier value.
@@ -72,6 +73,7 @@ internal value class ObjectIdentifier private constructor(
         internal fun of(value: Collection<Int>): ObjectIdentifier =
             ObjectIdentifier(value = value.toIntArray())
 
+        @JvmName("ofValues") // Avoids compiler error for JVM name clashing with IntArray version.
         internal fun of(vararg value: Int): ObjectIdentifier =
             ObjectIdentifier(value = intArrayOf(*value))
 
@@ -115,7 +117,7 @@ internal value class ObjectIdentifier private constructor(
     }
 }
 
-private fun Int.toDerEncoded(): List<Byte> {
+internal fun Int.toDerEncoded(): List<Byte> {
     // According to the specification, these values are encoded as follows:
     // - If the value is less than 128 (max byte value), then it is encoded as a single byte
     // - If the value is greater than 128, then it uses "variable size encoding":

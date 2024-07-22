@@ -6,6 +6,6 @@ import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
-@ExperimentalJwtApi
-@Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
-public expect suspend fun SignatureAlgorithm.generateSigningKey(json: Json = Json.Default): Jwk?
+//@ExperimentalJwtApi
+///@Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
+// FIXME: public expect suspend fun SignatureAlgorithm.generateSigningKey(json: Json = Json.Default): Jwk?

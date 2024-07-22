@@ -17,7 +17,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 @ExperimentalJwtApi
 @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
-public actual suspend fun SignatureAlgorithm.generateSigningKey(json: Json): Jwk? {
+public suspend fun SignatureAlgorithm.generateSigningKey(json: Json): Jwk? {
     val key = when (this) {
         SignatureAlgorithm.NONE -> return null
         SignatureAlgorithm.HS256 -> Jwts.SIG.HS256.key().build()
