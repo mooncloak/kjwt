@@ -10,7 +10,8 @@ import kotlin.math.pow
  *
  * @see [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-4.2)
  */
-internal fun OS2ZIP(
+@Suppress("FunctionName")
+internal fun OS2IP(
     @Suppress("LocalVariableName") X: ByteArray
 ): BigInteger {
     var x = BigInteger.ZERO
