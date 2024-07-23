@@ -44,6 +44,10 @@ kotlin {
                 // Secure Random (CSPRNG)
                 // https://github.com/KotlinCrypto/secure-random
                 implementation("org.kotlincrypto:secure-random:_")
+
+                // Big Numbers
+                // https://github.com/ionspin/kotlin-multiplatform-bignum
+                implementation("com.ionspin.kotlin:bignum:_")
             }
         }
 
