@@ -126,28 +126,36 @@ internal fun Int.toDerEncoded(): List<Byte> {
     //       byte which must be 0.
     //     * After the most significant bit, encode the next 7 bits of the binary
     //       representation of the number.
-
     val encoded = mutableListOf<Byte>()
 
-    var v = this
+    if (this < 128) {
+        encoded.add(this.toByte())
+    } else {
+        var value = this
 
-    // While the value is greater than 128 (0x80)
-    while (v >= 0x80) {
-        // Take the lower 7 bits of the byte, and set the most significant bit (MSB) to a
-        // binary value of 1.
-        val nextEncodedByte = (v and 0x7F or 0x80).toByte()
+        do {
+            // Take the lower 7 bits of the byte
+            val nextEncodedByte = ((value and 0x7F)).toByte()
 
-        encoded.add(nextEncodedByte)
+            encoded.add(nextEncodedByte)
 
-        // Shift right 7 bits so that we can take the next bit values
-        v = v shr 7
+            value = value ushr 7
+        } while (value > 0)
     }
 
-    // Add the last value without the most significant bit set to 1. This value is
-    // guaranteed to be less than 128.
-    encoded.add(v.toByte())
-
-    return encoded
+    // The Bytes must be in big-endian order, which means we have to reverse the order of the list.
+    // Note that it is important to do this before setting the most significant bit because the
+    // last value will change and the last value doesn't change its most significant bit.
+    return encoded.reversed()
+        .mapIndexed { index, byte ->
+            // Set the most significant bit (MSB) of each byte to a binary value of 1, except for
+            // the last byte
+            if (index != encoded.lastIndex) {
+                (byte.toInt() or 0x80).toByte()
+            } else {
+                byte
+            }
+        }
 }
 
 // The inverse of the Int.toDerEncoded() function.
