@@ -33,8 +33,10 @@ kotlin {
                 // https://github.com/Kotlin/kotlinx-datetime
                 implementation(KotlinX.datetime)
 
-                // SHA Hash Functions
+                // Hash Functions
                 // https://github.com/KotlinCrypto/hash
+                implementation("org.kotlincrypto.hash:md:_")
+                implementation("org.kotlincrypto.hash:sha1:_")
                 implementation("org.kotlincrypto.hash:sha2:_")
 
                 // HMAC Functions

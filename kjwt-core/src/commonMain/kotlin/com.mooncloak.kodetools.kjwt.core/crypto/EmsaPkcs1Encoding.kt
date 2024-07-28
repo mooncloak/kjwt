@@ -33,12 +33,9 @@ internal data object EmsaPkcs1V15Encoding {
      * where `tLen` is the octet length of the Distinguished Encoding Rules (DER) encoding T of a
      * certain value computed during the encoding operation.
      *
-     * @param [hash] The [HashFunction] to use in the encoding.
-     *
-     * @param [hLen] The length in octets of the hash function output.
-     *
      * @param [hashAlgorithm] The unique hash algorithm identifier defined by the specification,
-     * see [Appendix A.2.4](https://www.rfc-editor.org/rfc/rfc8017#appendix-A.2.4).
+     * see [Appendix A.2.4](https://www.rfc-editor.org/rfc/rfc8017#appendix-A.2.4). Defaults to
+     * [AlgorithmIdentifier.SHA256].
      *
      * @throws [MessageTooLongException] if the provided message [M] was too long to be encoded.
      *
@@ -58,18 +55,18 @@ internal data object EmsaPkcs1V15Encoding {
     fun encode(
         @Suppress("LocalVariableName") M: ByteArray,
         emLen: Int,
-        hash: HashFunction,
-        hLen: Int,
-        hashAlgorithm: AlgorithmIdentifier
+        hashAlgorithm: AlgorithmIdentifier = AlgorithmIdentifier.SHA256
     ): ByteArray {
         // https://www.rfc-editor.org/rfc/rfc8017#section-9.2
+
+        val hash = hashAlgorithm.hashFunction
 
         // Step 1
         val H = hash.hash(M)
 
-        if (H.size > hLen) {
+        if (H.size > hashAlgorithm.hLen) {
             throw MessageTooLongException(
-                expectedLength = hLen,
+                expectedLength = hashAlgorithm.hLen,
                 actualLength = H.size
             )
         }
@@ -135,4 +132,3 @@ internal class EncodedMessageLengthTooShortException internal constructor(
 ) : EmsaPkcs1V15EncodingException(
     message = "intended encoded message length too short"
 )
-
