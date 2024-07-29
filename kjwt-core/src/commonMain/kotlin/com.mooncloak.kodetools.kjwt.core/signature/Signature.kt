@@ -1,7 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core.signature
 
 import com.mooncloak.kodetools.kjwt.core.CompactedJwt
-import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.Jws
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline

@@ -1,5 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+
 @ExperimentalJwtApi
 public open class JwtException public constructor(
     message: String? = null,

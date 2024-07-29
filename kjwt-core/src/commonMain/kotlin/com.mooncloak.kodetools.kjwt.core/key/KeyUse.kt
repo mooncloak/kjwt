@@ -1,6 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core.key
 
-import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 

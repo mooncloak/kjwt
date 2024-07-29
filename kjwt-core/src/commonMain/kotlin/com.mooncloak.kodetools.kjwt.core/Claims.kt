@@ -1,5 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.util.SecondsSinceEpochSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable

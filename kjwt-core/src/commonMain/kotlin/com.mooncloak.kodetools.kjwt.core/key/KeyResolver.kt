@@ -1,6 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core.key
 
-import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.Header
 import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 

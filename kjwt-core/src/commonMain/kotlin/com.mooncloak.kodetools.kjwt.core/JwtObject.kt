@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.JwtObject.Builder
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationStrategy

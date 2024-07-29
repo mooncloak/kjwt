@@ -1,5 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+
 /**
  * A component that can be compacted into a [CompactedJwt] value.
  */

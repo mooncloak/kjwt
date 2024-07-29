@@ -1,7 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core.key
 
 import com.mooncloak.kodetools.kjwt.core.BaseJwtObjectSerializer
-import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.JwtObject
 import com.mooncloak.kodetools.kjwt.core.Thumbprint
 import com.mooncloak.kodetools.kjwt.core.crypto.HashFunction

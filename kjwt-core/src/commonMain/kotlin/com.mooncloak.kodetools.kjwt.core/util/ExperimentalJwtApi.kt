@@ -1,4 +1,4 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.util
 
 @RequiresOptIn(
     message = "This is an experimental JWT API and should be used with caution.",

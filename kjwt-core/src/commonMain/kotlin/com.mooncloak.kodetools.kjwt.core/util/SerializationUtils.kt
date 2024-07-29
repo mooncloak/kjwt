@@ -1,6 +1,5 @@
 package com.mooncloak.kodetools.kjwt.core.util
 
-import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.JwtObject
 import com.mooncloak.kodetools.kjwt.core.toJsonObject
 import kotlinx.serialization.ExperimentalSerializationApi
