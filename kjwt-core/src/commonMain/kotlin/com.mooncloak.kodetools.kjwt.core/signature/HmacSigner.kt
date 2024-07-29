@@ -17,7 +17,11 @@ internal data object HmacSigner : Signer {
         SignatureAlgorithm.HS512
     )
 
-    override suspend fun sign(input: String, key: Jwk, algorithm: SignatureAlgorithm): Signature {
+    override suspend fun sign(
+        input: SignatureInput,
+        key: Jwk,
+        algorithm: SignatureAlgorithm
+    ): Signature {
         // See JWA Specification:
         // https://www.rfc-editor.org/rfc/rfc7518.html#section-3.2
 
@@ -44,7 +48,7 @@ internal data object HmacSigner : Signer {
                     )
                 }
 
-                HmacSHA256(keyBytes).doFinal(input.encodeToByteArray())
+                HmacSHA256(keyBytes).doFinal(input.value.encodeToByteArray())
             }
 
             SignatureAlgorithm.HS384 -> {
@@ -57,7 +61,7 @@ internal data object HmacSigner : Signer {
                     )
                 }
 
-                HmacSHA384(keyBytes).doFinal(input.encodeToByteArray())
+                HmacSHA384(keyBytes).doFinal(input.value.encodeToByteArray())
             }
 
             SignatureAlgorithm.HS512 -> {
@@ -70,7 +74,7 @@ internal data object HmacSigner : Signer {
                     )
                 }
 
-                HmacSHA512(keyBytes).doFinal(input.encodeToByteArray())
+                HmacSHA512(keyBytes).doFinal(input.value.encodeToByteArray())
             }
 
             else -> throw UnsupportedJwtSignatureAlgorithm(

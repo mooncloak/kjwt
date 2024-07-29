@@ -15,7 +15,7 @@ public fun interface Signer {
     /**
      * Produces a [Signature] value given the provided signature [input], [key], and [algorithm].
      *
-     * @param [input] The signature input [String] that will be signed, resulting in the returned
+     * @param [input] The [SignatureInput] [String] that will be signed, resulting in the returned
      * [Signature].
      *
      * @param [key] The [Jwk] that will be used as a signing key.
@@ -37,7 +37,7 @@ public fun interface Signer {
         CancellationException::class
     )
     public suspend fun sign(
-        input: String,
+        input: SignatureInput,
         key: Jwk,
         algorithm: SignatureAlgorithm
     ): Signature
@@ -52,7 +52,7 @@ public val Signer.Companion.Default: Signer
 @ExperimentalJwtApi
 internal data object DefaultSigner : Signer {
 
-    override suspend fun sign(input: String, key: Jwk, algorithm: SignatureAlgorithm): Signature =
+    override suspend fun sign(input: SignatureInput, key: Jwk, algorithm: SignatureAlgorithm): Signature =
         when {
             algorithm in HmacSigner.supportedAlgorithms -> HmacSigner.sign(
                 input = input,

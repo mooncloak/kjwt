@@ -3,6 +3,7 @@ package com.mooncloak.kodetools.kjwt.core
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Signer
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
@@ -311,7 +312,7 @@ internal data object DefaultJwsParser : Jws.Parser {
 
         val key = resolver.resolve(header)
 
-        val signatureInput = "$headerSection.$payloadSection"
+        val signatureInput = SignatureInput(value = "$headerSection.$payloadSection")
         val signature = Signer.Default.sign(
             input = signatureInput,
             key = key,

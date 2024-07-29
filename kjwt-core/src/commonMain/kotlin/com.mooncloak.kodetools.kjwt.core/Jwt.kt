@@ -5,6 +5,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signable
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Signer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -119,7 +120,7 @@ public class UnsignedJwt internal constructor(
         )
         val encodedHeader = Base64.UrlSafe.encode(headerString.encodeToByteArray())
 
-        val signatureInput = "$encodedHeader.$encodedPayload"
+        val signatureInput = SignatureInput(value = "$encodedHeader.$encodedPayload")
         val signature = signer.sign(
             input = signatureInput,
             key = key,
