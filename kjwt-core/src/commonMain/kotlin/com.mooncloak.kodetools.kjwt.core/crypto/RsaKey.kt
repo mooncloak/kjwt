@@ -166,7 +166,7 @@ internal data class AdditionalPrime internal constructor(
 )
 
 @ExperimentalJwtApi
-internal fun Jwk.toRsaKey(): RsaKey {
+internal fun Jwk.toRsaKeyMaterial(): RsaKeyMaterial {
     require(this.keyType == KeyType.RSA) {
         "Only a JWK with a '${Jwk.PropertyKey.KEY_TYPE}' of '${KeyType.RSA.value}' can be converted into a RSA key. Key type provided was '${this.keyType.value}'."
     }
@@ -178,15 +178,17 @@ internal fun Jwk.toRsaKey(): RsaKey {
     requireNotNull(n) { "Required JWK parameter '${Jwk.PropertyKey.N}' was not present." }
     requireNotNull(e) { "Reqiored JWK parameter '${Jwk.PropertyKey.E}' was not present." }
 
+    val publicKey = RsaPublicKey(
+        n = n,
+        e = e
+    )
+
     // According to the JWA Specification (https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2),
     // the "d" parameter is required for RSA private keys. So, if it is not present, then we can
-    // consider this an RSA public key, otherwise, if it is present, we consider this an RSA
-    // private key.
+    // consider this an RSA public key, otherwise, if it is present, this is either an RSA private
+    // key or a key-pair.
     if (d == null) {
-        return RsaPublicKey(
-            n = n,
-            e = e
-        )
+        return publicKey
     } else {
         val p = this.p?.decodeBase64UrlUInt()
         val q = this.q?.decodeBase64UrlUInt()
@@ -208,18 +210,28 @@ internal fun Jwk.toRsaKey(): RsaKey {
             dQ == null ||
             qInv == null
         ) {
-            return RsaPrivateKey.Pair(
+            val privateKey = RsaPrivateKey.Pair(
                 n = n,
                 d = d
             )
+
+            return RsaKeyPair(
+                publicKey = publicKey,
+                privateKey = privateKey
+            )
         } else {
-            return RsaPrivateKey.MultiPrime(
+            val privateKey = RsaPrivateKey.MultiPrime(
                 p = p,
                 q = q,
                 dP = dP,
                 dQ = dQ,
                 qInv = qInv,
                 additionalPrimes = additionalPrimes
+            )
+
+            return RsaKeyPair(
+                publicKey = publicKey,
+                privateKey = privateKey
             )
         }
     }

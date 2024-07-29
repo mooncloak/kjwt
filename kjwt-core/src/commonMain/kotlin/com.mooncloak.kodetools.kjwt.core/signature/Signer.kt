@@ -44,22 +44,3 @@ public fun interface Signer {
 
     public companion object
 }
-
-@ExperimentalJwtApi
-public val Signer.Companion.Default: Signer
-    get() = DefaultSigner
-
-@ExperimentalJwtApi
-internal data object DefaultSigner : Signer {
-
-    override suspend fun sign(input: SignatureInput, key: Jwk, algorithm: SignatureAlgorithm): Signature =
-        when {
-            algorithm in HmacSigner.supportedAlgorithms -> HmacSigner.sign(
-                input = input,
-                key = key,
-                algorithm = algorithm
-            )
-
-            else -> TODO()
-        }
-}
