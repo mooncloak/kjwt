@@ -32,7 +32,7 @@ internal fun RSASP1(
             dP = K.dP,
             dQ = K.dQ,
             qInv = K.qInv,
-            triplets = K.triplets,
+            triplets = K.additionalPrimes,
             m = m
         )
     }

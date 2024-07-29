@@ -22,9 +22,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public class PrimeInfo public constructor(
-    @SerialName(value = PropertyKey.R) public val r: String?,
-    @SerialName(value = PropertyKey.D) public val d: String?,
-    @SerialName(value = PropertyKey.T) public val t: String?
+    @SerialName(value = PropertyKey.R) public val r: String,
+    @SerialName(value = PropertyKey.D) public val d: String,
+    @SerialName(value = PropertyKey.T) public val t: String
 ) {
 
     public object PropertyKey {
