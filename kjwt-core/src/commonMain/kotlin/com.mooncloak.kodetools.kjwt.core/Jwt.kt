@@ -54,6 +54,7 @@ public interface Jwt {
     @ExperimentalJwtApi
     public class Builder internal constructor(
         private val json: Json,
+        private val signer: Signer = Signer.Default,
         private var headerValue: Header? = null,
         private var claimsValue: Claims? = null
     ) {
@@ -77,7 +78,8 @@ public interface Jwt {
             return UnsignedJwt(
                 header = headerValue!!,
                 payload = claimsValue!!,
-                json = json
+                json = json,
+                signer = signer
             )
         }
     }
@@ -90,7 +92,7 @@ public class UnsignedJwt internal constructor(
     override val header: Header,
     override val payload: Claims,
     private val json: Json,
-    private val signer: Signer = Signer.Default
+    private val signer: Signer
 ) : Jwt,
     Signable {
 
@@ -170,10 +172,12 @@ public operator fun Jwt.Companion.invoke(
 public fun Jwt.Companion.from(
     header: Header,
     payload: Claims,
-    json: Json = Json.Default
+    json: Json = Json.Default,
+    signer: Signer = Signer.Default
 ): UnsignedJwt =
     UnsignedJwt(
         header = header,
         payload = payload,
-        json = json
+        json = json,
+        signer = signer
     )

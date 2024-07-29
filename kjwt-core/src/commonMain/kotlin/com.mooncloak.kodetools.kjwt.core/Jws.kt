@@ -90,6 +90,8 @@ public interface Jws : Jwt,
             resolver: KeyResolver,
             validation: suspend Jws.() -> Boolean
         ): Jws
+
+        public companion object
     }
 
     public companion object : Parser by DefaultJwsParser
