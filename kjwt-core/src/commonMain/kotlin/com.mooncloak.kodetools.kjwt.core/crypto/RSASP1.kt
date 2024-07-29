@@ -24,7 +24,7 @@ internal fun RSASP1(
     // https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1
 
     // Step 1.
-    if (m < 0 || m > (n - 1)) {
+    if (m < 0 || m >= n) {
         error("message representative out of range")
     }
 
@@ -68,7 +68,7 @@ internal fun RSASP1(
     dP: BigInteger,
     dQ: BigInteger,
     qInv: BigInteger,
-    triplets: List<Triple<BigInteger, BigInteger, BigInteger>>,
+    triplets: List<Triple<BigInteger, BigInteger, BigInteger>> = emptyList(),
     m: BigInteger
 ): BigInteger {
     // https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1
@@ -115,7 +115,7 @@ internal fun RSASP1(
     var prevR = q
     i = 2
     while (i < u) {
-        val (r, d, t) = triplets[i - 2]
+        val (r, _, t) = triplets[i - 2]
 
         // Step 2 - b - 5 - a
         // Let R = R * r_(i-1).
