@@ -15,6 +15,12 @@ package com.mooncloak.kodetools.kjwt.core.crypto
  * required by the caller know this value (which it should), and providing an incorrect value will
  * result in undefined behavior. // TODO: Derive this value from [K].
  *
+ * @param [hashAlgorithm] The unique hash algorithm identifier defined by the specification,
+ * see [Appendix A.2.4](https://www.rfc-editor.org/rfc/rfc8017#appendix-A.2.4). Defaults to
+ * [AlgorithmIdentifier.SHA256]. This is not defined as a parameter of the function in the
+ * specification, but is provided to override the hash function used in the EMSA-PKCS1-v1_5-ENCODE
+ * operation.
+ *
  * @return The resulting signature, an octet string of length k, where k is the length in octets of
  * the RSA modulus n.
  *
@@ -24,19 +30,30 @@ package com.mooncloak.kodetools.kjwt.core.crypto
 internal fun RSASSA_PKCS1_v1_5_SIGN(
     K: ByteArray,
     M: ByteArray,
-    k: Int
+    k: Int,
+    hashAlgorithm: AlgorithmIdentifier = AlgorithmIdentifier.SHA256
 ): ByteArray {
     // https://www.rfc-editor.org/rfc/rfc8017#section-8.2.1
 
     // Step 1.
+    // EM = EMSA-PKCS1-V1_5-ENCODE (M, k).
     val EM = EmsaPkcs1V15Encoding.encode(
         M = M,
-        emLen = k
+        emLen = k,
+        hashAlgorithm = hashAlgorithm
     )
 
     // Step 2a.
+    // m = OS2IP (EM).
     val m = OS2IP(EM)
 
     // Step 2b.
+    // s = RSASP1 (K, m).
     TODO()
+
+    // Step 2c.
+    // S = I2OSP (s, k).
+
+    // Step 3.
+    // Output the signature S.
 }

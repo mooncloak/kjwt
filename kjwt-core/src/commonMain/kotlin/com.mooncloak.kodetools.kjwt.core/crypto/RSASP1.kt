@@ -6,9 +6,46 @@ import com.ionspin.kotlin.bignum.integer.BigInteger
  * Implements the RSASP1 signature and verification primitive defined by
  * [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1).
  *
+ * @param [K] The [RsaPrivateKey] value.
+ *
+ * @param [m] message representative, an integer between 0 and n - 1.
+ *
+ * @return The signature representative, an integer between 0 and n - 1.
+ *
+ * @see [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1)
+ */
+@Suppress("FunctionName", "LocalVariableName")
+private fun RSASP1(
+    K: RsaPrivateKey,
+    m: BigInteger
+): BigInteger =
+    when (K) {
+        is RsaPrivateKey.Pair -> RSASP1(
+            n = K.n,
+            d = K.d,
+            m = m
+        )
+
+        is RsaPrivateKey.MultiPrime -> RSASP1(
+            p = K.p,
+            q = K.q,
+            dP = K.dP,
+            dQ = K.dQ,
+            qInv = K.qInv,
+            triplets = K.triplets,
+            m = m
+        )
+    }
+
+/**
+ * Implements the RSASP1 signature and verification primitive defined by
+ * [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1).
+ *
  * @param [n] The RSA modulus which is used to derive the private key, K.
  *
  * @param [d] The RSA private exponent which is used to derive the private key, K.
+ *
+ * @param [m] message representative, an integer between 0 and n - 1.
  *
  * @return The signature representative, an integer between 0 and n - 1.
  *
@@ -16,7 +53,8 @@ import com.ionspin.kotlin.bignum.integer.BigInteger
  * @see [RSASP1] for a different version of this function where the private key, 'K', is
  * represented by values of 'p', 'q', 'dP', 'dQ', 'qInv', and other values.
  */
-internal fun RSASP1(
+@Suppress("FunctionName")
+private fun RSASP1(
     n: BigInteger,
     d: BigInteger,
     m: BigInteger
@@ -36,9 +74,9 @@ internal fun RSASP1(
  * Implements the RSASP1 signature and verification primitive defined by
  * [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1).
  *
- * @param [p] The RSA modulus which is used to derive the private key, K.
+ * @param [p] The first prime factor of K.
  *
- * @param [q] The RSA private exponent which is used to derive the private key, K.
+ * @param [q] The second prime factor of K.
  *
  * @param [dP] [p]'s CRT exponent, a positive integer such that `e * dP == 1 (mod (p-1))`.
  *
@@ -55,20 +93,22 @@ internal fun RSASP1(
  * additional prime factor 'r_i's CRT coefficient, a positive integer less than 'r_i' such that
  * `r_1 * r_2 * ... * r_(i-1) * t_i == 1 (mod r_i), i = 2, ..., u`.
  *
+ * @param [m] message representative, an integer between 0 and n - 1.
+ *
  * @return The signature representative, an integer between 0 and n - 1.
  *
  * @see [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1)
  * @see [RSASP1] for a different version of this function where the private key, 'K', is
  * represented by values of 'n' and 'd'.
  */
-@Suppress("LocalVariableName")
-internal fun RSASP1(
+@Suppress("FunctionName", "LocalVariableName")
+private fun RSASP1(
     p: BigInteger,
     q: BigInteger,
     dP: BigInteger,
     dQ: BigInteger,
     qInv: BigInteger,
-    triplets: List<Triple<BigInteger, BigInteger, BigInteger>> = emptyList(),
+    triplets: List<AdditionalPrime> = emptyList(),
     m: BigInteger
 ): BigInteger {
     // https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1
