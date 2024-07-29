@@ -28,7 +28,7 @@ package com.mooncloak.kodetools.kjwt.core.crypto
  */
 @Suppress("FunctionName", "LocalVariableName")
 internal fun RSASSA_PKCS1_v1_5_SIGN(
-    K: ByteArray,
+    K: RsaPrivateKey,
     M: ByteArray,
     k: Int,
     hashAlgorithm: AlgorithmIdentifier = AlgorithmIdentifier.SHA256
@@ -49,11 +49,19 @@ internal fun RSASSA_PKCS1_v1_5_SIGN(
 
     // Step 2b.
     // s = RSASP1 (K, m).
-    TODO()
+    val s = RSASP1(
+        K = K,
+        m = m
+    )
 
     // Step 2c.
     // S = I2OSP (s, k).
+    val S = I20SP(
+        x = s,
+        xLen = k
+    )
 
     // Step 3.
     // Output the signature S.
+    return S
 }

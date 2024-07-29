@@ -15,7 +15,7 @@ import com.ionspin.kotlin.bignum.integer.BigInteger
  * @see [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1)
  */
 @Suppress("FunctionName", "LocalVariableName")
-private fun RSASP1(
+internal fun RSASP1(
     K: RsaPrivateKey,
     m: BigInteger
 ): BigInteger =
