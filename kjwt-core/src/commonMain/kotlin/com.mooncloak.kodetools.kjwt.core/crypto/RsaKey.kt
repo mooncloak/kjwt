@@ -3,10 +3,10 @@ package com.mooncloak.kodetools.kjwt.core.crypto
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.Sign
 import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
-import com.mooncloak.kodetools.kjwt.core.Jwk
-import com.mooncloak.kodetools.kjwt.core.KeyType
-import com.mooncloak.kodetools.kjwt.core.PrimeInfo
-import com.mooncloak.kodetools.kjwt.core.build
+import com.mooncloak.kodetools.kjwt.core.key.Jwk
+import com.mooncloak.kodetools.kjwt.core.key.KeyType
+import com.mooncloak.kodetools.kjwt.core.key.PrimeInfo
+import com.mooncloak.kodetools.kjwt.core.key.build
 import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi

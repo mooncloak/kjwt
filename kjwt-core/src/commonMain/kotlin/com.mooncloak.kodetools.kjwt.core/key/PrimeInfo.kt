@@ -1,4 +1,4 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.key
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
  * @see [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.7)
  */
 @Serializable
-public class PrimeInfo public constructor(
+public data class PrimeInfo public constructor(
     @SerialName(value = PropertyKey.R) public val r: String,
     @SerialName(value = PropertyKey.D) public val d: String,
     @SerialName(value = PropertyKey.T) public val t: String

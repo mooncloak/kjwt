@@ -1,5 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.key.KeyResolver
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm

@@ -1,7 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core.signature
 
 import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
-import com.mooncloak.kodetools.kjwt.core.Jwk
+import com.mooncloak.kodetools.kjwt.core.key.Jwk
 import com.mooncloak.kodetools.kjwt.core.Jws
 import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import kotlin.coroutines.cancellation.CancellationException

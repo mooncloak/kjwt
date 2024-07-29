@@ -1,4 +1,8 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.key
+
+import com.mooncloak.kodetools.kjwt.core.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.Header
+import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 
 /**
  * A component that resolves the [Jwk] key used when signing a [Jws]. This could be used to

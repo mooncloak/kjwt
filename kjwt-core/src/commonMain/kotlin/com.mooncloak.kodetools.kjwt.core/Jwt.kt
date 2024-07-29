@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.Jwt.Builder
+import com.mooncloak.kodetools.kjwt.core.key.Jwk
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signable
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
