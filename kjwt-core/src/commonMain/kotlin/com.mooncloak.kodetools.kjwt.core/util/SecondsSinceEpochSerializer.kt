@@ -1,4 +1,4 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.util
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.KSerializer

@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.util.toJsonElement
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.DynamicJwkBuilder
 import io.jsonwebtoken.security.Jwks
