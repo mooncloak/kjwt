@@ -31,5 +31,4 @@ plugins {
 
 rootProject.name = "kjwt"
 
-include(":kjwt-key")
 include(":kjwt-core")
