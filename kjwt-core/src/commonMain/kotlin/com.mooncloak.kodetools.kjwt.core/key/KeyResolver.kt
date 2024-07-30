@@ -2,6 +2,7 @@ package com.mooncloak.kodetools.kjwt.core.key
 
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.Header
+import com.mooncloak.kodetools.kjwt.core.JwkSet
 import com.mooncloak.kodetools.kjwt.core.Jws
 import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 
@@ -41,6 +42,19 @@ public fun KeyResolver.Companion.of(key: Jwk?): KeyResolver =
     StaticKeyResolver(key = key)
 
 /**
+ * Retrieves a [KeyResolver] instance that chooses from [Jwk]s defined in the provided [JwkSet] by
+ * comparing the [Jwk.keyId] value with the [Header.keyId] value.
+ *
+ * @param [keys] The [JwkSet] to used to retrieve [Jwk]s.
+ *
+ * @return A [KeyResolver] whose [KeyResolver.resolve] function returns a [Jwk] from the provided
+ * [keys], or `null` if there is no match.
+ */
+@ExperimentalJwtApi
+public fun KeyResolver.Companion.of(keys: JwkSet): KeyResolver =
+    StaticJwkSetKeyResolver(keySet = keys)
+
+/**
  * Retrieves a [KeyResolver] instance whose [KeyResolver.resolve] function always throws an
  * [UnsupportedJwtSignatureAlgorithm]. This could be useful for testing purposes.
  */
@@ -76,6 +90,31 @@ internal class StaticKeyResolver internal constructor(
     override fun hashCode(): Int = key.hashCode()
 
     override fun toString(): String = "StaticKeyResolver(key=REDACTED)"
+}
+
+@ExperimentalJwtApi
+internal class StaticJwkSetKeyResolver internal constructor(
+    private val keySet: JwkSet
+) : KeyResolver {
+
+    override suspend fun resolve(header: Header): Jwk? {
+        if (header.keyId == null) return null
+
+        return keySet.jwkKeys.firstOrNull { key -> key.keyId == header.keyId }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is StaticJwkSetKeyResolver) return false
+
+        return keySet == other.keySet
+    }
+
+    override fun hashCode(): Int =
+        keySet.hashCode()
+
+    override fun toString(): String =
+        "StaticJwkSetKeyResolver(keySet=REDACTED)"
 }
 
 @ExperimentalJwtApi
