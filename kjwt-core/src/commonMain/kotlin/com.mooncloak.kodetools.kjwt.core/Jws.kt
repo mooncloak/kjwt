@@ -6,6 +6,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Signer
+import com.mooncloak.kodetools.kjwt.core.signature.Verifier
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
@@ -73,6 +74,8 @@ public interface Jws : Jwt,
          *
          * @param [json] The [Json] instance to use for deserializing and serializing JSON models.
          *
+         * @param [verifier] The [Verifier] used to verify the signature.
+         *
          * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
          * signature of the [Jws] represented by the provided [compacted] JWT.
          *
@@ -89,6 +92,7 @@ public interface Jws : Jwt,
         public suspend fun parse(
             compacted: CompactedJwt,
             json: Json,
+            verifier: Verifier,
             resolver: KeyResolver,
             validation: suspend Jws.() -> Boolean
         ): Jws
@@ -108,6 +112,8 @@ public interface Jws : Jwt,
  * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
  * signature of the [Jws] represented by the provided [compacted] JWT.
  *
+ * @param [verifier] The [Verifier] used to verify the signature.
+ *
  * @param [validation] A function that performs additional validation on the parsed [Jws] instance.
  * If this function returns `false`, then validation failed and an exception is thrown. Otherwise,
  * if this function returns `true`, the [Jws] is returned from this [parse] function.
@@ -121,11 +127,13 @@ public interface Jws : Jwt,
 public suspend fun Jws.Parser.parse(
     compacted: CompactedJwt,
     resolver: KeyResolver,
+    verifier: Verifier = Verifier.Default,
     validation: suspend Jws.() -> Boolean = { true }
 ): Jws = parse(
     compacted = compacted,
     resolver = resolver,
     json = Json.Default,
+    verifier = verifier,
     validation = validation
 )
 
@@ -141,6 +149,8 @@ public suspend fun Jws.Parser.parse(
  * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
  * signature of the [Jws] represented by the provided [compacted] JWT.
  *
+ * @param [verifier] The [Verifier] used to verify the signature.
+ *
  * @throws [JwtParseException] if an exception occurred during parsing.
  *
  * @return The parsed [Jws].
@@ -150,11 +160,13 @@ public suspend fun Jws.Parser.parse(
 public suspend fun Jws.Parser.parse(
     compacted: CompactedJwt,
     json: Json = Json.Default,
+    verifier: Verifier = Verifier.Default,
     resolver: KeyResolver
 ): Jws = parse(
     compacted = compacted,
     resolver = resolver,
     json = json,
+    verifier = verifier,
     validation = { true }
 )
 
@@ -169,6 +181,8 @@ public suspend fun Jws.Parser.parse(
  * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
  * signature of the [Jws] represented by the provided [compacted] JWT.
  *
+ * @param [verifier] The [Verifier] used to verify the signature.
+ *
  * @param [validation] A function that performs additional validation on the parsed [Jws] instance.
  * If this function returns `false`, then validation failed and an exception is thrown. Otherwise,
  * if this function returns `true`, the [Jws] is returned from this [parse] function.
@@ -179,12 +193,14 @@ public suspend fun Jws.Parser.parse(
 public suspend fun Jws.Parser.parseOrNull(
     compacted: CompactedJwt,
     json: Json = Json.Default,
+    verifier: Verifier = Verifier.Default,
     resolver: KeyResolver,
     validation: suspend Jws.() -> Boolean = { true }
 ): Jws? = try {
     parse(
         compacted = compacted,
         json = json,
+        verifier = verifier,
         resolver = resolver,
         validation = validation
     )
@@ -226,6 +242,7 @@ internal data object DefaultJwsParser : Jws.Parser {
     override suspend fun parse(
         compacted: CompactedJwt,
         json: Json,
+        verifier: Verifier,
         resolver: KeyResolver,
         validation: suspend Jws.() -> Boolean
     ): Jws {
@@ -255,6 +272,7 @@ internal data object DefaultJwsParser : Jws.Parser {
         return when (sections.size) {
             2, 3 -> parseJws(
                 json = json,
+                verifier = verifier,
                 resolver = resolver,
                 sections = sections,
                 validation = validation
@@ -269,6 +287,7 @@ internal data object DefaultJwsParser : Jws.Parser {
     @OptIn(ExperimentalEncodingApi::class)
     private suspend fun parseJws(
         json: Json,
+        verifier: Verifier,
         resolver: KeyResolver,
         sections: List<String>,
         validation: suspend Jws.() -> Boolean
@@ -298,33 +317,36 @@ internal data object DefaultJwsParser : Jws.Parser {
         )
 
         val signatureSection = sections.getOrNull(2)
+        val signatureAlgorithm = header.signatureAlgorithm ?: SignatureAlgorithm.NONE
 
         if (signatureSection.isNullOrEmpty()) {
-            if (header.signatureAlgorithm != SignatureAlgorithm.NONE) {
-                throw JwtParseException("Compacted JWS did NOT contain a signature and the signature algorithm was NOT set to none.")
+            if (signatureAlgorithm != SignatureAlgorithm.NONE) {
+                throw JwtParseException("Compacted JWS did NOT contain a signature but the signature algorithm was NOT set to 'none'.")
             }
 
             return DefaultJws(
                 header = header,
                 payload = payload,
-                signature = Signature(value = ""),
+                signature = Signature.Empty,
                 json = json
             )
         }
 
         val decodedSignature = Base64.UrlSafe.decode(signatureSection).decodeToString()
+        val signature = Signature(value = decodedSignature)
 
         val key = resolver.resolve(header)
 
         val signatureInput = SignatureInput(value = "$headerSection.$payloadSection")
-        val signature = Signer.Default.sign(
+
+        val isVerified = verifier.verify(
+            signature = signature,
             input = signatureInput,
             key = key,
-            algorithm = header.signatureAlgorithm
-                ?: throw UnsupportedJwtSignatureAlgorithm("Missing or unsupported signature algorithm used in JWS header: '${header.signatureAlgorithm?.serialName}'.")
+            algorithm = signatureAlgorithm
         )
 
-        if (signature.value != decodedSignature) {
+        if (!isVerified) {
             throw JwtParseException("Signature of JWS was invalid.")
         }
 
@@ -339,7 +361,7 @@ internal data object DefaultJwsParser : Jws.Parser {
             val isValid = validation.invoke(jws)
 
             if (!isValid) {
-                throw JwtParseException(message = "Error validating JWS.")
+                throw JwtParseException(message = "JWS failed validation.")
             }
         } catch (e: JwtValidationException) {
             throw JwtParseException(message = "Error validating JWS.", cause = e)

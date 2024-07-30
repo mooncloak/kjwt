@@ -5,38 +5,41 @@ import com.mooncloak.kodetools.kjwt.core.key.Jwk
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 
 /**
- * Retrieves the platform default [Signer] implementation.
+ * Retrieves the platform default [Verifier] implementation.
  *
  * @see [SignatureAlgorithm] for more information on the supported [SignatureAlgorithm]s.
- * @see [Verifier.Companion.Default] for the default companion [Verifier] implementation.
+ * @see [Signer.Companion.Default] for the default companion [Signer] implementation.
  */
 @ExperimentalJwtApi
-public val Signer.Companion.Default: Signer
-    get() = DefaultSigner
+public val Verifier.Companion.Default: Verifier
+    get() = DefaultVerifier
 
 @ExperimentalJwtApi
-internal data object DefaultSigner : Signer {
+internal data object DefaultVerifier : Verifier {
 
-    override suspend fun sign(
+    override suspend fun verify(
+        signature: Signature,
         input: SignatureInput,
         key: Jwk,
         algorithm: SignatureAlgorithm
-    ): Signature =
+    ): Boolean =
         when (algorithm) {
-            in HmacSigner.supportedAlgorithms -> HmacSigner.sign(
+            in HmacSigner.supportedAlgorithms -> HmacVerifier.verify(
+                signature = signature,
                 input = input,
                 key = key,
                 algorithm = algorithm
             )
 
-            in RsaSigner.supportedAlgorithms -> RsaSigner.sign(
+            in RsaVerifier.supportedAlgorithms -> RsaVerifier.verify(
+                signature = signature,
                 input = input,
                 key = key,
                 algorithm = algorithm
             )
 
             else -> throw UnsupportedJwtSignatureAlgorithm(
-                message = "Signature algorithm '${algorithm.serialName}' is not supported by ${DefaultSigner::class.simpleName}."
+                message = "Signature algorithm '${algorithm.serialName}' is not supported by ${DefaultVerifier::class.simpleName}."
             )
         }
 }

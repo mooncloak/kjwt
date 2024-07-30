@@ -1,5 +1,9 @@
 package com.mooncloak.kodetools.kjwt.core.crypto
 
+import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+
 /**
  * Represents a hash algorithm used for [EmsaPkcs1V15Encoding].
  *
@@ -75,6 +79,17 @@ internal val AlgorithmIdentifier.hashFunction: HashFunction
         AlgorithmIdentifier.SHA512 -> HashFunction.Sha512
         AlgorithmIdentifier.SHA512_224 -> HashFunction.Sha512_224
         AlgorithmIdentifier.SHA512_256 -> HashFunction.Sha512_256
+    }
+
+@ExperimentalJwtApi
+internal val SignatureAlgorithm.algorithmIdentifier: AlgorithmIdentifier
+    get() = when (this) {
+        SignatureAlgorithm.RS256 -> AlgorithmIdentifier.SHA256
+        SignatureAlgorithm.RS384 -> AlgorithmIdentifier.SHA384
+        SignatureAlgorithm.RS512 -> AlgorithmIdentifier.SHA512
+        else -> throw UnsupportedJwtSignatureAlgorithm(
+            message = "Signature algorithm '${this.serialName}' is not supported by this component."
+        )
     }
 
 internal fun AlgorithmIdentifier.encode(): ByteArray {

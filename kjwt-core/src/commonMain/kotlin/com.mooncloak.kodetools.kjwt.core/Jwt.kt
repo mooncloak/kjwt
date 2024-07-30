@@ -156,7 +156,7 @@ public class UnsignedJwt internal constructor(
         DefaultJws(
             header = header,
             payload = payload,
-            signature = Signature(value = ""),
+            signature = Signature.Empty,
             json = json
         )
 }

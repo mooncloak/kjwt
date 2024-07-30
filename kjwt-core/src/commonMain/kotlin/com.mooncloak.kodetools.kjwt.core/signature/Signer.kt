@@ -8,6 +8,8 @@ import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Represents a component that can be used to produce a [Signature].
+ *
+ * @see [Signer.Companion.Default] for a default implementation of this interface.
  */
 @ExperimentalJwtApi
 public fun interface Signer {
@@ -15,7 +17,7 @@ public fun interface Signer {
     /**
      * Produces a [Signature] value given the provided signature [input], [key], and [algorithm].
      *
-     * @param [input] The [SignatureInput] [String] that will be signed, resulting in the returned
+     * @param [input] The [SignatureInput] that will be signed, resulting in the returned
      * [Signature].
      *
      * @param [key] The [Jwk] that will be used as a signing key.

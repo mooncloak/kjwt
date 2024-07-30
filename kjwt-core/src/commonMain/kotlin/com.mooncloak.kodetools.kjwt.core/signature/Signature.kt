@@ -29,4 +29,13 @@ import kotlin.jvm.JvmInline
 @ExperimentalJwtApi
 public value class Signature public constructor(
     public val value: String
-)
+) {
+
+    public companion object {
+
+        /**
+         * Represents an empty [Signature] value that is used for unsecured JWTs.
+         */
+        public val Empty: Signature = Signature(value = "")
+    }
+}
