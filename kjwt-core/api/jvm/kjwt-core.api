@@ -461,6 +461,11 @@ public final class com/mooncloak/kodetools/kjwt/core/Thumbprint$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/mooncloak/kodetools/kjwt/core/ThumbprintKt {
+	public static final fun thumbprint (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/crypto/HashFunction;)Ljava/lang/String;
+	public static synthetic fun thumbprint$default (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/crypto/HashFunction;ILjava/lang/Object;)Ljava/lang/String;
+}
+
 public final class com/mooncloak/kodetools/kjwt/core/UnsignedJwt : com/mooncloak/kodetools/kjwt/core/Jwt, com/mooncloak/kodetools/kjwt/core/signature/Signable {
 	public fun getHeader ()Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public fun getPayload ()Lcom/mooncloak/kodetools/kjwt/core/Claims;
@@ -612,8 +617,6 @@ public final class com/mooncloak/kodetools/kjwt/core/key/JwkKt {
 	public static synthetic fun build-i8iuqi8$default (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk$Companion;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;
 	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;
 	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;
-	public static final fun thumbprint (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/crypto/HashFunction;)Ljava/lang/String;
-	public static synthetic fun thumbprint$default (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/crypto/HashFunction;ILjava/lang/Object;)Ljava/lang/String;
 	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;)Lcom/mooncloak/kodetools/kjwt/core/key/Jwk$Builder;
 }
 
