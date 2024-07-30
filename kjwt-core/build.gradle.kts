@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.dokka")
     id("kjwt.multiplatform")
+    id("kjwt.publish")
 }
 
 kotlin {
@@ -13,9 +14,6 @@ kotlin {
             // Disable warnings and errors related to these expected @OptIn annotations.
             // See: https://kotlinlang.org/docs/opt-in-requirements.html#module-wide-opt-in
             languageSettings.optIn("kotlin.RequiresOptIn")
-            languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
-            languageSettings.optIn("kotlinx.coroutines.FlowPreview")
-            languageSettings.optIn("kotlin.time.ExperimentalTime")
             languageSettings.optIn("-Xexpect-actual-classes")
         }
 
@@ -27,11 +25,11 @@ kotlin {
 
                 // Serialization
                 // https://github.com/Kotlin/kotlinx.serialization
-                implementation(KotlinX.serialization.json)
+                api(KotlinX.serialization.json)
 
                 // Time
                 // https://github.com/Kotlin/kotlinx-datetime
-                implementation(KotlinX.datetime)
+                api(KotlinX.datetime)
 
                 // Hash Functions
                 // https://github.com/KotlinCrypto/hash

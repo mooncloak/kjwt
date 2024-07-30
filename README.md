@@ -16,7 +16,7 @@ Checkout the [releases page](https://github.com/mooncloak/kjwt/releases) to get 
 
 ```kotlin
 repositories {
-  maven("https://repo.repsy.io/mvn/mooncloak/public")
+    maven("https://repo.repsy.io/mvn/mooncloak/public")
 }
 ```
 
@@ -26,20 +26,65 @@ repositories {
 implementation("com.mooncloak.kodetools.kjwt:kjwt-core:VERSION")
 ```
 
+## Usage
+
+The following library usage examples, and more, can be found in the [sample module](sample).
+
+### Creating a JWT (Signed JWS)
+
+The following example illustrates how to create a [CompactedJwt](docs/). The full source code can be
+found [here](sample/src/commonMain/kotlin/com/mooncloak/kodetools/kjwt/sample/CreateJwt.kt).
+
+```kotlin
+Jwt {
+    header {
+        signatureAlgorithm = algorithm
+        keyId = "MY_KEY_ID"
+        // ...
+    }
+
+    payload {
+        this.issuedAt = Clock.System.now()
+        this["custom_claim"] = JsonPrimitive("CUSTOM_CLAIM_VALUE")
+        this.putValue(key = "other_custom_claim", value = 0)
+        // ...
+    }
+}.sign(
+    resolver = keyResolver,
+    algorithm = algorithm
+).compact()
+```
+
+### Parsing a compacted JWS
+
+The following example illustrates how to parse a [CompactedJwt](docs/). The full source code can be
+found [here](sample/src/commonMain/kotlin/com/mooncloak/kodetools/kjwt/sample/ParseCompactedJwt.kt).
+
+```kotlin
+val (header, payload, signature) = Jws.parse(
+    compacted = compactedJwt,
+    resolver = keyResolver
+)
+```
+
 ## Documentation 📃
 
-More detailed documentation is available in the [docs](docs/) folder. The entry point to the documentation can be
+More detailed documentation is available in the [docs](docs/) folder. The entry point to the
+documentation can be
 found [here](docs/index.md).
 
 ## Security 🛡️
 
-For security vulnerabilities, concerns, or issues, please refer to the [security policy](SECURITY.md) for more
+For security vulnerabilities, concerns, or issues, please refer to
+the [security policy](SECURITY.md) for more
 information on appropriate approaches for disclosure.
 
 ## Contributing ✍️
 
-Outside contributions are welcome for this project. Please follow the [code of conduct](CODE_OF_CONDUCT.md)
-and [coding conventions](CODING_CONVENTIONS.md) when contributing. If contributing code, please add thorough documents
+Outside contributions are welcome for this project. Please follow
+the [code of conduct](CODE_OF_CONDUCT.md)
+and [coding conventions](CODING_CONVENTIONS.md) when contributing. If contributing code, please add
+thorough documents
 and tests. Thank you!
 
 ## License ⚖️

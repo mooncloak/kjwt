@@ -346,6 +346,18 @@ public val Header.signatureAlgorithm: SignatureAlgorithm?
     get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
 
 /**
+ * Gets or sets the [SignatureAlgorithm] algorithm used to sign the [Jws] token associated with
+ * this [Header], or `null` if a matching [SignatureAlgorithm] could not be found or the
+ * [Header.algorithm] value was `null`.
+ */
+@ExperimentalJwtApi
+public var Header.Builder.signatureAlgorithm: SignatureAlgorithm?
+    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+    set(value) {
+        this.algorithm = value?.serialName
+    }
+
+/**
  * Converts this [Header] instance into a [Header.Builder].
  */
 @ExperimentalJwtApi

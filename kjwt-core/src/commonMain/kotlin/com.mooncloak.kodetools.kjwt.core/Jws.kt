@@ -5,12 +5,11 @@ import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
-import com.mooncloak.kodetools.kjwt.core.signature.Signer
 import com.mooncloak.kodetools.kjwt.core.signature.Verifier
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
-import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -104,6 +103,24 @@ public interface Jws : Jwt,
 }
 
 /**
+ * Obtains the [Jws.header] property in a deconstructed manner.
+ */
+@ExperimentalJwtApi
+public operator fun Jws.component1(): Header = header
+
+/**
+ * Obtains the [Jws.payload] property in a deconstructed manner.
+ */
+@ExperimentalJwtApi
+public operator fun Jws.component2(): Claims = payload
+
+/**
+ * Obtains the [Jws.signature] property in a deconstructed manner.
+ */
+@ExperimentalJwtApi
+public operator fun Jws.component3(): Signature = signature
+
+/**
  * Parses the provided [compacted] JWT instance into a [Jws]. This is a convenience function that
  * delegates to the [Jws.Parser.parse] function using the [Json.Default] instance.
  *
@@ -135,39 +152,6 @@ public suspend fun Jws.Parser.parse(
     json = Json.Default,
     verifier = verifier,
     validation = validation
-)
-
-/**
- * Parses the provided [compacted] JWT instance into a [Jws]. This is a convenience function that
- * delegates to the [Jws.Parser.parse] function using a validation parameter that always returns
- * `true`.
- *
- * @param [compacted] The [CompactedJwt] instance to parse into a [Jws].
- *
- * @param [json] The [Json] instance to use for deserializing and serializing JSON models.
- *
- * @param [resolver] The [KeyResolver] used to obtain the signing key to verify the
- * signature of the [Jws] represented by the provided [compacted] JWT.
- *
- * @param [verifier] The [Verifier] used to verify the signature.
- *
- * @throws [JwtParseException] if an exception occurred during parsing.
- *
- * @return The parsed [Jws].
- */
-@ExperimentalJwtApi
-@Throws(JwtParseException::class, CancellationException::class)
-public suspend fun Jws.Parser.parse(
-    compacted: CompactedJwt,
-    json: Json = Json.Default,
-    verifier: Verifier = Verifier.Default,
-    resolver: KeyResolver
-): Jws = parse(
-    compacted = compacted,
-    resolver = resolver,
-    json = json,
-    verifier = verifier,
-    validation = { true }
 )
 
 /**
@@ -335,7 +319,7 @@ internal data object DefaultJwsParser : Jws.Parser {
         val decodedSignature = Base64.UrlSafe.decode(signatureSection).decodeToString()
         val signature = Signature(value = decodedSignature)
 
-        val key = resolver.resolve(header)
+        val key = resolver.resolve(header) ?: throw JwtParseException("No matching JWK found.")
 
         val signatureInput = SignatureInput(value = "$headerSection.$payloadSection")
 

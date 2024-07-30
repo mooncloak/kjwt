@@ -32,3 +32,4 @@ plugins {
 rootProject.name = "kjwt"
 
 include(":kjwt-core")
+include(":sample")

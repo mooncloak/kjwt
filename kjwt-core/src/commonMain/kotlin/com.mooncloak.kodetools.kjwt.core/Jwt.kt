@@ -1,7 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.Jwt.Builder
-import com.mooncloak.kodetools.kjwt.core.key.Jwk
+import com.mooncloak.kodetools.kjwt.core.key.KeyResolver
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signable
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
@@ -89,6 +89,18 @@ public interface Jwt {
     public companion object
 }
 
+/**
+ * Obtains the [Jwt.header] property in a deconstructed manner.
+ */
+@ExperimentalJwtApi
+public operator fun Jwt.component1(): Header = header
+
+/**
+ * Obtains the [Jwt.payload] property in a deconstructed manner.
+ */
+@ExperimentalJwtApi
+public operator fun Jwt.component2(): Claims = payload
+
 @ExperimentalJwtApi
 public class UnsignedJwt internal constructor(
     override val header: Header,
@@ -99,12 +111,12 @@ public class UnsignedJwt internal constructor(
     Signable {
 
     @OptIn(ExperimentalEncodingApi::class)
-    override suspend fun sign(key: Jwk?, algorithm: SignatureAlgorithm): Jws {
+    override suspend fun sign(resolver: KeyResolver, algorithm: SignatureAlgorithm): Jws {
+        val key = resolver.resolve(header)
+
         if (key == null && algorithm != SignatureAlgorithm.NONE) {
             throw UnsupportedJwtSignatureAlgorithm("Signature algorithm '${algorithm.serialName}' requires a key but `null` was provided.")
-        }
-
-        if (key == null) {
+        } else if (key == null) {
             return unsecured()
         }
 

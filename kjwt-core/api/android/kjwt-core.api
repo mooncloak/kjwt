@@ -125,7 +125,9 @@ public final class com/mooncloak/kodetools/kjwt/core/HeaderKt {
 	public static synthetic fun build$default (Lcom/mooncloak/kodetools/kjwt/core/Header$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public static final fun copy (Lcom/mooncloak/kodetools/kjwt/core/Header;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/kjwt/core/Header;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static final fun getSignatureAlgorithm (Lcom/mooncloak/kodetools/kjwt/core/Header$Builder;)Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;
 	public static final fun getSignatureAlgorithm (Lcom/mooncloak/kodetools/kjwt/core/Header;)Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;
+	public static final fun setSignatureAlgorithm (Lcom/mooncloak/kodetools/kjwt/core/Header$Builder;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;)V
 	public static final fun toBuilder (Lcom/mooncloak/kodetools/kjwt/core/Header;)Lcom/mooncloak/kodetools/kjwt/core/Header$Builder;
 }
 
@@ -235,12 +237,13 @@ public final class com/mooncloak/kodetools/kjwt/core/Jws$Parser$Companion {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JwsKt {
+	public static final fun component1 (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static final fun component2 (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Lcom/mooncloak/kodetools/kjwt/core/Claims;
+	public static final fun component3 (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Ljava/lang/String;
 	public static final fun isSecured (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Z
 	public static final fun isUnsecured (Lcom/mooncloak/kodetools/kjwt/core/Jws;)Z
 	public static final fun parse-dqr0rFM (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun parse-dqr0rFM (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun parse-dqr0rFM$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static synthetic fun parse-dqr0rFM$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun parseOrNull-ZXmjo5c (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun parseOrNull-ZXmjo5c$default (Lcom/mooncloak/kodetools/kjwt/core/Jws$Parser;Ljava/lang/String;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Verifier;Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
@@ -267,6 +270,8 @@ public class com/mooncloak/kodetools/kjwt/core/JwtException : java/lang/RuntimeE
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/JwtKt {
+	public static final fun component1 (Lcom/mooncloak/kodetools/kjwt/core/Jwt;)Lcom/mooncloak/kodetools/kjwt/core/Header;
+	public static final fun component2 (Lcom/mooncloak/kodetools/kjwt/core/Jwt;)Lcom/mooncloak/kodetools/kjwt/core/Claims;
 	public static final fun from (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lcom/mooncloak/kodetools/kjwt/core/Header;Lcom/mooncloak/kodetools/kjwt/core/Claims;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Signer;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
 	public static synthetic fun from$default (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lcom/mooncloak/kodetools/kjwt/core/Header;Lcom/mooncloak/kodetools/kjwt/core/Claims;Lkotlinx/serialization/json/Json;Lcom/mooncloak/kodetools/kjwt/core/signature/Signer;ILjava/lang/Object;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
 	public static final fun invoke (Lcom/mooncloak/kodetools/kjwt/core/Jwt$Companion;Lkotlinx/serialization/json/Json;Lkotlin/jvm/functions/Function1;)Lcom/mooncloak/kodetools/kjwt/core/UnsignedJwt;
@@ -459,7 +464,7 @@ public final class com/mooncloak/kodetools/kjwt/core/Thumbprint$Companion {
 public final class com/mooncloak/kodetools/kjwt/core/UnsignedJwt : com/mooncloak/kodetools/kjwt/core/Jwt, com/mooncloak/kodetools/kjwt/core/signature/Signable {
 	public fun getHeader ()Lcom/mooncloak/kodetools/kjwt/core/Header;
 	public fun getPayload ()Lcom/mooncloak/kodetools/kjwt/core/Claims;
-	public fun sign (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun sign (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun unsecured ()Lcom/mooncloak/kodetools/kjwt/core/Jws;
 }
 
@@ -659,6 +664,7 @@ public final class com/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion {
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/key/KeyResolverKt {
+	public static final fun getAlwaysNull (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 	public static final fun getUnsupported (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 	public static final fun of (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 }
@@ -776,7 +782,7 @@ public final class com/mooncloak/kodetools/kjwt/core/signature/DefaultVerifierKt
 
 public abstract interface class com/mooncloak/kodetools/kjwt/core/signature/Signable {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/signature/Signable$Companion;
-	public abstract fun sign (Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun sign (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/signature/Signable$Companion {
