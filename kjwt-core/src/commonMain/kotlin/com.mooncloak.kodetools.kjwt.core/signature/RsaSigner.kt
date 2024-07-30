@@ -49,7 +49,6 @@ internal data object RsaSigner : Signer {
         val value = RSASSA_PKCS1_v1_5_SIGN(
             K = rsaSigningKey,
             M = input.value.encodeToByteArray(),
-            k = 0, // FIXME: This should be derived by the function
             hashAlgorithm = hashAlgorithm
         ).decodeToString()
 

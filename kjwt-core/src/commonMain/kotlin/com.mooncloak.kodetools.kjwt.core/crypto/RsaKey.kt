@@ -28,7 +28,19 @@ internal data class RsaKeyPair internal constructor(
  * Represents a key that is used with the RSA specification. RSA uses asymmetric keys, so there are
  * [RsaPublicKey] and [RsaPrivateKey]s.
  */
-internal sealed interface RsaKey : RsaKeyMaterial
+internal sealed interface RsaKey : RsaKeyMaterial {
+
+    /**
+     * The RSA modulus, a positive integer.
+     */
+    val n: BigInteger
+}
+
+/**
+ * The length in octets of the RSA modulus 'n'.
+ */
+internal val RsaKey.k: Int
+    inline get() = n.numberOfWords
 
 /**
  * Represents a public key used for the
@@ -41,7 +53,7 @@ internal sealed interface RsaKey : RsaKeyMaterial
  * @see [RFC-8017](https://www.rfc-editor.org/rfc/rfc8017#section-3.1)
  */
 internal data class RsaPublicKey internal constructor(
-    val n: BigInteger,
+    override val n: BigInteger,
     val e: BigInteger
 ) : RsaKey
 
@@ -62,7 +74,7 @@ internal sealed interface RsaPrivateKey : RsaKey {
      * @property [d] the RSA private exponent, a positive integer.
      */
     class Pair internal constructor(
-        val n: BigInteger,
+        override val n: BigInteger,
         val d: BigInteger
     ) : RsaPrivateKey {
 
@@ -110,15 +122,57 @@ internal sealed interface RsaPrivateKey : RsaKey {
      * CRT coefficient, a positive integer less than 'r_i' such that
      * `r_1 * r_2 * ... * r_(i-1) * t_i == 1 (mod r_i), i = 2, ..., u`.
      */
-    class MultiPrime internal constructor(
-        val d: BigInteger? = null,
-        val p: BigInteger,
-        val q: BigInteger,
-        val dP: BigInteger,
-        val dQ: BigInteger,
-        val qInv: BigInteger,
-        val additionalPrimes: List<AdditionalPrime> = emptyList()
-    ) : RsaPrivateKey {
+    class MultiPrime : RsaPrivateKey {
+
+        override val n: BigInteger
+        val d: BigInteger?
+        val p: BigInteger
+        val q: BigInteger
+        val dP: BigInteger
+        val dQ: BigInteger
+        val qInv: BigInteger
+        val additionalPrimes: List<AdditionalPrime>
+
+        internal constructor(
+            p: BigInteger,
+            q: BigInteger,
+            dP: BigInteger,
+            dQ: BigInteger,
+            qInv: BigInteger,
+            additionalPrimes: List<AdditionalPrime> = emptyList(),
+            d: BigInteger? = null
+        ) {
+            // The value of 'n' is the result of multiplying all the prime numbers together.
+            this.n = p * q * additionalPrimes.map { it.r }.reduce { acc, r -> acc * r }
+            this.p = p
+            this.q = q
+            this.dP = dP
+            this.dQ = dQ
+            this.qInv = qInv
+            this.additionalPrimes = additionalPrimes
+            this.d = d
+        }
+
+        @Suppress("unused")
+        internal constructor(
+            n: BigInteger,
+            p: BigInteger,
+            q: BigInteger,
+            dP: BigInteger,
+            dQ: BigInteger,
+            qInv: BigInteger,
+            additionalPrimes: List<AdditionalPrime> = emptyList(),
+            d: BigInteger? = null
+        ) {
+            this.n = n
+            this.p = p
+            this.q = q
+            this.dP = dP
+            this.dQ = dQ
+            this.qInv = qInv
+            this.additionalPrimes = additionalPrimes
+            this.d = d
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -176,7 +230,7 @@ internal fun Jwk.toRsaKeyMaterial(): RsaKeyMaterial {
     val d = this.d?.decodeBase64UrlUInt()
 
     requireNotNull(n) { "Required JWK parameter '${Jwk.PropertyKey.N}' was not present." }
-    requireNotNull(e) { "Reqiored JWK parameter '${Jwk.PropertyKey.E}' was not present." }
+    requireNotNull(e) { "Required JWK parameter '${Jwk.PropertyKey.E}' was not present." }
 
     val publicKey = RsaPublicKey(
         n = n,
