@@ -11,8 +11,3 @@ Converts this [JsonClaims](-json-claims/index.md) instance into a [JsonClaims.Bu
 fun [Header](-header/index.md).[toBuilder](to-builder.md)(): [Header.Builder](-header/-builder/index.md)
 
 Converts this [Header](-header/index.md) instance into a [Header.Builder](-header/-builder/index.md).
-
-[common]\
-fun [JwkSet](-jwk-set/index.md).[toBuilder](to-builder.md)(): [JwkSet.Builder](-jwk-set/-builder/index.md)
-
-Converts this [JwkSet](-jwk-set/index.md) instance into a [JwkSet.Builder](-jwk-set/-builder/index.md).

@@ -1,51 +1,27 @@
-//[kjwt-core](../../../../index.md)/[com.mooncloak.kodetools.kjwt.core.key](../../index.md)/[Jwk](../index.md)/[Builder](index.md)
+//[kjwt-core](../../../../index.md)/[com.mooncloak.kodetools.kjwt.core.key](../../index.md)/[JwkSet](../index.md)/[Builder](index.md)
 
 # Builder
 
 [common]\
 class [Builder](index.md) : [JwtObject.Builder](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/index.md)
 
-A builder component for creating a [Jwk](../index.md) instance. This component should not be created directly, but instead can be used to create a [Jwk](../index.md) instance via the [Jwk](../index.md) constructor function.
+A builder component for creating a [JwkSet](../index.md) instance. This component should not be created directly, but instead can be used to create a [JwkSet](../index.md) instance via the [JwkSet](../index.md) constructor function.
 
 ## Properties
 
 | Name | Summary |
 |---|---|
-| [algorithm](algorithm.md) | [common]<br>var [algorithm](algorithm.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.algorithm](../algorithm.md) value. |
-| [computeIdFromThumbprint](compute-id-from-thumbprint.md) | [common]<br>var [computeIdFromThumbprint](compute-id-from-thumbprint.md): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>Whether the [Jwk.keyId](../key-id.md) value should be set to the computed [Jwk.thumbprint](../../../com.mooncloak.kodetools.kjwt.core/thumbprint.md) value. If `true`, when the [Jwk.Builder.build](build.md) function is invoked, the [Jwk.thumbprint](../../../com.mooncloak.kodetools.kjwt.core/thumbprint.md) function will be computed and its result will be set as the [Jwk.keyId](../key-id.md) value on the resulting [Jwk](../index.md). If `false`, no extra calculation will happen. Defaults to `false`. |
-| [curve](curve.md) | [common]<br>var [curve](curve.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.curve](../curve.md) value. |
-| [d](d.md) | [common]<br>var [d](d.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.d](../d.md) value. |
-| [dp](dp.md) | [common]<br>var [dp](dp.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.dp](../dp.md) value. |
-| [dq](dq.md) | [common]<br>var [dq](dq.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.dq](../dq.md) value. |
-| [e](e.md) | [common]<br>var [e](e.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.e](../e.md) value. |
 | [entries](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/entries.md) | [common]<br>open override val [entries](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/entries.md): [MutableSet](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-set/index.html)&lt;[MutableMap.MutableEntry](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/-mutable-entry/index.html)&lt;[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), JsonElement&gt;&gt; |
-| [k](k.md) | [common]<br>var [k](k.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.k](../k.md) value. |
-| [keyId](key-id.md) | [common]<br>var [keyId](key-id.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.algorithm](../algorithm.md) value. |
-| [keyOperations](key-operations.md) | [common]<br>var [keyOperations](key-operations.md): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)&lt;[KeyOperation](../../-key-operation/index.md)&gt;?<br>Gets/sets the [Jwk.keyOperations](../key-operations.md) value. |
+| [jwkKeys](jwk-keys.md) | [common]<br>var [jwkKeys](jwk-keys.md): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)&lt;[Jwk](../../-jwk/index.md)&gt; |
 | [keys](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/keys.md) | [common]<br>open override val [keys](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/keys.md): [MutableSet](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-set/index.html)&lt;[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)&gt; |
-| [keyType](key-type.md) | [common]<br>var [keyType](key-type.md): [KeyType](../../-key-type/index.md)<br>Gets/sets the [Jwk.keyType](../key-type.md) value. |
-| [n](n.md) | [common]<br>var [n](n.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.n](../n.md) value. |
-| [oth](oth.md) | [common]<br>var [oth](oth.md): [List](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)&lt;[PrimeInfo](../../-prime-info/index.md)&gt;?<br>Gets/sets the [Jwk.oth](../oth.md) value. |
-| [p](p.md) | [common]<br>var [p](p.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.p](../p.md) value. |
-| [q](q.md) | [common]<br>var [q](q.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.q](../q.md) value. |
-| [qi](qi.md) | [common]<br>var [qi](qi.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.qi](../qi.md) value. |
-| [signatureAlgorithm](../../signature-algorithm.md) | [common]<br>var [Jwk.Builder](index.md).[signatureAlgorithm](../../signature-algorithm.md): [SignatureAlgorithm](../../../com.mooncloak.kodetools.kjwt.core.signature/-signature-algorithm/index.md)?<br>Gets or sets the [Jwk.algorithm](../algorithm.md) property as a [SignatureAlgorithm](../../../com.mooncloak.kodetools.kjwt.core.signature/-signature-algorithm/index.md) value, or `null` if a matching [SignatureAlgorithm](../../../com.mooncloak.kodetools.kjwt.core.signature/-signature-algorithm/index.md) could not be found or the [Jwk.algorithm](../algorithm.md) does not represent a [SignatureAlgorithm](../../../com.mooncloak.kodetools.kjwt.core.signature/-signature-algorithm/index.md). |
 | [size](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/size.md) | [common]<br>@Transient<br>override val [size](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/size.md): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
-| [thumbprintHashFunction](thumbprint-hash-function.md) | [common]<br>var [thumbprintHashFunction](thumbprint-hash-function.md): [HashFunction](../../../com.mooncloak.kodetools.kjwt.core.crypto/-hash-function/index.md)<br>Determines the [HashFunction](../../../com.mooncloak.kodetools.kjwt.core.crypto/-hash-function/index.md) that is used to compute the [Jwk.thumbprint](../../../com.mooncloak.kodetools.kjwt.core/thumbprint.md) value when the [computeIdFromThumbprint](compute-id-from-thumbprint.md) is set to `true`. Defaults to [HashFunction.Companion.Sha256](../../../com.mooncloak.kodetools.kjwt.core.crypto/-sha256.md). |
-| [use](use.md) | [common]<br>var [use](use.md): [KeyUse](../../-key-use/index.md)?<br>Gets/sets the [Jwk.use](../use.md) value. |
 | [values](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/values.md) | [common]<br>open override val [values](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/values.md): [MutableCollection](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html)&lt;JsonElement&gt; |
-| [x](x.md) | [common]<br>var [x](x.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.x](../x.md) value. |
-| [x5c](x5c.md) | [common]<br>var [x5c](x5c.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.x5c](../x5c.md) value. |
-| [x5t](x5t.md) | [common]<br>var [x5t](x5t.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.x5t](../x5t.md) value. |
-| [x5tS256](x5t-s256.md) | [common]<br>var [x5tS256](x5t-s256.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.x5tS256](../x5t-s256.md) value. |
-| [x5u](x5u.md) | [common]<br>var [x5u](x5u.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.x5u](../x5u.md) value. |
-| [y](y.md) | [common]<br>var [y](y.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?<br>Gets/sets the [Jwk.y](../y.md) value. |
 
 ## Functions
 
 | Name | Summary |
 |---|---|
-| [build](build.md) | [common]<br>fun [build](build.md)(): [Jwk](../index.md)<br>Converts this [Jwk.Builder](index.md) instance into a [Jwk](../index.md) instance. |
+| [build](build.md) | [common]<br>fun [build](build.md)(): [JwkSet](../index.md)<br>Converts this [JwkSet.Builder](index.md) instance into a [JwkSet](../index.md) instance. |
 | [clear](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/clear.md) | [common]<br>open override fun [clear](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/-builder/clear.md)() |
 | [containsKey](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/contains-key.md) | [common]<br>override fun [containsKey](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/contains-key.md)(key: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 | [containsValue](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/contains-value.md) | [common]<br>override fun [containsValue](../../../com.mooncloak.kodetools.kjwt.core/-jwt-object/contains-value.md)(value: JsonElement): [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |

@@ -3,16 +3,14 @@ package com.mooncloak.kodetools.kjwt.core.key
 import com.mooncloak.kodetools.kjwt.core.BaseJwtObjectSerializer
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.JwtObject
-import com.mooncloak.kodetools.kjwt.core.Thumbprint
 import com.mooncloak.kodetools.kjwt.core.crypto.HashFunction
 import com.mooncloak.kodetools.kjwt.core.crypto.Sha256
 import com.mooncloak.kodetools.kjwt.core.property
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.thumbprint
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * An interface that represents a JWK (JSON Web Key).
@@ -583,6 +581,41 @@ public fun Jwk.Companion.build(
     initialKeyType = keyType
 ).apply(block)
     .build()
+
+/**
+ * Creates a [Jwk] from the provided builder [block] and [json] instance.
+ */
+@ExperimentalJwtApi
+public operator fun Jwk.Companion.invoke(
+    keyType: KeyType,
+    json: Json = Json.Default,
+    block: Jwk.Builder.() -> Unit
+): Jwk = Jwk.Builder(
+    json = json,
+    initialKeyType = keyType
+).apply(block)
+    .build()
+
+/**
+ * Retrieves the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a matching
+ * [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
+ * [SignatureAlgorithm].
+ */
+@ExperimentalJwtApi
+public val Jwk.signatureAlgorithm: SignatureAlgorithm?
+    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+
+/**
+ * Gets or sets the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a
+ * matching [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
+ * [SignatureAlgorithm].
+ */
+@ExperimentalJwtApi
+public var Jwk.Builder.signatureAlgorithm: SignatureAlgorithm?
+    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+    set(value) {
+        this.algorithm = value?.serialName
+    }
 
 /**
  * The [KSerializer] implementation for the [Jwk] class.

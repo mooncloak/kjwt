@@ -67,6 +67,33 @@ val (header, payload, signature) = Jws.parse(
 )
 ```
 
+### JSON Web Keys (JWKs and JWKSets)
+
+JWKs are used to sign, verify, encrypt, and decrypt JWTs. They are essential for working with JWTs
+and it is up to an application to define where it obtains its JWKs. This library
+provides [Jwk](docs/kjwt-core/kjwt-core/com.mooncloak.kodetools.kjwt.core.key/-jwk/index.md)
+and [JwkSet](docs/kjwt-core/kjwt-core/com.mooncloak.kodetools.kjwt.core.key/-jwkset/index.md)
+components, as well as
+a [KeyResolver](docs/kjwt-core/kjwt-core/com.mooncloak.kodetools.kjwt.core.key/-key-resolver/index.md)
+component which is used to obtain a JWK.
+
+#### Creating a JWK
+
+To create a JSON Web Key, use the [Jwk.invoke] constructor function:
+
+```kotlin
+Jwk(keyType = KeyType.RSA) {
+    keyId = "abc123"
+    signatureAlgorithm = SignatureAlgorithm.HS256
+    keyOperations = listOf(KeyOperation.Sign, KeyOperation.Verify)
+    use = KeyUse.Sig
+    // ...
+}
+```
+
+The full source code can be
+found [here](sample/src/commonMain/kotlin/com/mooncloak/kodetools/kjwt/sample/CreateJwk.kt)
+
 ## Documentation 📃
 
 More detailed documentation is available in the [docs](docs/) folder. The entry point to the

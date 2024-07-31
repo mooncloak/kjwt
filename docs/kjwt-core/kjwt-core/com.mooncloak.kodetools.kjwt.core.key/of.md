@@ -20,9 +20,9 @@ common
 | key | The [Jwk](-jwk/index.md) key that the returned [KeyResolver](-key-resolver/index.md) will always return. |
 
 [common]\
-fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[of](of.md)(keys: [JwkSet](../com.mooncloak.kodetools.kjwt.core/-jwk-set/index.md)): [KeyResolver](-key-resolver/index.md)
+fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[of](of.md)(keys: [JwkSet](-jwk-set/index.md)): [KeyResolver](-key-resolver/index.md)
 
-Retrieves a [KeyResolver](-key-resolver/index.md) instance that chooses from [Jwk](-jwk/index.md)s defined in the provided [JwkSet](../com.mooncloak.kodetools.kjwt.core/-jwk-set/index.md) by comparing the [Jwk.keyId](-jwk/key-id.md) value with the [Header.keyId](../com.mooncloak.kodetools.kjwt.core/-header/key-id.md) value.
+Retrieves a [KeyResolver](-key-resolver/index.md) instance that chooses from [Jwk](-jwk/index.md)s defined in the provided [JwkSet](-jwk-set/index.md) by comparing the [Jwk.keyId](-jwk/key-id.md) value with the [Header.keyId](../com.mooncloak.kodetools.kjwt.core/-header/key-id.md) value.
 
 #### Return
 
@@ -34,4 +34,4 @@ common
 
 | | |
 |---|---|
-| keys | The [JwkSet](../com.mooncloak.kodetools.kjwt.core/-jwk-set/index.md) to used to retrieve [Jwk](-jwk/index.md)s. |
+| keys | The [JwkSet](-jwk-set/index.md) to used to retrieve [Jwk](-jwk/index.md)s. |

@@ -10,3 +10,4 @@ object [Companion](index.md)
 | Name | Summary |
 |---|---|
 | [build](../../build.md) | [common]<br>fun [Jwk.Companion](index.md).[build](../../build.md)(keyType: [KeyType](../../-key-type/index.md), json: Json = Json.Default, block: [Jwk.Builder](../-builder/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [Jwk](../index.md)<br>Creates a [Jwk](../index.md) from the provided builder [block](../../build.md) and [json](../../build.md) instance. |
+| [invoke](../../invoke.md) | [common]<br>operator fun [Jwk.Companion](index.md).[invoke](../../invoke.md)(keyType: [KeyType](../../-key-type/index.md), json: Json = Json.Default, block: [Jwk.Builder](../-builder/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [Jwk](../index.md)<br>Creates a [Jwk](../index.md) from the provided builder [block](../../invoke.md) and [json](../../invoke.md) instance. |

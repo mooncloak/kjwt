@@ -14,9 +14,9 @@ Typically, JWT object constructs are extensible JSON objects. So this interface 
 |---|
 | [JsonClaims](../-json-claims/index.md) |
 | [Header](../-header/index.md) |
-| [JwkSet](../-jwk-set/index.md) |
 | [Builder](-builder/index.md) |
 | [Jwk](../../com.mooncloak.kodetools.kjwt.core.key/-jwk/index.md) |
+| [JwkSet](../../com.mooncloak.kodetools.kjwt.core.key/-jwk-set/index.md) |
 
 ## Types
 

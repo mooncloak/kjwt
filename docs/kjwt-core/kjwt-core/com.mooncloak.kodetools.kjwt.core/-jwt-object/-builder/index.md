@@ -12,8 +12,8 @@ A component that can be used to create an instance of a [JwtObject](../index.md)
 |---|
 | [Builder](../../-json-claims/-builder/index.md) |
 | [Builder](../../-header/-builder/index.md) |
-| [Builder](../../-jwk-set/-builder/index.md) |
 | [Builder](../../../com.mooncloak.kodetools.kjwt.core.key/-jwk/-builder/index.md) |
+| [Builder](../../../com.mooncloak.kodetools.kjwt.core.key/-jwk-set/-builder/index.md) |
 
 ## Types
 

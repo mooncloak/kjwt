@@ -1,7 +1,8 @@
-package com.mooncloak.kodetools.kjwt.core
+package com.mooncloak.kodetools.kjwt.core.key
 
-import com.mooncloak.kodetools.kjwt.core.key.Jwk
-import com.mooncloak.kodetools.kjwt.core.key.KeyType
+import com.mooncloak.kodetools.kjwt.core.BaseJwtObjectSerializer
+import com.mooncloak.kodetools.kjwt.core.JwtObject
+import com.mooncloak.kodetools.kjwt.core.property
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
