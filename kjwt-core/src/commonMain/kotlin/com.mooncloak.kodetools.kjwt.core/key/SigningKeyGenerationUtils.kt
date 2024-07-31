@@ -1,5 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core.key
 
+import com.benasher44.uuid.uuid4
 import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
@@ -22,25 +23,29 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  * @return The generated [Jwk], or `null` if the [SignatureAlgorithm] does not require a signing
  * key.
  */
+@Suppress("RedundantSuspendModifier")
 @OptIn(ExperimentalEncodingApi::class)
 @ExperimentalJwtApi
 @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
 public suspend fun SignatureAlgorithm.generateSigningKey(
     json: Json = Json.Default
-): Jwk? =
-    when (this) {
+): Jwk? {
+    val random = SecureRandom()
+
+    return when (this) {
         SignatureAlgorithm.NONE -> null
 
         SignatureAlgorithm.HS256 -> Jwk(
             keyType = KeyType.OCT,
             json = json
         ) {
+            keyId = uuid4().toString()
             use = KeyUse.Sig
             keyOperations = listOf(KeyOperation.Sign, KeyOperation.Verify)
             signatureAlgorithm = SignatureAlgorithm.HS256
 
             // 32 bytes = 256 bits
-            val randomBytes = SecureRandom().nextBytesOf(32)
+            val randomBytes = random.nextBytesOf(32)
             k = Base64.UrlSafe.encode(source = randomBytes)
         }
 
@@ -48,12 +53,13 @@ public suspend fun SignatureAlgorithm.generateSigningKey(
             keyType = KeyType.OCT,
             json = json
         ) {
+            keyId = uuid4().toString()
             use = KeyUse.Sig
             keyOperations = listOf(KeyOperation.Sign, KeyOperation.Verify)
             signatureAlgorithm = SignatureAlgorithm.HS256
 
             // 48 bytes = 384 bits
-            val randomBytes = SecureRandom().nextBytesOf(48)
+            val randomBytes = random.nextBytesOf(48)
             k = Base64.UrlSafe.encode(source = randomBytes)
         }
 
@@ -61,12 +67,13 @@ public suspend fun SignatureAlgorithm.generateSigningKey(
             keyType = KeyType.OCT,
             json = json
         ) {
+            keyId = uuid4().toString()
             use = KeyUse.Sig
             keyOperations = listOf(KeyOperation.Sign, KeyOperation.Verify)
             signatureAlgorithm = SignatureAlgorithm.HS256
 
             // 64 bytes = 512 bits
-            val randomBytes = SecureRandom().nextBytesOf(64)
+            val randomBytes = random.nextBytesOf(64)
             k = Base64.UrlSafe.encode(source = randomBytes)
         }
 
@@ -78,6 +85,7 @@ public suspend fun SignatureAlgorithm.generateSigningKey(
 
         else -> throw UnsupportedJwtSignatureAlgorithm("Signature algorithm '${this.serialName}' is not supported.")
     }
+}
 
 /**
  * Generates a new [Jwk] value with random key data for this particular [SignatureAlgorithm]. Note

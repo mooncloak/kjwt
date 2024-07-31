@@ -48,28 +48,16 @@ kotlin {
                 // Big Numbers
                 // https://github.com/ionspin/kotlin-multiplatform-bignum
                 implementation("com.ionspin.kotlin:bignum:_")
+
+                // UUID
+                // https://github.com/benasher44/uuid
+                implementation("com.benasher44:uuid:_")
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                implementation("io.jsonwebtoken:jjwt-api:_")
-                runtimeOnly("io.jsonwebtoken:jjwt-impl:_")
-                runtimeOnly("org.bouncycastle:bcprov-jdk18on:_")
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                implementation("io.jsonwebtoken:jjwt-api:_")
-                runtimeOnly("io.jsonwebtoken:jjwt-impl:_")
-                runtimeOnly("org.bouncycastle:bcprov-jdk18on:_")
             }
         }
     }
