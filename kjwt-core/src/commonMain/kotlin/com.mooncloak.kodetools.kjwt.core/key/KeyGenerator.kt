@@ -118,11 +118,11 @@ internal class SigningKeyGenerator internal constructor(
                 k = Base64.UrlSafe.encode(source = randomBytes)
             }
 
-            SignatureAlgorithm.RS256 -> TODO()
-
-            SignatureAlgorithm.RS384 -> TODO()
-
-            SignatureAlgorithm.RS512 -> TODO()
+            SignatureAlgorithm.RS256, SignatureAlgorithm.RS384, SignatureAlgorithm.RS512 -> generateRsaSigningKey(
+                algorithm = algorithm,
+                bitCount = 4096,
+                json = json
+            )
 
             else -> throw KeyGenerationException(
                 cause = UnsupportedJwtSignatureAlgorithm("Signature algorithm '${algorithm.serialName}' is not supported.")

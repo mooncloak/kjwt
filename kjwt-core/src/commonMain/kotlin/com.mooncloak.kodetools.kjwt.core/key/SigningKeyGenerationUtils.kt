@@ -1,5 +1,12 @@
 package com.mooncloak.kodetools.kjwt.core.key
 
-import com.mooncloak.kodetools.kjwt.core.crypto.RsaKeyPair
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import kotlinx.serialization.json.Json
 
-internal expect suspend fun generateRsaKeyPair(bitCount: Int): RsaKeyPair?
+@ExperimentalJwtApi
+internal expect suspend fun generateRsaSigningKey(
+    algorithm: SignatureAlgorithm,
+    bitCount: Int,
+    json: Json
+): Jwk?

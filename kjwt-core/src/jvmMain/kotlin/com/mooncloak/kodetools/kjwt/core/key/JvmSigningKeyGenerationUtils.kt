@@ -6,14 +6,23 @@ import com.mooncloak.kodetools.kjwt.core.crypto.AdditionalPrime
 import com.mooncloak.kodetools.kjwt.core.crypto.RsaKeyPair
 import com.mooncloak.kodetools.kjwt.core.crypto.RsaPrivateKey
 import com.mooncloak.kodetools.kjwt.core.crypto.RsaPublicKey
+import com.mooncloak.kodetools.kjwt.core.crypto.toJwk
+import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
+import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import kotlinx.serialization.json.Json
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAMultiPrimePrivateCrtKey
 import java.security.interfaces.RSAPrivateCrtKey
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
+@ExperimentalJwtApi
 @Suppress("unused")
-internal actual suspend fun generateRsaKeyPair(bitCount: Int): RsaKeyPair? {
+internal actual suspend fun generateRsaSigningKey(
+    algorithm: SignatureAlgorithm,
+    bitCount: Int,
+    json: Json
+): Jwk? {
     val generator = KeyPairGenerator.getInstance("RSA").apply {
         initialize(bitCount)
     }
@@ -64,7 +73,7 @@ internal actual suspend fun generateRsaKeyPair(bitCount: Int): RsaKeyPair? {
             e = e
         ),
         privateKey = rsaPrivateKey
-    )
+    ).toJwk(json = json)
 }
 
 internal fun java.math.BigInteger.toKotlinBigInteger(): BigInteger =
