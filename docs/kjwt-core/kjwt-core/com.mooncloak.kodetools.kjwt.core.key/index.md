@@ -1,0 +1,31 @@
+//[kjwt-core](../../index.md)/[com.mooncloak.kodetools.kjwt.core.key](index.md)
+
+# Package-level declarations
+
+## Types
+
+| Name | Summary |
+|---|---|
+| [Jwk](-jwk/index.md) | [common]<br>@Serializable(with = [JwkSerializer::class](../../../kjwt-core/com.mooncloak.kodetools.kjwt.core.key/-jwk-serializer/index.md))<br>class [Jwk](-jwk/index.md)(json: Json = Json.Default, properties: [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)&lt;[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), JsonElement&gt;, keyType: [KeyType](-key-type/index.md)) : [JwtObject](../com.mooncloak.kodetools.kjwt.core/-jwt-object/index.md)<br>An interface that represents a JWK (JSON Web Key). |
+| [KeyOperation](-key-operation/index.md) | [common]<br>@Serializable<br>@[JvmInline](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html)<br>value class [KeyOperation](-key-operation/index.md)(val value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))<br>Identifies the operations for which the key is intended to be used. Values defined by the specification are: |
+| [KeyResolver](-key-resolver/index.md) | [common]<br>fun interface [KeyResolver](-key-resolver/index.md)<br>A component that resolves the [Jwk](-jwk/index.md) key used when signing or verifying a [Jws](../com.mooncloak.kodetools.kjwt.core/-jws/index.md). This could be used to dynamically resolve the signing key for verification or signing purposes. |
+| [KeyType](-key-type/index.md) | [common]<br>@[JvmInline](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html)<br>@Serializable<br>value class [KeyType](-key-type/index.md)(val value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))<br>Represents the cryptographic algorithm family used with a key. |
+| [KeyUse](-key-use/index.md) | [common]<br>@Serializable<br>@[JvmInline](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-inline/index.html)<br>value class [KeyUse](-key-use/index.md)(val value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))<br>Represents what a key is used for (signature, encryption, etc.) |
+| [PrimeInfo](-prime-info/index.md) | [common]<br>@Serializable<br>data class [PrimeInfo](-prime-info/index.md)(val r: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), val d: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), val t: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))<br>Represents a prime info object for the [Jwk.oth](-jwk/oth.md) property defined by the [JWA Specification](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.3.2.7). |
+
+## Properties
+
+| Name | Summary |
+|---|---|
+| [AlwaysNull](-always-null.md) | [common]<br>val [KeyResolver.Companion](-key-resolver/-companion/index.md).[AlwaysNull](-always-null.md): [KeyResolver](-key-resolver/index.md)<br>Retrieves a [KeyResolver](-key-resolver/index.md) instance whose [KeyResolver.resolve](-key-resolver/resolve.md) function always returns `null`. This could be useful for testing purposes. |
+| [Unsupported](-unsupported.md) | [common]<br>val [KeyResolver.Companion](-key-resolver/-companion/index.md).[Unsupported](-unsupported.md): [KeyResolver](-key-resolver/index.md)<br>Retrieves a [KeyResolver](-key-resolver/index.md) instance whose [KeyResolver.resolve](-key-resolver/resolve.md) function always throws an [UnsupportedJwtSignatureAlgorithm](../com.mooncloak.kodetools.kjwt.core/-unsupported-jwt-signature-algorithm/index.md). This could be useful for testing purposes. |
+
+## Functions
+
+| Name | Summary |
+|---|---|
+| [aggregate](aggregate.md) | [common]<br>fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[aggregate](aggregate.md)(vararg resolvers: [KeyResolver](-key-resolver/index.md)): [KeyResolver](-key-resolver/index.md)<br>fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[aggregate](aggregate.md)(resolvers: [Collection](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html)&lt;[KeyResolver](-key-resolver/index.md)&gt;): [KeyResolver](-key-resolver/index.md)<br>Retrieves a [KeyResolver](-key-resolver/index.md) instance that uses the provided [resolvers](aggregate.md) to resolve a [Jwk](-jwk/index.md). |
+| [build](build.md) | [common]<br>fun [Jwk.Companion](-jwk/-companion/index.md).[build](build.md)(keyType: [KeyType](-key-type/index.md), json: Json = Json.Default, block: [Jwk.Builder](-jwk/-builder/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)): [Jwk](-jwk/index.md)<br>Creates a [Jwk](-jwk/index.md) from the provided builder [block](build.md) and [json](build.md) instance. |
+| [copy](copy.md) | [common]<br>fun [Jwk](-jwk/index.md).[copy](copy.md)(block: [Jwk.Builder](-jwk/-builder/index.md).() -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) = {}): [Jwk](-jwk/index.md)<br>Creates a new [Jwk](-jwk/index.md) instance starting with the same values from this [Jwk](-jwk/index.md) instance which can be overridden from the provided builder [block](copy.md). |
+| [of](of.md) | [common]<br>fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[of](of.md)(keys: [JwkSet](../com.mooncloak.kodetools.kjwt.core/-jwk-set/index.md)): [KeyResolver](-key-resolver/index.md)<br>Retrieves a [KeyResolver](-key-resolver/index.md) instance that chooses from [Jwk](-jwk/index.md)s defined in the provided [JwkSet](../com.mooncloak.kodetools.kjwt.core/-jwk-set/index.md) by comparing the [Jwk.keyId](-jwk/key-id.md) value with the [Header.keyId](../com.mooncloak.kodetools.kjwt.core/-header/key-id.md) value.<br>[common]<br>fun [KeyResolver.Companion](-key-resolver/-companion/index.md).[of](of.md)(key: [Jwk](-jwk/index.md)?): [KeyResolver](-key-resolver/index.md)<br>Retrieves a [KeyResolver](-key-resolver/index.md) instance that always resolves the provided [key](of.md) value. This is a convenience function. |
+| [toBuilder](to-builder.md) | [common]<br>fun [Jwk](-jwk/index.md).[toBuilder](to-builder.md)(): [Jwk.Builder](-jwk/-builder/index.md)<br>Converts this [Jwk](-jwk/index.md) instance into a [Jwk.Builder](-jwk/-builder/index.md). |

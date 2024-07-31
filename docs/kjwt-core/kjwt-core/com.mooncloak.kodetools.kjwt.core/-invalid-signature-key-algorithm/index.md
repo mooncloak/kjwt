@@ -1,0 +1,19 @@
+//[kjwt-core](../../../index.md)/[com.mooncloak.kodetools.kjwt.core](../index.md)/[InvalidSignatureKeyAlgorithm](index.md)
+
+# InvalidSignatureKeyAlgorithm
+
+[common]\
+open class [InvalidSignatureKeyAlgorithm](index.md)(message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null, cause: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)? = null) : [JwtSignatureException](../-jwt-signature-exception/index.md)
+
+## Constructors
+
+| | |
+|---|---|
+| [InvalidSignatureKeyAlgorithm](-invalid-signature-key-algorithm.md) | [common]<br>constructor(message: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null, cause: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)? = null) |
+
+## Properties
+
+| Name | Summary |
+|---|---|
+| [cause](index.md#-654012527%2FProperties%2F1883947000) | [common]<br>open val [cause](index.md#-654012527%2FProperties%2F1883947000): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)? |
+| [message](index.md#1824300659%2FProperties%2F1883947000) | [common]<br>open val [message](index.md#1824300659%2FProperties%2F1883947000): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? |
