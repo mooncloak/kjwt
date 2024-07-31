@@ -52,3 +52,12 @@ public open class InvalidSignatureKeyAlgorithm public constructor(
     message = message,
     cause = cause
 )
+
+@ExperimentalJwtApi
+public open class KeyGenerationException public constructor(
+    message: String? = null,
+    cause: Throwable? = null
+) : JwtException(
+    message = message,
+    cause = cause
+)
