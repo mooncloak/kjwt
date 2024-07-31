@@ -388,6 +388,19 @@ public fun Header.Companion.build(
 ): Header =
     Header.Builder(json = json).apply(block).build()
 
+/**
+ * Creates a [Header] from the provided builder [block] and [json] instance. This is a convenience
+ * function for invoking [build].
+ */
+@ExperimentalJwtApi
+public operator fun Header.Companion.invoke(
+    json: Json = Json.Default,
+    block: Header.Builder.() -> Unit
+): Header = build(
+    json = json,
+    block = block
+)
+
 @ExperimentalJwtApi
 internal class HeaderSerializer internal constructor() : BaseJwtObjectSerializer<Header>() {
 

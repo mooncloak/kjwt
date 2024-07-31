@@ -106,8 +106,8 @@ public operator fun Jwt.component2(): Claims = payload
 public class UnsignedJwt internal constructor(
     override val header: Header,
     override val payload: Claims,
-    private val json: Json,
-    private val signer: Signer
+    internal val json: Json,
+    internal val signer: Signer
 ) : Jwt,
     Signable {
 
@@ -175,17 +175,83 @@ public class UnsignedJwt internal constructor(
             signature = Signature.Empty,
             json = json
         )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is UnsignedJwt) return false
+
+        if (header != other.header) return false
+        if (payload != other.payload) return false
+        if (json != other.json) return false
+        if (signer != other.signer) return false
+
+        return signer == other.signer
+    }
+
+    override fun hashCode(): Int {
+        var result = header.hashCode()
+        result = 31 * result + payload.hashCode()
+        result = 31 * result + json.hashCode()
+        result = 31 * result + signer.hashCode()
+        return result
+    }
+
+    override fun toString(): String =
+        "UnsignedJwt(header=$header, payload=$payload, json=$json, signer=$signer)"
 }
 
+/**
+ * Creates an [UnsignedJwt] instance from the provided [builder].
+ *
+ * @param [json] The [Json] instance to use for serialization and deserialization.
+ *
+ * @param [signer] The [Signer] to use for creating the [Jwt] [Signature].
+ *
+ * @param [builder] The [Jwt.Builder] scoped function used to build an [UnsignedJwt].
+ */
+@ExperimentalJwtApi
+public fun Jwt.Companion.build(
+    json: Json = Json.Default,
+    signer: Signer = Signer.Default,
+    builder: Builder.() -> Unit
+): UnsignedJwt = Builder(
+    json = json,
+    signer = signer
+).apply(builder)
+    .build()
+
+/**
+ * Creates an [UnsignedJwt] instance from the provided [builder]. This is a convenience function
+ * for invoking the [build] function.
+ *
+ * @param [json] The [Json] instance to use for serialization and deserialization.
+ *
+ * @param [signer] The [Signer] to use for creating the [Jwt] [Signature].
+ *
+ * @param [builder] The [Jwt.Builder] scoped function used to build an [UnsignedJwt].
+ */
 @ExperimentalJwtApi
 public operator fun Jwt.Companion.invoke(
     json: Json = Json.Default,
+    signer: Signer = Signer.Default,
     builder: Builder.() -> Unit
-): UnsignedJwt =
-    Builder(json = json)
-        .apply(builder)
-        .build()
+): UnsignedJwt = build(
+    json = json,
+    signer = signer,
+    builder = builder
+)
 
+/**
+ * Creates an [UnsignedJwt] instance from the provided values.
+ *
+ * @param [header] The [Jwt] [Header].
+ *
+ * @param [payload] The [Jwt] payload.
+ *
+ * @param [json] The [Json] instance to use for serialization and deserialization.
+ *
+ * @param [signer] The [Signer] to use for creating the [Jwt] [Signature].
+ */
 @ExperimentalJwtApi
 public fun Jwt.Companion.from(
     header: Header,
@@ -199,3 +265,26 @@ public fun Jwt.Companion.from(
         json = json,
         signer = signer
     )
+
+/**
+ * Converts this [UnsignedJwt] instance into a [Jwt.Builder].
+ */
+@ExperimentalJwtApi
+public fun UnsignedJwt.toBuilder(): Builder =
+    Builder(
+        json = this.json,
+        signer = this.signer,
+        headerValue = this.header,
+        claimsValue = this.payload
+    )
+
+/**
+ * Creates a new [UnsignedJwt] instance starting with the same values from this [UnsignedJwt]
+ * instance which can be overridden from the provided builder [block].
+ */
+@ExperimentalJwtApi
+public fun UnsignedJwt.copy(block: Jwt.Builder.() -> Unit = {}): UnsignedJwt {
+    val builder = this.toBuilder().apply(block)
+
+    return builder.build()
+}

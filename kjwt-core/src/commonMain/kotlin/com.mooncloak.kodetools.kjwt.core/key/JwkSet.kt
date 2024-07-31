@@ -109,6 +109,21 @@ public fun JwkSet.Companion.build(
 ).apply(block).build()
 
 /**
+ * Creates a [JwkSet] from the provided builder [block] and [json] instance. This is a convenience
+ * function for invoking the [build] function.
+ */
+@ExperimentalJwtApi
+public operator fun JwkSet.Companion.invoke(
+    keys: List<Jwk> = emptyList(),
+    json: Json = Json.Default,
+    block: JwkSet.Builder.() -> Unit
+): JwkSet = build(
+    keys = keys,
+    json = json,
+    block = block
+)
+
+/**
  * The [KSerializer] implementation for the [Jwk] class.
  */
 @ExperimentalJwtApi

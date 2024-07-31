@@ -256,6 +256,19 @@ public fun JsonClaims.Companion.build(
 ): JsonClaims =
     JsonClaims.Builder(json = json).apply(block).build()
 
+/**
+ * Creates a [JsonClaims] from the provided builder [block] and [json] instance. This is a
+ * convenience function for invoking [build].
+ */
+@ExperimentalJwtApi
+public operator fun JsonClaims.Companion.invoke(
+    json: Json = Json.Default,
+    block: JsonClaims.Builder.() -> Unit
+): JsonClaims = build(
+    json = json,
+    block = block
+)
+
 @ExperimentalJwtApi
 internal class JsonClaimsSerializer internal constructor() : BaseJwtObjectSerializer<JsonClaims>() {
 

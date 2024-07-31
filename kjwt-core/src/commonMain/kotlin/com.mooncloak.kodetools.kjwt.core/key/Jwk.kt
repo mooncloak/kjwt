@@ -547,6 +547,27 @@ public class Jwk public constructor(
 }
 
 /**
+ * Retrieves the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a matching
+ * [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
+ * [SignatureAlgorithm].
+ */
+@ExperimentalJwtApi
+public val Jwk.signatureAlgorithm: SignatureAlgorithm?
+    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+
+/**
+ * Gets or sets the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a
+ * matching [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
+ * [SignatureAlgorithm].
+ */
+@ExperimentalJwtApi
+public var Jwk.Builder.signatureAlgorithm: SignatureAlgorithm?
+    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
+    set(value) {
+        this.algorithm = value?.serialName
+    }
+
+/**
  * Converts this [Jwk] instance into a [Jwk.Builder].
  */
 @ExperimentalJwtApi
@@ -583,39 +604,19 @@ public fun Jwk.Companion.build(
     .build()
 
 /**
- * Creates a [Jwk] from the provided builder [block] and [json] instance.
+ * Creates a [Jwk] from the provided builder [block] and [json] instance. This is a convenience
+ * function for invoking the [build] function.
  */
 @ExperimentalJwtApi
 public operator fun Jwk.Companion.invoke(
     keyType: KeyType,
     json: Json = Json.Default,
     block: Jwk.Builder.() -> Unit
-): Jwk = Jwk.Builder(
+): Jwk = build(
+    keyType = keyType,
     json = json,
-    initialKeyType = keyType
-).apply(block)
-    .build()
-
-/**
- * Retrieves the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a matching
- * [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
- * [SignatureAlgorithm].
- */
-@ExperimentalJwtApi
-public val Jwk.signatureAlgorithm: SignatureAlgorithm?
-    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
-
-/**
- * Gets or sets the [Jwk.algorithm] property as a [SignatureAlgorithm] value, or `null` if a
- * matching [SignatureAlgorithm] could not be found or the [Jwk.algorithm] does not represent a
- * [SignatureAlgorithm].
- */
-@ExperimentalJwtApi
-public var Jwk.Builder.signatureAlgorithm: SignatureAlgorithm?
-    get() = this.algorithm?.let { SignatureAlgorithm.getBySerialName(it) }
-    set(value) {
-        this.algorithm = value?.serialName
-    }
+    block = block
+)
 
 /**
  * The [KSerializer] implementation for the [Jwk] class.
