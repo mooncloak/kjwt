@@ -58,6 +58,34 @@ public fun KeyResolver.Companion.of(keys: JwkSet): KeyResolver =
     StaticJwkSetKeyResolver(keySet = keys)
 
 /**
+ * Retrieves a [KeyResolver] instance that uses the provided [resolvers] to resolve a [Jwk].
+ *
+ * @param [resolvers] The [KeyResolver]s used to resolve a [Jwk]. When the returned [KeyResolver]'s
+ * [KeyResolver.resolve] function is invoked, the provided [resolvers] are invoked in-order until
+ * one of them returns a non-null [Jwk], and if no resolver returns a non-null [Jwk], then `null`
+ * is returned.
+ *
+ * @return A [KeyResolver] that delegates to the provided [KeyResolver]s in-order.
+ */
+@ExperimentalJwtApi
+public fun KeyResolver.Companion.aggregate(vararg resolvers: KeyResolver): KeyResolver =
+    AggregateKeyResolver(resolvers = resolvers.toList())
+
+/**
+ * Retrieves a [KeyResolver] instance that uses the provided [resolvers] to resolve a [Jwk].
+ *
+ * @param [resolvers] The [KeyResolver]s used to resolve a [Jwk]. When the returned [KeyResolver]'s
+ * [KeyResolver.resolve] function is invoked, the provided [resolvers] are invoked in-order until
+ * one of them returns a non-null [Jwk], and if no resolver returns a non-null [Jwk], then `null`
+ * is returned.
+ *
+ * @return A [KeyResolver] that delegates to the provided [KeyResolver]s in-order.
+ */
+@ExperimentalJwtApi
+public fun KeyResolver.Companion.aggregate(resolvers: Collection<KeyResolver>): KeyResolver =
+    AggregateKeyResolver(resolvers = resolvers)
+
+/**
  * Retrieves a [KeyResolver] instance whose [KeyResolver.resolve] function always throws an
  * [UnsupportedJwtSignatureAlgorithm]. This could be useful for testing purposes.
  */
@@ -144,4 +172,30 @@ internal data object AlwaysNullKeyResolver : KeyResolver {
         header: Header,
         operation: KeyOperation
     ): Jwk? = null
+}
+
+@ExperimentalJwtApi
+internal class AggregateKeyResolver internal constructor(
+    private val resolvers: Collection<KeyResolver>
+) : KeyResolver {
+
+    override suspend fun resolve(header: Header, operation: KeyOperation): Jwk? =
+        resolvers.firstNotNullOfOrNull { resolver ->
+            resolver.resolve(
+                header = header,
+                operation = operation
+            )
+        }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AggregateKeyResolver) return false
+
+        return resolvers == other.resolvers
+    }
+
+    override fun hashCode(): Int = resolvers.hashCode()
+
+    override fun toString(): String =
+        "AggregateKeyResolver(resolvers=$resolvers)"
 }
