@@ -1,5 +1,6 @@
 package com.mooncloak.kodetools.kjwt.core
 
+import com.mooncloak.kodetools.kjwt.core.key.KeyOperation
 import com.mooncloak.kodetools.kjwt.core.key.KeyResolver
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signature
@@ -319,7 +320,10 @@ internal data object DefaultJwsParser : Jws.Parser {
         val decodedSignature = Base64.UrlSafe.decode(signatureSection).decodeToString()
         val signature = Signature(value = decodedSignature)
 
-        val key = resolver.resolve(header) ?: throw JwtParseException("No matching JWK found.")
+        val key = resolver.resolve(
+            header = header,
+            operation = KeyOperation.Verify
+        ) ?: throw JwtParseException("No matching JWK found.")
 
         val signatureInput = SignatureInput(value = "$headerSection.$payloadSection")
 

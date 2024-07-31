@@ -18,7 +18,13 @@ kotlin {
                 enabled = false
             }
         }
-        nodejs()
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
+
+        binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
@@ -33,6 +39,8 @@ kotlin {
                 enabled = false
             }
         }
+
+        binaries.executable()
     }
 
     //@OptIn(ExperimentalWasmDsl::class)

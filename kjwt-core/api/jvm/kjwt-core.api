@@ -660,7 +660,7 @@ public final class com/mooncloak/kodetools/kjwt/core/key/KeyOperation$Companion 
 
 public abstract interface class com/mooncloak/kodetools/kjwt/core/key/KeyResolver {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;
-	public abstract fun resolve (Lcom/mooncloak/kodetools/kjwt/core/Header;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun resolve-ds3bZeY (Lcom/mooncloak/kodetools/kjwt/core/Header;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion {
@@ -669,6 +669,7 @@ public final class com/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion {
 public final class com/mooncloak/kodetools/kjwt/core/key/KeyResolverKt {
 	public static final fun getAlwaysNull (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 	public static final fun getUnsupported (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
+	public static final fun of (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;Lcom/mooncloak/kodetools/kjwt/core/JwkSet;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 	public static final fun of (Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver$Companion;Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;)Lcom/mooncloak/kodetools/kjwt/core/key/KeyResolver;
 }
 

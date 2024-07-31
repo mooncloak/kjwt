@@ -1,6 +1,7 @@
 package com.mooncloak.kodetools.kjwt.core
 
 import com.mooncloak.kodetools.kjwt.core.Jwt.Builder
+import com.mooncloak.kodetools.kjwt.core.key.KeyOperation
 import com.mooncloak.kodetools.kjwt.core.key.KeyResolver
 import com.mooncloak.kodetools.kjwt.core.signature.Default
 import com.mooncloak.kodetools.kjwt.core.signature.Signable
@@ -112,7 +113,10 @@ public class UnsignedJwt internal constructor(
 
     @OptIn(ExperimentalEncodingApi::class)
     override suspend fun sign(resolver: KeyResolver, algorithm: SignatureAlgorithm): Jws {
-        val key = resolver.resolve(header)
+        val key = resolver.resolve(
+            header = header,
+            operation = KeyOperation.Sign
+        )
 
         if (key == null && algorithm != SignatureAlgorithm.NONE) {
             throw UnsupportedJwtSignatureAlgorithm("Signature algorithm '${algorithm.serialName}' requires a key but `null` was provided.")

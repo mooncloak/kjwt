@@ -17,13 +17,16 @@ public fun interface KeyResolver {
      * Returns the signing key that should be used to validate a digital signature for the
      * Claims JWS with the specified header and claims.
      *
-     * @param header the header of the JWS to validate
+     * @param [header] the header of the JWS to validate
+     *
+     * @param [operation] The [KeyOperation] that will be performed with the returned key.
      *
      * @return the key that should be used to validate a digital signature for the Claims JWS with
      * the specified header and claims, or `null` if no valid key was found.
      */
     public suspend fun resolve(
-        header: Header
+        header: Header,
+        operation: KeyOperation
     ): Jwk?
 
     public companion object
@@ -78,7 +81,10 @@ internal class StaticKeyResolver internal constructor(
     private val key: Jwk?
 ) : KeyResolver {
 
-    override suspend fun resolve(header: Header): Jwk? = key
+    override suspend fun resolve(
+        header: Header,
+        operation: KeyOperation
+    ): Jwk? = key
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -97,7 +103,10 @@ internal class StaticJwkSetKeyResolver internal constructor(
     private val keySet: JwkSet
 ) : KeyResolver {
 
-    override suspend fun resolve(header: Header): Jwk? {
+    override suspend fun resolve(
+        header: Header,
+        operation: KeyOperation
+    ): Jwk? {
         if (header.keyId == null) return null
 
         return keySet.jwkKeys.firstOrNull { key -> key.keyId == header.keyId }
@@ -120,7 +129,10 @@ internal class StaticJwkSetKeyResolver internal constructor(
 @ExperimentalJwtApi
 internal data object UnsupportedKeyResolver : KeyResolver {
 
-    override suspend fun resolve(header: Header): Jwk {
+    override suspend fun resolve(
+        header: Header,
+        operation: KeyOperation
+    ): Jwk {
         throw UnsupportedJwtSignatureAlgorithm("No signature algorithms are supported.")
     }
 }
@@ -128,5 +140,8 @@ internal data object UnsupportedKeyResolver : KeyResolver {
 @ExperimentalJwtApi
 internal data object AlwaysNullKeyResolver : KeyResolver {
 
-    override suspend fun resolve(header: Header): Jwk? = null
+    override suspend fun resolve(
+        header: Header,
+        operation: KeyOperation
+    ): Jwk? = null
 }
