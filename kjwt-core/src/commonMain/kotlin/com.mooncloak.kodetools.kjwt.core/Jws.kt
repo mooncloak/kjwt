@@ -318,7 +318,7 @@ internal data object DefaultJwsParser : Jws.Parser {
             )
         }
 
-        val decodedSignature = Base64.UrlSafe.decode(signatureSection).decodeToString()
+        val decodedSignature = Base64.UrlSafe.decode(signatureSection)
         val signature = Signature(value = decodedSignature)
 
         val key = resolver.resolve(
@@ -384,8 +384,7 @@ internal class DefaultJws internal constructor(
             value = header.toJsonObject()
         )
         val encodedHeader = headerString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
-        val encodedSignature =
-            signature.value.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
+        val encodedSignature = signature.value.encodeBase64UrlSafeWithoutPadding()
 
         val compactedString = "$encodedHeader.$encodedPayload.$encodedSignature"
 

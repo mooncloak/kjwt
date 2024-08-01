@@ -35,6 +35,6 @@ internal data object HmacVerifier : Verifier {
             algorithm = algorithm
         )
 
-        return signature.value == actualSignature.value
+        return signature.value.contentEquals(actualSignature.value)
     }
 }

@@ -136,8 +136,6 @@ public class UnsignedJwt internal constructor(
         // https://datatracker.ietf.org/doc/html/rfc7519#section-7.1
         // https://datatracker.ietf.org/doc/html/rfc7515#section-5
 
-        val encoder = Base64.UrlSafe
-
         val claimString = when (payload) {
             is TextClaims -> payload.value
             is JsonClaims -> json.encodeToString(

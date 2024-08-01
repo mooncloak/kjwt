@@ -18,6 +18,7 @@ import com.mooncloak.kodetools.kjwt.core.key.signingKey
 import com.mooncloak.kodetools.kjwt.core.property
 import com.mooncloak.kodetools.kjwt.core.signatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
@@ -119,6 +120,10 @@ class HmacSignerTest {
     @Test
     fun test() {
         runTest {
+            val generatedKey = KeyGenerator.signingKey(SignatureAlgorithm.HS256).generate()
+
+            println("k = ${generatedKey?.k}")
+
             val jwt = Jwt {
                 header {
                     signatureAlgorithm = SignatureAlgorithm.HS256
@@ -145,6 +150,15 @@ class HmacSignerTest {
                 resolver = KeyResolver.of(hmac256Key)
             ).compact().value
 
+            val signature = HmacSigner.sign(
+                input = SignatureInput(value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ"),
+                algorithm = SignatureAlgorithm.HS256,
+                key = hmac256Key
+            )
+            val decodedSignature = signature.value.encodeBase64UrlSafeWithoutPadding()
+
+            println("Signature = $decodedSignature")
+
             assertEquals(
                 expected = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.iAYfZKLi-FxPi5YeFrzUxGpQYMOHJNCI1dzgfWStysY",
                 actual = signedJwt
@@ -157,6 +171,6 @@ class HmacSignerTest {
         use = KeyUse.Sig
         keyOperations = listOf(KeyOperation.Sign, KeyOperation.Verify)
         signatureAlgorithm = SignatureAlgorithm.HS256
-        k = "ZcvDJMERMIzLrrcNyJd7-XJMI0c12a6tnjl1hBZtT1A="
+        k = "N5Vjzt_nrSi1X0jDHDugRqzB5Ac9LJbeDKN7RSbKneg"
     }
 }

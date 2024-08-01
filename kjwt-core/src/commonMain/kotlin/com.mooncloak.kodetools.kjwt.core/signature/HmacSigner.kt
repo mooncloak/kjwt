@@ -86,6 +86,6 @@ internal data object HmacSigner : Signer {
             )
         }
 
-        return Signature(value = output.decodeToString())
+        return Signature(value = output)
     }
 }

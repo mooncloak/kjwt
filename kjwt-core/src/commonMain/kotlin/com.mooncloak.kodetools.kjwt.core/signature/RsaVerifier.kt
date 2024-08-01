@@ -41,7 +41,7 @@ internal data object RsaVerifier : Verifier {
         return RSASSA_PKCS1_V1_5_VERIFY(
             publicKey = rsaVerificationKey,
             M = input.value.encodeToByteArray(),
-            S = signature.value.encodeToByteArray(),
+            S = signature.value,
             hashAlgorithm = algorithm.algorithmIdentifier
         )
     }

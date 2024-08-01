@@ -9,7 +9,7 @@ import kotlin.jvm.JvmInline
 /**
  * Represents the signature part of a [Jws].
  *
- * @property [value] The actual [String] signature value. Note that this value MAY be empty,
+ * @property [value] The actual [ByteArray] signature value. Note that this value MAY be empty,
  * according to the specification, which can occur when a [Jws] is considered "unsecured" and uses
  * a signature algorithm of [SignatureAlgorithm.NONE].
  *
@@ -28,14 +28,20 @@ import kotlin.jvm.JvmInline
 @JvmInline
 @ExperimentalJwtApi
 public value class Signature public constructor(
-    public val value: String
+    public val value: ByteArray
 ) {
+
+    /**
+     * Creates a [Signature] value by UTF-8 encoding the provided [value] [String] into a
+     * [ByteArray] to use as the [Signature.value] property.
+     */
+    public constructor(value: String) : this(value = value.encodeToByteArray())
 
     public companion object {
 
         /**
          * Represents an empty [Signature] value that is used for unsecured JWTs.
          */
-        public val Empty: Signature = Signature(value = "")
+        public val Empty: Signature = Signature(value = byteArrayOf())
     }
 }
