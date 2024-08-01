@@ -15,17 +15,17 @@ import kotlin.coroutines.cancellation.CancellationException
 public fun interface Signable {
 
     /**
-     * Signs this [Jwt] using the provided [algorithm] and [key] to create a [Jws].
+     * Signs this [Jwt] using the provided key retrieved from the [resolver] and the
+     * [SignatureAlgorithm] retrieved from the JWT header to create a [Jws].
      *
      * @param [resolver] The [KeyResolver] used to obtain the [Jwk] used for signing the JWT. Note
-     * that this value may be `null`, if the provided [algorithm] is [SignatureAlgorithm.NONE]. If
-     * this value is `null`, in any other case, then an exception will be thrown.
+     * that this value may be `null`, if the retrieved [SignatureAlgorithm] is
+     * [SignatureAlgorithm.NONE]. If this value is `null`, in any other case, then an exception
+     * will be thrown.
      *
-     * @param [algorithm] The [SignatureAlgorithm] used for signing the JWT.
-     *
-     * @throws [UnsupportedJwtSignatureAlgorithm] if the provided [algorithm] is unsupported by the
-     * platform, or the key obtained from the [resolver] was required for the [algorithm] but
-     * `null` was provided.
+     * @throws [UnsupportedJwtSignatureAlgorithm] if the retrieved [SignatureAlgorithm] is
+     * unsupported by the platform, or the key obtained from the [resolver] was required for the
+     * [SignatureAlgorithm] but `null` was provided.
      *
      * @return The signed [Jws].
      *
@@ -33,8 +33,7 @@ public fun interface Signable {
      */
     @Throws(UnsupportedJwtSignatureAlgorithm::class, CancellationException::class)
     public suspend fun sign(
-        resolver: KeyResolver,
-        algorithm: SignatureAlgorithm
+        resolver: KeyResolver
     ): Jws
 
     public companion object

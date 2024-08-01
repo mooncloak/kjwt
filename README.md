@@ -58,8 +58,7 @@ Jwt {
         // ...
     }
 }.sign(
-    resolver = keyResolver,
-    algorithm = algorithm
+    resolver = keyResolver
 ).compact()
 ```
 

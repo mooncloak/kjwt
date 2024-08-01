@@ -29,6 +29,5 @@ public suspend fun createJwt(
             // ...
         }
     }.sign(
-        resolver = keyResolver,
-        algorithm = algorithm
+        resolver = keyResolver
     ).compact()

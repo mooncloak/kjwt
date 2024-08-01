@@ -7,6 +7,8 @@ import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import org.kotlincrypto.macs.hmac.sha2.HmacSHA256
 import org.kotlincrypto.macs.hmac.sha2.HmacSHA384
 import org.kotlincrypto.macs.hmac.sha2.HmacSHA512
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @ExperimentalJwtApi
 internal data object HmacSigner : Signer {
@@ -17,6 +19,7 @@ internal data object HmacSigner : Signer {
         SignatureAlgorithm.HS512
     )
 
+    @OptIn(ExperimentalEncodingApi::class)
     override suspend fun sign(
         input: SignatureInput,
         key: Jwk,
@@ -35,7 +38,8 @@ internal data object HmacSigner : Signer {
             message = "JWK '${Jwk.PropertyKey.K}' is required for '${algorithm.serialName}'."
         )
 
-        val keyBytes = k.encodeToByteArray()
+        // The 'k' value is Base64Url Encoded.
+        val keyBytes = Base64.UrlSafe.decode(source = k)
 
         val output = when (algorithm) {
             SignatureAlgorithm.HS256 -> {

@@ -5,6 +5,7 @@ import com.mooncloak.kodetools.kjwt.core.crypto.Sha256
 import com.mooncloak.kodetools.kjwt.core.key.Jwk
 import com.mooncloak.kodetools.kjwt.core.key.KeyType
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -90,5 +91,5 @@ public fun Jwk.thumbprint(
     val utfEncodedBytes = jsonString.encodeToByteArray()
     val hashedBytes = hashFunction.hash(utfEncodedBytes)
 
-    return Thumbprint(value = Base64.UrlSafe.encode(hashedBytes))
+    return Thumbprint(value = hashedBytes.encodeBase64UrlSafeWithoutPadding())
 }

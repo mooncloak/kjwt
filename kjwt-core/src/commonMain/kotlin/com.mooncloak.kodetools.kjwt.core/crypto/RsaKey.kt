@@ -7,6 +7,7 @@ import com.mooncloak.kodetools.kjwt.core.key.Jwk
 import com.mooncloak.kodetools.kjwt.core.key.KeyType
 import com.mooncloak.kodetools.kjwt.core.key.PrimeInfo
 import com.mooncloak.kodetools.kjwt.core.key.build
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -345,6 +346,5 @@ internal fun String.decodeBase64UrlUInt(): BigInteger {
     )
 }
 
-@OptIn(ExperimentalEncodingApi::class)
 internal fun BigInteger.encodeBase64UrlUInt(): String =
-    Base64.UrlSafe.encode(source = this.toByteArray())
+    this.toByteArray().encodeBase64UrlSafeWithoutPadding()

@@ -8,6 +8,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Verifier
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlin.coroutines.cancellation.CancellationException
@@ -297,7 +298,7 @@ internal data object DefaultJwsParser : Jws.Parser {
             ?: throw JwtParseException("Compacted JWS must contain a payload section.")
         val payloadJsonString = Base64.UrlSafe.decode(payloadSection).decodeToString()
         val payload = json.decodeFromString(
-            deserializer = JsonClaims.serializer(),
+            deserializer = Claims.serializer(),
             string = payloadJsonString
         )
 
@@ -367,7 +368,6 @@ internal class DefaultJws internal constructor(
     private val json: Json
 ) : Jws {
 
-    @OptIn(ExperimentalEncodingApi::class)
     override suspend fun compact(): CompactedJwt {
         // The creation of compacted JWT are defined by the JWT specification:
         // https://datatracker.ietf.org/doc/html/rfc7519#section-7.1
@@ -378,13 +378,14 @@ internal class DefaultJws internal constructor(
                 value = payload.toJsonObject()
             )
         }
-        val encodedPayload = Base64.UrlSafe.encode(claimString.encodeToByteArray())
+        val encodedPayload = claimString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
         val headerString = json.encodeToString(
             serializer = JsonObject.serializer(),
             value = header.toJsonObject()
         )
-        val encodedHeader = Base64.UrlSafe.encode(headerString.encodeToByteArray())
-        val encodedSignature = Base64.UrlSafe.encode(signature.value.encodeToByteArray())
+        val encodedHeader = headerString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
+        val encodedSignature =
+            signature.value.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
 
         val compactedString = "$encodedHeader.$encodedPayload.$encodedSignature"
 

@@ -611,7 +611,7 @@ public fun Jwk.Companion.build(
 public operator fun Jwk.Companion.invoke(
     keyType: KeyType,
     json: Json = Json.Default,
-    block: Jwk.Builder.() -> Unit
+    block: Jwk.Builder.() -> Unit = {}
 ): Jwk = build(
     keyType = keyType,
     json = json,

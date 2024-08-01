@@ -116,7 +116,7 @@ public fun JwkSet.Companion.build(
 public operator fun JwkSet.Companion.invoke(
     keys: List<Jwk> = emptyList(),
     json: Json = Json.Default,
-    block: JwkSet.Builder.() -> Unit
+    block: JwkSet.Builder.() -> Unit = {}
 ): JwkSet = build(
     keys = keys,
     json = json,

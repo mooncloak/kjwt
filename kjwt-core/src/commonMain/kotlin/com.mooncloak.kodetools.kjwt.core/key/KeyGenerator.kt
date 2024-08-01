@@ -5,11 +5,10 @@ import com.mooncloak.kodetools.kjwt.core.KeyGenerationException
 import com.mooncloak.kodetools.kjwt.core.UnsupportedJwtSignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
 import org.kotlincrypto.SecureRandom
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * A component that generates a [Jwk].
@@ -63,7 +62,6 @@ public fun KeyGenerator.Companion.signingKey(
     json = json
 )
 
-@OptIn(ExperimentalEncodingApi::class)
 @ExperimentalJwtApi
 internal class SigningKeyGenerator internal constructor(
     private val algorithm: SignatureAlgorithm,
@@ -87,7 +85,7 @@ internal class SigningKeyGenerator internal constructor(
 
                 // 32 bytes = 256 bits
                 val randomBytes = random.nextBytesOf(32)
-                k = Base64.UrlSafe.encode(source = randomBytes)
+                k = randomBytes.encodeBase64UrlSafeWithoutPadding()
             }
 
             SignatureAlgorithm.HS384 -> Jwk(
@@ -101,7 +99,7 @@ internal class SigningKeyGenerator internal constructor(
 
                 // 48 bytes = 384 bits
                 val randomBytes = random.nextBytesOf(48)
-                k = Base64.UrlSafe.encode(source = randomBytes)
+                k = randomBytes.encodeBase64UrlSafeWithoutPadding()
             }
 
             SignatureAlgorithm.HS512 -> Jwk(
@@ -115,7 +113,7 @@ internal class SigningKeyGenerator internal constructor(
 
                 // 64 bytes = 512 bits
                 val randomBytes = random.nextBytesOf(64)
-                k = Base64.UrlSafe.encode(source = randomBytes)
+                k = randomBytes.encodeBase64UrlSafeWithoutPadding()
             }
 
             SignatureAlgorithm.RS256, SignatureAlgorithm.RS384, SignatureAlgorithm.RS512 -> generateRsaSigningKey(

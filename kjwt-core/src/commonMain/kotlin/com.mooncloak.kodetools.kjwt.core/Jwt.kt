@@ -10,6 +10,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Signer
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlin.io.encoding.Base64
@@ -112,7 +113,14 @@ public class UnsignedJwt internal constructor(
     Signable {
 
     @OptIn(ExperimentalEncodingApi::class)
-    override suspend fun sign(resolver: KeyResolver, algorithm: SignatureAlgorithm): Jws {
+    override suspend fun sign(
+        resolver: KeyResolver
+    ): Jws {
+        val algorithm = header.signatureAlgorithm
+            ?: throw MissingSignatureAlgorithmException(
+                message = "The \"${Header.PropertyKey.ALGORITHM}\" header value is REQUIRED to sign a JWT, per RFC-7515 section 5.1 step 5., but it was missing."
+            )
+
         val key = resolver.resolve(
             header = header,
             operation = KeyOperation.Sign
@@ -124,21 +132,25 @@ public class UnsignedJwt internal constructor(
             return unsecured()
         }
 
-        // The creation of compacted JWT are defined by the JWT specification:
+        // The creation of compacted JWT are defined by the JWT specifications:
         // https://datatracker.ietf.org/doc/html/rfc7519#section-7.1
+        // https://datatracker.ietf.org/doc/html/rfc7515#section-5
+
+        val encoder = Base64.UrlSafe
+
         val claimString = when (payload) {
-            is TextClaims -> error("Illegal claims used for a JWS. A JWS must use JsonClaims.")
+            is TextClaims -> payload.value
             is JsonClaims -> json.encodeToString(
                 serializer = JsonObject.serializer(),
                 value = payload.toJsonObject()
             )
         }
-        val encodedPayload = Base64.UrlSafe.encode(claimString.encodeToByteArray())
+        val encodedPayload = claimString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
         val headerString = json.encodeToString(
             serializer = JsonObject.serializer(),
             value = header.toJsonObject()
         )
-        val encodedHeader = Base64.UrlSafe.encode(headerString.encodeToByteArray())
+        val encodedHeader = headerString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
 
         val signatureInput = SignatureInput(value = "$encodedHeader.$encodedPayload")
         val signature = signer.sign(
@@ -234,7 +246,7 @@ public fun Jwt.Companion.build(
 public operator fun Jwt.Companion.invoke(
     json: Json = Json.Default,
     signer: Signer = Signer.Default,
-    builder: Builder.() -> Unit
+    builder: Builder.() -> Unit = {}
 ): UnsignedJwt = build(
     json = json,
     signer = signer,
@@ -283,7 +295,7 @@ public fun UnsignedJwt.toBuilder(): Builder =
  * instance which can be overridden from the provided builder [block].
  */
 @ExperimentalJwtApi
-public fun UnsignedJwt.copy(block: Jwt.Builder.() -> Unit = {}): UnsignedJwt {
+public fun UnsignedJwt.copy(block: Builder.() -> Unit = {}): UnsignedJwt {
     val builder = this.toBuilder().apply(block)
 
     return builder.build()

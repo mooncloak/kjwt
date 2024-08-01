@@ -395,7 +395,7 @@ public fun Header.Companion.build(
 @ExperimentalJwtApi
 public operator fun Header.Companion.invoke(
     json: Json = Json.Default,
-    block: Header.Builder.() -> Unit
+    block: Header.Builder.() -> Unit = {}
 ): Header = build(
     json = json,
     block = block

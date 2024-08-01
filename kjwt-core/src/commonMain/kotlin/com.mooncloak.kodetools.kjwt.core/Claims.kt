@@ -3,11 +3,17 @@ package com.mooncloak.kodetools.kjwt.core
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.util.SecondsSinceEpochSerializer
 import kotlinx.datetime.Instant
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import kotlin.jvm.JvmInline
 
 @ExperimentalJwtApi
+@Serializable(with = ClaimsSerializer::class)
 public sealed interface Claims
 
 @ExperimentalJwtApi
@@ -263,18 +269,59 @@ public fun JsonClaims.Companion.build(
 @ExperimentalJwtApi
 public operator fun JsonClaims.Companion.invoke(
     json: Json = Json.Default,
-    block: JsonClaims.Builder.() -> Unit
+    block: JsonClaims.Builder.() -> Unit = {}
 ): JsonClaims = build(
     json = json,
     block = block
 )
 
 @ExperimentalJwtApi
-internal class JsonClaimsSerializer internal constructor() : BaseJwtObjectSerializer<JsonClaims>() {
+internal data object JsonClaimsSerializer : BaseJwtObjectSerializer<JsonClaims>() {
 
     override fun toType(json: Json, jsonObject: JsonObject): JsonClaims =
         JsonClaims(
             json = json,
             properties = jsonObject
         )
+}
+
+@ExperimentalJwtApi
+internal data object ClaimsSerializer : KSerializer<Claims> {
+
+    // FIXME: This forces Claims to be encoded as a String value. Consider allowing more complex
+    //  encoding.
+    override val descriptor: SerialDescriptor
+        get() = String.serializer().descriptor
+
+    override fun serialize(encoder: Encoder, value: Claims) {
+        when (value) {
+            is JsonClaims -> encoder.encodeSerializableValue(
+                serializer = JsonClaims.serializer(),
+                value = value
+            )
+
+            is TextClaims -> encoder.encodeString(value = value.value)
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): Claims {
+        val stringValue = decoder.decodeString()
+        val trimmedStringValue = stringValue.trim()
+
+        return if (trimmedStringValue.startsWith('{') && trimmedStringValue.endsWith('}')) {
+            val jsonDecoder = (decoder as? JsonDecoder)
+                ?: error("JsonDecoder required to decode Json elements.")
+
+            try {
+                jsonDecoder.json.decodeFromString(
+                    deserializer = JsonClaims.serializer(),
+                    string = stringValue
+                )
+            } catch (_: Exception) {
+                TextClaims(value = stringValue)
+            }
+        } else {
+            TextClaims(value = stringValue)
+        }
+    }
 }
