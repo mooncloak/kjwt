@@ -6,6 +6,14 @@ Kotlin multi-platform JSON Web Token (JWT/JWS) library.
 
 <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/mooncloak/kjwt">
 
+## Status
+
+> [!Warning]
+> This project is being actively developed but is in an early experimental state. Use the library
+> cautiously and report back any issues. mooncloak is not responsible for any issues faced when
+> using
+> the library.
+
 ## Getting Started 🏁
 
 Checkout the [releases page](https://github.com/mooncloak/kjwt/releases) to get the latest version.
