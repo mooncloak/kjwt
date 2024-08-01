@@ -54,7 +54,7 @@ internal fun RSASP1(
  * represented by values of 'p', 'q', 'dP', 'dQ', 'qInv', and other values.
  */
 @Suppress("FunctionName")
-private fun RSASP1(
+internal fun RSASP1(
     n: BigInteger,
     d: BigInteger,
     m: BigInteger
@@ -102,7 +102,7 @@ private fun RSASP1(
  * represented by values of 'n' and 'd'.
  */
 @Suppress("FunctionName", "LocalVariableName")
-private fun RSASP1(
+internal fun RSASP1(
     p: BigInteger,
     q: BigInteger,
     dP: BigInteger,
@@ -112,6 +112,11 @@ private fun RSASP1(
     m: BigInteger
 ): BigInteger {
     // https://www.rfc-editor.org/rfc/rfc8017#section-5.2.1
+
+    // Step 1.
+    if (m < 0) {
+        error("message representative out of range")
+    }
 
     // u - The number of prime factors of the RSA modulus, u >= 2.
     // There are always at least two factors, p and q, plus the additional factors provided by the
