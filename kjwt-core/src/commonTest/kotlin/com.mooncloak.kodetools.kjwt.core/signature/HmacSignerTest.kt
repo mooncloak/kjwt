@@ -160,7 +160,7 @@ class HmacSignerTest {
                 algorithm = SignatureAlgorithm.HS256,
                 key = hmac256Key
             )
-            val decodedSignature = signature.value.encodeBase64UrlSafeWithoutPadding()
+            val decodedSignature = signature.encoded()
 
             assertEquals(
                 expected = "ymDLSaqj3MVRnri0RLDeix_mQSfvmREwYAIOVWqXUvs",

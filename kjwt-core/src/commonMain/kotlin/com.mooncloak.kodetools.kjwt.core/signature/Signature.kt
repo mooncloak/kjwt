@@ -3,6 +3,7 @@ package com.mooncloak.kodetools.kjwt.core.signature
 import com.mooncloak.kodetools.kjwt.core.CompactedJwt
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.Jws
+import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
@@ -45,3 +46,10 @@ public value class Signature public constructor(
         public val Empty: Signature = Signature(value = byteArrayOf())
     }
 }
+
+/**
+ * Retrieves the Base64 Url encoded version of this [Signature.value].
+ */
+@ExperimentalJwtApi
+public fun Signature.encoded(): String =
+    this.value.encodeBase64UrlSafeWithoutPadding()

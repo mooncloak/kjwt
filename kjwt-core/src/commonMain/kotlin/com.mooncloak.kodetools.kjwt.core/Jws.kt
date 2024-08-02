@@ -7,6 +7,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.Signature
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Verifier
+import com.mooncloak.kodetools.kjwt.core.signature.encoded
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
@@ -388,7 +389,7 @@ internal class DefaultJws internal constructor(
             value = header.toJsonObject()
         )
         val encodedHeader = headerString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
-        val encodedSignature = signature.value.encodeBase64UrlSafeWithoutPadding()
+        val encodedSignature = signature.encoded()
 
         val compactedString = "$encodedHeader.$encodedPayload.$encodedSignature"
 

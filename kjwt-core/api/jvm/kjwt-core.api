@@ -965,6 +965,10 @@ public final class com/mooncloak/kodetools/kjwt/core/signature/SignatureInput$Co
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/mooncloak/kodetools/kjwt/core/signature/SignatureKt {
+	public static final fun encoded-r7eW8oE ([B)Ljava/lang/String;
+}
+
 public abstract interface class com/mooncloak/kodetools/kjwt/core/signature/Signer {
 	public static final field Companion Lcom/mooncloak/kodetools/kjwt/core/signature/Signer$Companion;
 	public abstract fun sign-4L3ufjY (Ljava/lang/String;Lcom/mooncloak/kodetools/kjwt/core/key/Jwk;Lcom/mooncloak/kodetools/kjwt/core/signature/SignatureAlgorithm;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
