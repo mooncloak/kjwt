@@ -326,7 +326,11 @@ internal data object DefaultJwsParser : Jws.Parser {
             operation = KeyOperation.Verify
         ) ?: throw JwtParseException("No matching JWK found.")
 
-        val signatureInput = SignatureInput(value = "$headerSection.$payloadSection")
+        val signatureInput = SignatureInput(
+            header = header,
+            payload = payload,
+            json = json
+        )
 
         val isVerified = verifier.verify(
             signature = signature,

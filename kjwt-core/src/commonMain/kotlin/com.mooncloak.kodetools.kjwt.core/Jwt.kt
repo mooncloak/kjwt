@@ -10,11 +10,7 @@ import com.mooncloak.kodetools.kjwt.core.signature.SignatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.signature.SignatureInput
 import com.mooncloak.kodetools.kjwt.core.signature.Signer
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
-import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * Represents a decoded JSON Web Token (JWT) without the Signature defined in a [Jws]. According to
@@ -112,7 +108,6 @@ public class UnsignedJwt internal constructor(
 ) : Jwt,
     Signable {
 
-    @OptIn(ExperimentalEncodingApi::class)
     override suspend fun sign(
         resolver: KeyResolver
     ): Jws {
@@ -136,21 +131,11 @@ public class UnsignedJwt internal constructor(
         // https://datatracker.ietf.org/doc/html/rfc7519#section-7.1
         // https://datatracker.ietf.org/doc/html/rfc7515#section-5
 
-        val claimString = when (payload) {
-            is TextClaims -> payload.value
-            is JsonClaims -> json.encodeToString(
-                serializer = JsonObject.serializer(),
-                value = payload.toJsonObject()
-            )
-        }
-        val encodedPayload = claimString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
-        val headerString = json.encodeToString(
-            serializer = JsonObject.serializer(),
-            value = header.toJsonObject()
+        val signatureInput = SignatureInput(
+            header = header,
+            payload = payload,
+            json = json
         )
-        val encodedHeader = headerString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
-
-        val signatureInput = SignatureInput(value = "$encodedHeader.$encodedPayload")
         val signature = signer.sign(
             input = signatureInput,
             key = key,
