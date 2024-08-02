@@ -2,11 +2,9 @@ package com.mooncloak.kodetools.kjwt.core.signature
 
 import com.mooncloak.kodetools.kjwt.core.Claims
 import com.mooncloak.kodetools.kjwt.core.Header
-import com.mooncloak.kodetools.kjwt.core.JsonClaims
 import com.mooncloak.kodetools.kjwt.core.Jwt
 import com.mooncloak.kodetools.kjwt.core.invoke
 import com.mooncloak.kodetools.kjwt.core.key.Jwk
-import com.mooncloak.kodetools.kjwt.core.key.KeyGenerator
 import com.mooncloak.kodetools.kjwt.core.key.KeyOperation
 import com.mooncloak.kodetools.kjwt.core.key.KeyResolver
 import com.mooncloak.kodetools.kjwt.core.key.KeyType
@@ -14,8 +12,6 @@ import com.mooncloak.kodetools.kjwt.core.key.KeyUse
 import com.mooncloak.kodetools.kjwt.core.key.invoke
 import com.mooncloak.kodetools.kjwt.core.key.of
 import com.mooncloak.kodetools.kjwt.core.key.signatureAlgorithm
-import com.mooncloak.kodetools.kjwt.core.key.signingKey
-import com.mooncloak.kodetools.kjwt.core.property
 import com.mooncloak.kodetools.kjwt.core.signatureAlgorithm
 import com.mooncloak.kodetools.kjwt.core.util.ExperimentalJwtApi
 import com.mooncloak.kodetools.kjwt.core.util.encodeBase64UrlSafeWithoutPadding
@@ -118,12 +114,8 @@ class HmacSignerTest {
     }
 
     @Test
-    fun test() {
+    fun valid_input_signs_correctly() {
         runTest {
-            val generatedKey = KeyGenerator.signingKey(SignatureAlgorithm.HS256).generate()
-
-            println("k = ${generatedKey?.k}")
-
             val jwt = Jwt {
                 header {
                     signatureAlgorithm = SignatureAlgorithm.HS256
@@ -136,19 +128,32 @@ class HmacSignerTest {
                 }
             }
 
-            println("header: ${Json.encodeToString(Header.serializer(), jwt.header)}")
-            println(
-                "payload: ${
-                    Json.encodeToString(
-                        Claims.serializer(),
-                        jwt.payload as JsonClaims
-                    )
-                }"
-            )
-
             val signedJwt = jwt.sign(
                 resolver = KeyResolver.of(hmac256Key)
             ).compact().value
+
+            val headerJsonString = Json.encodeToString(
+                serializer = Header.serializer(),
+                value = jwt.header
+            )
+            val headerBase64 =
+                headerJsonString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
+
+            val payloadString = Json.encodeToString(
+                serializer = Claims.serializer(),
+                value = jwt.payload
+            )
+            val payloadBase64 =
+                payloadString.encodeToByteArray().encodeBase64UrlSafeWithoutPadding()
+
+            assertEquals(
+                expected = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+                actual = headerBase64
+            )
+            assertEquals(
+                expected = "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+                actual = payloadBase64
+            )
 
             val signature = HmacSigner.sign(
                 input = SignatureInput(value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ"),
@@ -157,10 +162,13 @@ class HmacSignerTest {
             )
             val decodedSignature = signature.value.encodeBase64UrlSafeWithoutPadding()
 
-            println("Signature = $decodedSignature")
+            assertEquals(
+                expected = "ymDLSaqj3MVRnri0RLDeix_mQSfvmREwYAIOVWqXUvs",
+                actual = decodedSignature
+            )
 
             assertEquals(
-                expected = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.iAYfZKLi-FxPi5YeFrzUxGpQYMOHJNCI1dzgfWStysY",
+                expected = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.ymDLSaqj3MVRnri0RLDeix_mQSfvmREwYAIOVWqXUvs",
                 actual = signedJwt
             )
         }
