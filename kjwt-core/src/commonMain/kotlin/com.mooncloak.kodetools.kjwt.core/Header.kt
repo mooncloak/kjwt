@@ -35,6 +35,7 @@ public class Header public constructor(
      * Value defaults to `null`.
      *
      * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.1)
+     * @see [JWE Definition](https://datatracker.ietf.org/doc/html/rfc7516#section-4.1.1)
      */
     public val algorithm: String? by property(PropertyKey.ALGORITHM)
 
@@ -170,7 +171,7 @@ public class Header public constructor(
      *
      * Value defaults to `null`.
      *
-     * @see [JWS Definition](https://datatracker.ietf.org/doc/html/rfc7516#section-4.1.2)
+     * @see [JWE Definition](https://datatracker.ietf.org/doc/html/rfc7516#section-4.1.2)
      */
     public val encryption: String? by property(PropertyKey.ENCRYPTION)
 
