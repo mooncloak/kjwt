@@ -31,5 +31,6 @@ plugins {
 
 rootProject.name = "kjwt"
 
+include(":aes")
 include(":kjwt-core")
 include(":sample")
