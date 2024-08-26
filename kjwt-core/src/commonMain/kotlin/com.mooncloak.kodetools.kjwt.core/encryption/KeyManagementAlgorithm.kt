@@ -14,6 +14,7 @@ import kotlin.jvm.JvmInline
  * upon the CEK.
  *
  * @see [JWA Specification](https://datatracker.ietf.org/doc/html/rfc7518#section-4)
+ * @see [ContentEncryptionAlgorithm] for a similar concept but for content encryption.
  * @see [SignatureAlgorithm] for a similar concept but for signing keys.
  */
 @JvmInline
