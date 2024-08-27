@@ -130,13 +130,64 @@ internal inline fun State.addRoundKey(roundKey: Array<ByteArray>): State {
 }
 
 @OptIn(ExperimentalUnsignedTypes::class)
-internal fun State.subBytes(): State {
+internal inline fun State.subBytes(): State {
     for (r in 0..3) {
         for (c in 0..3) {
             val x = this[r, c].toInt() and 0x0F
             val y = this[r, c].toInt() shr 4
 
             this[r, c] = sbox[y][x].toByte()
+        }
+    }
+
+    return this
+}
+
+internal inline fun State.invShiftRows(): State {
+    for (r in 1..3) {
+        val temp = ByteArray(4)
+
+        for (c in 0..3) {
+            temp[c] = this[r, (c - r + 4) % 4]
+        }
+
+        for (c in 0..3) {
+            this[r, c] = temp[c]
+        }
+    }
+
+    return this
+}
+
+@OptIn(ExperimentalUnsignedTypes::class)
+internal inline fun State.invSubBytes(): State {
+    for (r in 0..3) {
+        for (c in 0..3) {
+            this[r, c] = invSbox[this[r, c].toInt() ushr 4][this[r, c].toInt() and 0x0f].toByte()
+        }
+    }
+
+    return this
+}
+
+internal inline fun State.invMixColumns(): State {
+    for (c in 0..3) {
+        val a = IntArray(4)
+        val b = IntArray(4)
+
+        for (i in 0..3) {
+            a[i] = this[i, c].toInt() and 0xff
+        }
+
+        //@formatter:off
+        b[0] = a[0].multiplyGF256(0x0e) xor a[1].multiplyGF256(0x0b) xor a[2].multiplyGF256(0x0d) xor a[3].multiplyGF256(0x09)
+        b[1] = a[0].multiplyGF256(0x09) xor a[1].multiplyGF256(0x0e) xor a[2].multiplyGF256( 0x0b) xor a[3].multiplyGF256( 0x0d)
+        b[2] = a[0].multiplyGF256(0x0d) xor a[1].multiplyGF256( 0x09) xor a[2].multiplyGF256( 0x0e) xor a[3].multiplyGF256( 0x0b)
+        b[3] = a[0].multiplyGF256( 0x0b) xor a[1].multiplyGF256( 0x0d) xor a[2].multiplyGF256( 0x09) xor a[3].multiplyGF256(0x0e)
+        //@formatter:on
+
+        for (i in 0..3) {
+            this[i, c] = b[i].toByte()
         }
     }
 
