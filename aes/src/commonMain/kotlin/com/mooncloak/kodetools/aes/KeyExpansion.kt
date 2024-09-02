@@ -1,6 +1,50 @@
 package com.mooncloak.kodetools.aes
 
-internal fun keyExpansion(key: ByteArray, numberOfWords: Int, numberOfRounds: Int): Array<ByteArray> {
+/**
+ * Performs the "KEYEXPANSION" function of the AES Specification. This function is used to convert a key into a series
+ * of "round" keys: keys that are used for each round of the AES encryption and decryption functions.
+ *
+ * @param [key] The AES key, as a [ByteArray], used to encrypt and decrypt data.
+ *
+ * @param [mode] The [AesMode].
+ *
+ * @return An [Array] of [ByteArray] key values, representing the "round keys".
+ *
+ * @see [AES Specification](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf)
+ * @see [Aes.encryptBlock]
+ * @see [Aes.decryptBlock]
+ */
+public inline fun Aes.expandKey(
+    key: ByteArray,
+    mode: AesMode
+): Array<ByteArray> = expandKey(
+    key = key,
+    numberOfWords = mode.numberOfWords,
+    numberOfRounds = mode.numberOfRounds
+)
+
+/**
+ * Performs the "KEYEXPANSION" function of the AES Specification. This function is used to convert a key into a series
+ * of "round" keys: keys that are used for each round of the AES encryption and decryption functions.
+ *
+ * @param [key] The AES key, as a [ByteArray], used to encrypt and decrypt data.
+ *
+ * @param [numberOfWords] The number of words comprising the key. See [AesMode.numberOfWords].
+ *
+ * @param [numberOfRounds] The number of rounds of the AES encryption operation. See [AesMode.numberOfRounds].
+ *
+ * @return An [Array] of [ByteArray] key values, representing the "round keys".
+ *
+ * @see [AES Specification](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf)
+ * @see [Aes.encryptBlock]
+ * @see [Aes.decryptBlock]
+ */
+@Suppress("UnusedReceiverParameter")
+public fun Aes.expandKey(
+    key: ByteArray,
+    numberOfWords: Int,
+    numberOfRounds: Int
+): Array<ByteArray> {
     val w = Array(4 * (numberOfRounds + 1)) { ByteArray(4) } // Expanded key
 
     var i = 0

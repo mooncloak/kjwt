@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -19,9 +20,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/aes" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/kjwt-core" />
-            <option value="$PROJECT_DIR$/kjwt-key" />
+            <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>
       </GradleProjectSettings>

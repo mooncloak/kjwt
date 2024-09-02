@@ -6,11 +6,13 @@ package com.mooncloak.kodetools.aes
  * @param [input] The data input, which is a block represented as a linear array of 16 bytes.
  *
  * @param [numberOfRounds] The number of rounds, "Nr", for the instance. This value is dependent on the key bit size.
- * The following values are supported: AES-128: `10`, for AES-192: `12`, AES-256: `14`.
+ * The following values are supported: AES-128: `10`, for AES-192: `12`, AES-256: `14`. The amount of [roundKeys] is
+ * defined as the following `4 * (Nr + 1)`, so the default value is deduced from this equation.
  *
- * @param [roundKeys] The keys for each round. This value must be of size [numberOfRounds]. A round key is a block that
- * is usually represented as a sequence of four words (16 bytes). The "KEYEXPANSION()" function, defined by the AES
- * Specification, takes the block cipher key as input and generates the round keys as output.
+ * @param [roundKeys] The keys for each round. A round key is a block that is usually represented as a sequence of four
+ * words (16 bytes). The "KEYEXPANSION()" function, defined by the AES Specification, takes the block cipher key as
+ * input and generates the round keys as output. This array value should be `4 * (Nr + 1)` in size according to the
+ * specification.
  *
  * @see [AES Specification](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf)
  */
