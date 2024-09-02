@@ -24,9 +24,11 @@ public val Transformer.Companion.NoTransform: Transformer
 /**
  * Retrieves a [Transformer] implementation that adds padding to the end of the input data according to the PKCS#7
  * specification using the provided [blockSize].
+ *
+ * @param [blockSize] The input data size of a single block. Defaults to `16` which is the block size for AES.
  */
 @Suppress("FunctionName")
-public fun Transformer.Companion.Pkcs7PaddingTransformer(blockSize: Int): Transformer =
+public fun Transformer.Companion.Pkcs7PaddingTransformer(blockSize: Int = 16): Transformer =
     Pkcs7PaddingTransformerImpl(blockSize = blockSize)
 
 internal data object NoOpTransformer : Transformer {
