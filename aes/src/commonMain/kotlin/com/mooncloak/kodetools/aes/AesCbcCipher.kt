@@ -1,7 +1,5 @@
 package com.mooncloak.kodetools.aes
 
-import kotlin.experimental.xor
-
 public class AesCbcCipher internal constructor(
     key: ByteArray,
     iv: ByteArray,
@@ -47,14 +45,4 @@ public class AesCbcCipher internal constructor(
 
     override suspend fun pad(input: ByteArray): ByteArray =
         paddingTransformer.transform(input)
-
-    private infix fun ByteArray.xor(other: ByteArray): ByteArray {
-        require(this.size == other.size) {
-            "Byte arrays must have the same size to perform xor on their values."
-        }
-
-        return ByteArray(this.size) { i ->
-            this[i] xor other[i]
-        }
-    }
 }
